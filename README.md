@@ -13,7 +13,7 @@ cp .env.example .env.local   # completează valorile (din săpt. 2)
 npm run dev
 ```
 
-Deschide http://localhost:5173.
+Deschide http://localhost:5180.
 
 ## Comenzi
 
@@ -26,6 +26,7 @@ Deschide http://localhost:5173.
 
 ## Documentație
 
+- [Specificația produsului (PRD)](docs/PRD.md)
 - [Ghid de brand](docs/BRAND.md)
 - [Decizii de arhitectură](docs/adr/)
 - [Instrucțiuni pentru Claude Code](CLAUDE.md)

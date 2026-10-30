@@ -4,8 +4,14 @@
     {
       "name": "obcina-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "5173", "--strictPort"],
-      "port": 5173
+      "runtimeArgs": ["run", "dev"],
+      "port": 5180
+    },
+    {
+      "name": "obcina-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "build-and-preview"],
+      "port": 4180
     }
   ]
 }

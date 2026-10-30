@@ -6,6 +6,9 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // Fixed ports so Obcina never collides with other local Vite apps on 5173.
+  server: { port: 5180, strictPort: true },
+  preview: { port: 4180, strictPort: true },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],

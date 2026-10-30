@@ -1,11 +1,14 @@
 # Obcina — cămară de munte din Bucovina
 
 Magazin online demonstrativ (proiect universitar, predare ~sfârșit de decembrie 2026).
-Produse fictive, plăți doar în mod test. Brand și ton: `docs/BRAND.md`. Decizii: `docs/adr/`.
+Produse fictive, plăți doar în mod test.
+
+**Citește întâi `docs/PRD.md`** (ce construim, publicul, deciziile de produs, calendarul).
+Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`.
 
 ## Comenzi
 
-- `npm run dev` — server local (http://localhost:5173)
+- `npm run dev` — server local (http://localhost:5180)
 - `npm run check` — lint + typecheck + format + teste (rulează înainte de orice commit)
 - `npm run test:watch` / `npm run test:coverage`
 - `npm run build` — build de producție

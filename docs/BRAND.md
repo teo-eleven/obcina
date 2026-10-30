@@ -19,6 +19,16 @@ loturi mici, ca la munte. Fiecare produs are o poveste scurtă: de unde vine și
 - Detalii concrete în loc de adjective: gramaj, ingrediente, locul de proveniență.
 - Româna corectă, cu diacritice.
 
+## Direcție vizuală: „etichetă de borcan”
+
+Magazinul arată ca o cămară cu borcane etichetate de mână:
+
+- **Hârtie:** fundaluri crem cu o textură fină de hârtie (SVG/noise ușor, nu imagini grele).
+- **Etichete:** cardurile de produs au chenar dublu subțire și colțuri tăiate, ca eticheta de pe borcan.
+- **Ilustrații desenate:** iconițe și decoruri SVG cu linie neregulată (afine, frunze de tei, brazi).
+- **Titluri serif** (Fraunces), cu accente italice; numerele de gramaj și prețurile în stil „ștampilă”.
+- **Rustic, dar curat:** textura și chenarele nu au voie să scadă contrastul sau lizibilitatea.
+
 ## Paletă
 
 | Token       | Hex       | Folosit pentru                |
