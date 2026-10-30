@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/inter';
+
+/* Obcina brand tokens — see docs/BRAND.md */
+@theme {
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+
+  --color-brad-900: #1f3328;
+  --color-brad-700: #2f4a3a;
+  --color-brad-500: #4f7259;
+  --color-brad-100: #dfe8e0;
+
+  --color-afina-700: #5b2a4a;
+  --color-afina-500: #8a3f6e;
+
+  --color-miere-500: #d9a441;
+  --color-miere-300: #ebc97a;
+
+  --color-lemn-800: #4a3424;
+  --color-lemn-600: #6e5038;
+
+  --color-in-100: #f1eadb;
+  --color-crema-50: #faf6ee;
+}
+
+@layer base {
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-crema-50 text-lemn-800 font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display text-brad-900;
+  }
+
+  :focus-visible {
+    @apply outline-afina-500 outline-2 outline-offset-2;
+  }
+}
