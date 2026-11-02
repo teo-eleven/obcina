@@ -1,10 +1,6 @@
 import { Link } from 'react-router'
 import { Logo } from './Logo'
-
-const NAV_LINKS = [
-  { hash: '#categorii', label: 'Categorii' },
-  { hash: '#povestea', label: 'Povestea' },
-] as const
+import { MainNav } from './MainNav'
 
 export function SiteHeader() {
   return (
@@ -13,20 +9,7 @@ export function SiteHeader() {
         <Link to="/">
           <Logo />
         </Link>
-        <nav aria-label="Principal">
-          <ul className="flex gap-4 text-sm font-medium whitespace-nowrap sm:gap-6">
-            {NAV_LINKS.map((link) => (
-              <li key={link.hash}>
-                <Link
-                  to={{ pathname: '/', hash: link.hash }}
-                  className="text-lemn-800 hover:text-afina-700"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <MainNav />
       </div>
     </header>
   )
