@@ -44,8 +44,19 @@ Testele stau lângă fișierul testat: `Foo.tsx` + `Foo.test.tsx`.
 - **Pași mici:** lucrăm câte un pas din `docs/PLAN.md` (~1 oră). Un pas e gata doar când „Gata când”
   e adevărat, `npm run check` trece și e într-un commit. Bifează pasul în PLAN.md.
 - **Un branch pe fază** (`faza-N/nume`), un commit pe pas, PR la final de fază.
-- Pentru fiecare pas: teste întâi (`tdd-guide`) → implementare → `/code-review` + `typescript-reviewer`;
-  `security-reviewer` pentru auth, checkout, webhook, reguli Firestore și asistentul AI.
+- **Fiecare pas folosește agenții din kitul `~/Desktop/claude-code-starter-kit`** (nivel „maxim”, ales de
+  Teodor):
+  1. `tdd-guide` scrie testele care pică (RED), pornind de la „Gata când” al pasului.
+  2. Implementare până trec (GREEN), apoi refactor; verificare vizuală în browser pe 375px și desktop.
+  3. `typescript-reviewer` **și** `code-reviewer`, rulați în paralel pe diff-ul pasului.
+  4. `security-reviewer` în plus când pasul atinge input de la utilizator, auth, checkout, webhook,
+     reguli Firestore, chei sau asistentul AI.
+  5. Constatările valide se repară cu un test care le prinde; cele respinse se explică.
+- Skill-urile kitului se încarcă când pasul le atinge: `react-testing`, `react-patterns`,
+  `frontend-patterns`, `security-review`, `api-design`, `error-handling`, `claude-api`, `eval-harness`.
 - **Poarta de testare** la finalul fiecărei faze, după `docs/testing/README.md`: Claude e tester și
-  verifică toată aplicația cap-coadă. Fără poartă trecută, nu începem faza următoare.
+  verifică toată aplicația cap-coadă (happy path, limite, adversarial, concurență/haos, rețea,
+  securitate OWASP), cu jurnal `[PASS]`/`[FAIL]` din rulări reale și secțiunea „Anticipare riscuri
+  & profilaxie”. Fără poartă trecută, nu începem faza următoare.
+- **Întrebările de decizie** se pun ca grilă cu variante și o recomandare, nu ca text liber.
 - Docker nu se folosește (ADR 0003); testele rulează pe Firebase Emulator Suite.
