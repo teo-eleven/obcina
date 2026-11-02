@@ -1,5 +1,3 @@
-import { SiteFooter } from '../components/SiteFooter'
-import { SiteHeader } from '../components/SiteHeader'
 import { CATEGORIES } from '../data/categories'
 
 function Hero() {
@@ -80,19 +78,9 @@ function Story() {
 export function HomePage() {
   return (
     <>
-      <a
-        href="#continut"
-        className="bg-brad-700 text-crema-50 sr-only z-20 rounded-md focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:px-4 focus:py-2"
-      >
-        Sari la conținut
-      </a>
-      <SiteHeader />
-      <main id="continut">
-        <Hero />
-        <CategoryGrid />
-        <Story />
-      </main>
-      <SiteFooter />
+      <Hero />
+      <CategoryGrid />
+      <Story />
     </>
   )
 }
