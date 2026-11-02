@@ -57,4 +57,41 @@ describe('app routes', () => {
       expect(scrollIntoView.mock.contexts.at(-1)).toBe(document.getElementById('povestea'))
     })
   })
+
+  it.each(['/nu-exista', '/produse/dulceata/inexistent'])(
+    'shows the not-found page inside the layout for %s',
+    (path) => {
+      renderWithRouter(routes, path)
+
+      const main = screen.getByRole('main')
+      expect(
+        within(main).getByRole('heading', { level: 1, name: /nu e în cămară/i }),
+      ).toBeInTheDocument()
+      expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
+      expect(screen.getByRole('banner')).toBeInTheDocument()
+      expect(screen.getByRole('contentinfo')).toBeInTheDocument()
+    },
+  )
+
+  it('takes the visitor from the not-found page back home', async () => {
+    const { router } = renderWithRouter(routes, '/nu-exista')
+
+    await userEvent.click(screen.getByRole('link', { name: 'Înapoi în cămară' }))
+
+    expect(router.state.location.pathname).toBe('/')
+    expect(
+      within(screen.getByRole('main')).getByRole('heading', { level: 1, name: /Gusturi de munte/ }),
+    ).toBeInTheDocument()
+  })
+
+  it('sends the visitor from the not-found page to the home categories', async () => {
+    Element.prototype.scrollIntoView = vi.fn()
+    const { router } = renderWithRouter(routes, '/nu-exista')
+
+    await userEvent.click(screen.getByRole('link', { name: 'Vezi categoriile' }))
+
+    expect(router.state.location.pathname).toBe('/')
+    expect(router.state.location.hash).toBe('#categorii')
+    expect(document.getElementById('categorii')).not.toBeNull()
+  })
 })

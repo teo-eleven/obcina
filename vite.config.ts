@@ -7,7 +7,12 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   // Fixed ports so Obcina never collides with other local Vite apps on 5173.
-  server: { port: 5180, strictPort: true },
+  server: {
+    port: 5180,
+    strictPort: true,
+    // Generated output (coverage reports, builds); don't reload the browser for it.
+    watch: { ignored: ['**/coverage/**', '**/dist/**'] },
+  },
   preview: { port: 4180, strictPort: true },
   test: {
     environment: 'jsdom',

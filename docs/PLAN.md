@@ -36,7 +36,7 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 | #      | Pas                                                           | Gata când                                         |
 | ------ | ------------------------------------------------------------- | ------------------------------------------------- |
 | 1.1 ✅ | React Router + layout comun (header, footer, skip link)       | `/` și o rută de test folosesc același layout     |
-| 1.2    | Pagină 404 ilustrată                                          | o rută inexistentă arată 404, cu link înapoi      |
+| 1.2 ✅ | Pagină 404 ilustrată                                          | o rută inexistentă arată 404, cu link înapoi      |
 | 1.3    | Textură de hârtie + chenar de etichetă (componentă `Label`)   | vizibile pe pagina de start, contrast AA păstrat  |
 | 1.4    | Iconițe SVG desenate pentru cele 6 categorii                  | fiecare categorie are iconiță, `aria-hidden`      |
 | 1.5    | Restilizare pagina de start în stilul nou                     | arată ca în BRAND.md pe 375px și desktop          |
@@ -154,14 +154,14 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F11 — Finisare și demo
 
-| #    | Pas                                                       | Gata când                                                        |
-| ---- | --------------------------------------------------------- | ---------------------------------------------------------------- |
-| 11.1 | Stări de eroare și de încărcare peste tot, erori de rețea | nicio pagină albă                                                |
-| 11.2 | SEO de bază (titluri, meta, Open Graph) pe fiecare pagină | Lighthouse SEO ≥ 90                                              |
-| 11.3 | Flag pentru plată simulată (rezervă pentru demo)          | comutabil fără redeploy de cod                                   |
-| 11.4 | Date curate pe producție + cont demo                      | seed de producție verificat                                      |
-| 11.5 | Scenariul de demo (5 minute) + repetiție                  | parcurs cap-coadă pe link-ul live                                |
-| 🧪   | **Poarta finală: testare cap-coadă a întregii aplicații** | raport `faza-11.md`; toate condițiile „Gata când” din PRD bifate |
+| #    | Pas                                                                         | Gata când                                                        |
+| ---- | --------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| 11.1 | Stări de eroare și de încărcare peste tot, erori de rețea                   | nicio pagină albă                                                |
+| 11.2 | SEO de bază (titluri, meta, Open Graph) pe fiecare pagină; 404 cu `noindex` | Lighthouse SEO ≥ 90                                              |
+| 11.3 | Flag pentru plată simulată (rezervă pentru demo)                            | comutabil fără redeploy de cod                                   |
+| 11.4 | Date curate pe producție + cont demo                                        | seed de producție verificat                                      |
+| 11.5 | Scenariul de demo (5 minute) + repetiție                                    | parcurs cap-coadă pe link-ul live                                |
+| 🧪   | **Poarta finală: testare cap-coadă a întregii aplicații**                   | raport `faza-11.md`; toate condițiile „Gata când” din PRD bifate |
 
 ---
 
