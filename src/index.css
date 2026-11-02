@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/fraunces/wght-italic.css';
 @import '@fontsource-variable/inter';
 
 /* Obcina brand tokens — see docs/BRAND.md */

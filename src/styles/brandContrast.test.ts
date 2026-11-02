@@ -68,7 +68,9 @@ const TEXT_ON_BACKGROUND = [
   ['crema-50', 'brad-700'], // primary buttons
   ['crema-50', 'afina-700'], // primary buttons on hover
   ['brad-100', 'brad-900'], // footer text
-  ['afina-700', 'crema-50'], // link hover
+  ['afina-700', 'crema-50'], // link hover, italic heading accents
+  ['afina-700', 'brad-100'], // italic accent in the hero heading
+  ['afina-700', 'in-100'], // stamp and italic accent in the story
 ] as const
 
 // Tokens never used for text or behind text: illustrations, focus rings, decorative fills.
