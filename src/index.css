@@ -25,6 +25,35 @@
   --color-crema-50: #faf6ee;
 }
 
+/*
+ * Paper texture: tiny tiled SVG noise in lemn-800 (rgb 74 52 36). Opacity follows the noise:
+ * about 5% on average, 10% at the darkest pixel. The filter blends in sRGB so those numbers are
+ * what renders. src/styles/brandContrast.test.ts reads this matrix and checks text contrast
+ * against the darkest pixel, so a darker texture fails the tests instead of hurting legibility.
+ */
+:root {
+  --texture-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .29 0 0 0 0 .2 0 0 0 0 .14 .1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Adds the paper grain on top of whatever background colour the element already has. */
+@utility paper {
+  background-image: var(--texture-paper);
+}
+
+/* Cut ("chamfered") corners, as on a jar label. Set the cut size with --chamfer. */
+@utility chamfer {
+  clip-path: polygon(
+    var(--chamfer) 0,
+    calc(100% - var(--chamfer)) 0,
+    100% var(--chamfer),
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    var(--chamfer) 100%,
+    0 calc(100% - var(--chamfer)),
+    0 var(--chamfer)
+  );
+}
+
 @layer base {
   @media (prefers-reduced-motion: no-preference) {
     html {
@@ -33,7 +62,7 @@
   }
 
   body {
-    @apply bg-crema-50 text-lemn-800 font-sans antialiased;
+    @apply bg-crema-50 paper text-lemn-800 font-sans antialiased;
   }
 
   h1,

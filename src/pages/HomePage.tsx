@@ -1,8 +1,9 @@
+import { Label } from '../components/Label'
 import { CATEGORIES } from '../data/categories'
 
 function Hero() {
   return (
-    <section className="bg-brad-100 relative overflow-hidden">
+    <section className="bg-brad-100 paper relative overflow-hidden">
       <div className="mx-auto max-w-6xl px-4 pt-16 pb-40 sm:pt-24 sm:pb-52">
         <p className="text-brad-700 text-sm font-semibold tracking-widest uppercase">
           Din Bucovina, în cămara ta
@@ -50,9 +51,11 @@ function CategoryGrid() {
       <h2 className="text-3xl font-semibold">Ce găsești în cămară</h2>
       <ul aria-label="Categorii" className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {CATEGORIES.map((category) => (
-          <li key={category.slug} className="border-in-100 rounded-2xl border bg-white/60 p-6">
-            <h3 className="text-xl font-semibold">{category.name}</h3>
-            <p className="text-lemn-600 mt-2">{category.description}</p>
+          <li key={category.slug}>
+            <Label className="h-full">
+              <h3 className="text-xl font-semibold">{category.name}</h3>
+              <p className="text-lemn-600 mt-2">{category.description}</p>
+            </Label>
           </li>
         ))}
       </ul>
@@ -62,7 +65,7 @@ function CategoryGrid() {
 
 function Story() {
   return (
-    <section id="povestea" className="bg-in-100 scroll-mt-20">
+    <section id="povestea" className="bg-in-100 paper scroll-mt-20">
       <div className="mx-auto max-w-3xl px-4 py-16">
         <h2 className="text-3xl font-semibold">Povestea noastră</h2>
         <p className="mt-4 text-lg">

@@ -18,4 +18,13 @@ describe('HomePage', () => {
       expect(within(list).getByRole('heading', { name: category.name })).toBeInTheDocument()
     }
   })
+
+  it('shows every category on a jar label', () => {
+    render(<HomePage />)
+
+    for (const category of CATEGORIES) {
+      const heading = screen.getByRole('heading', { name: category.name })
+      expect(heading.closest('[data-label]')).not.toBeNull()
+    }
+  })
 })
