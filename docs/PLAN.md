@@ -38,7 +38,7 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 | 1.1 ✅ | React Router + layout comun (header, footer, skip link)       | `/` și o rută de test folosesc același layout     |
 | 1.2 ✅ | Pagină 404 ilustrată                                          | o rută inexistentă arată 404, cu link înapoi      |
 | 1.3 ✅ | Textură de hârtie + chenar de etichetă (componentă `Label`)   | vizibile pe pagina de start, contrast AA păstrat  |
-| 1.4    | Iconițe SVG desenate pentru cele 6 categorii                  | fiecare categorie are iconiță, `aria-hidden`      |
+| 1.4 ✅ | Iconițe SVG desenate pentru cele 6 categorii                  | fiecare categorie are iconiță, `aria-hidden`      |
 | 1.5    | Restilizare pagina de start în stilul nou                     | arată ca în BRAND.md pe 375px și desktop          |
 | 1.6    | Meniu mobil (hamburger accesibil)                             | se deschide/închide cu tastatura, focus gestionat |
 | 1.7    | Playwright instalat + primul E2E (navigare, 404, meniu mobil) | `npm run test:e2e` trece local și în CI           |
@@ -47,20 +47,20 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F2 — Catalog
 
-| #    | Pas                                                                       | Gata când                                                            |
-| ---- | ------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| 2.1  | Proiect Firebase + config web în `.env.local`                             | aplicația se conectează, fără chei în cod                            |
-| 2.2  | Firebase Emulator Suite (Firestore + Auth) local                          | `npm run emulators` pornește; datele de test nu ating proiectul real |
-| 2.3  | Tipul `Product` + validare cu schemă (zod)                                | teste: produs invalid respins, preț întreg în bani                   |
-| 2.4  | Conținut: 15–20 produse (texte, gramaj, ingrediente, prețuri)             | fișier seed revizuit, ton conform BRAND.md                           |
-| 2.5  | Imagini: prompt-șablon AI pentru borcane + poze Unsplash pentru atmosferă | imagini optimizate (WebP), creditate în CREDITS.md                   |
-| 2.6  | Script de seed în emulator                                                | `npm run seed` încarcă produsele, idempotent                         |
-| 2.7  | Pagina de categorie (listă produse din Firestore)                         | stări: încărcare, gol, eroare; testate                               |
-| 2.8  | Card de produs în stil etichetă (preț formatat RON, badge stoc)           | `formatPrice(1999)` → „19,99 lei”, testat                            |
-| 2.9  | Pagina de produs (`/produs/:slug`)                                        | slug inexistent → 404                                                |
-| 2.10 | Reguli Firestore: produse doar citire publică                             | testate în emulator: scrierea din client e respinsă                  |
-| 2.11 | E2E: start → categorie → produs                                           | trece în CI cu emulatorul                                            |
-| 🧪   | **Poarta de testare F2**                                                  | raport `faza-2.md`, zero buguri deschise                             |
+| #    | Pas                                                                       | Gata când                                                                           |
+| ---- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 2.1  | Proiect Firebase + config web în `.env.local`                             | aplicația se conectează, fără chei în cod                                           |
+| 2.2  | Firebase Emulator Suite (Firestore + Auth) local                          | `npm run emulators` pornește; datele de test nu ating proiectul real                |
+| 2.3  | Tipul `Product` + validare cu schemă (zod)                                | teste: produs invalid respins, preț întreg în bani, categorie doar din `CATEGORIES` |
+| 2.4  | Conținut: 15–20 produse (texte, gramaj, ingrediente, prețuri)             | fișier seed revizuit, ton conform BRAND.md                                          |
+| 2.5  | Imagini: prompt-șablon AI pentru borcane + poze Unsplash pentru atmosferă | imagini optimizate (WebP), creditate în CREDITS.md                                  |
+| 2.6  | Script de seed în emulator                                                | `npm run seed` încarcă produsele, idempotent                                        |
+| 2.7  | Pagina de categorie (listă produse din Firestore)                         | stări: încărcare, gol, eroare; testate                                              |
+| 2.8  | Card de produs în stil etichetă (preț formatat RON, badge stoc)           | `formatPrice(1999)` → „19,99 lei”, testat                                           |
+| 2.9  | Pagina de produs (`/produs/:slug`)                                        | slug inexistent → 404                                                               |
+| 2.10 | Reguli Firestore: produse doar citire publică                             | testate în emulator: scrierea din client e respinsă                                 |
+| 2.11 | E2E: start → categorie → produs                                           | trece în CI cu emulatorul                                                           |
+| 🧪   | **Poarta de testare F2**                                                  | raport `faza-2.md`, zero buguri deschise                                            |
 
 ## F3 — Coș
 

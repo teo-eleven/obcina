@@ -27,4 +27,15 @@ describe('HomePage', () => {
       expect(heading.closest('[data-label]')).not.toBeNull()
     }
   })
+
+  it('gives every category a decorative icon on its label', () => {
+    render(<HomePage />)
+
+    for (const category of CATEGORIES) {
+      const label = screen.getByRole('heading', { name: category.name }).closest('[data-label]')
+      const icon = label?.querySelector('svg')
+      expect(icon, `${category.name} has no icon`).not.toBeNull()
+      expect(icon).toHaveAttribute('aria-hidden', 'true')
+    }
+  })
 })
