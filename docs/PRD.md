@@ -79,19 +79,9 @@ mai multe limbi, aplicație mobilă.
   - **Ilustrații SVG** — iconițe de categorii, chenare, decoruri, stări goale (coș gol, 404).
 - Fără poze sau nume de producători și magazine reale.
 
-## Calendar (ritm: 10+ ore / săptămână)
+## Calendar
 
-| Săpt.       | Livrabil                                                                      |
-| ----------- | ----------------------------------------------------------------------------- |
-| 1 ✅        | Fundație, branding, pagina de start, CI                                       |
-| 2           | Router, restilizare „etichetă de borcan”, catalog în Firestore, pagini produs |
-| 3           | Coș persistent, căutare și filtre                                             |
-| 4           | Cont obligatoriu (Auth), adrese, checkout + Stripe                            |
-| 5 → **MVP** | Webhook, comenzi, stoc, istoric, reguli Firestore                             |
-| 6           | Coșuri cadou, panou de admin                                                  |
-| 7           | Asistent AI de cadouri (cu evaluări)                                          |
-| 8           | Finisare: E2E Playwright, Lighthouse ≥ 90, accesibilitate, stări de eroare    |
-| 9           | Rezervă, date curate, scenariul de demo                                       |
+Ordinea pașilor, porțile de testare și estimarea de timp (2–3 ore pe zi): [PLAN.md](PLAN.md).
 
 ## Riscuri
 

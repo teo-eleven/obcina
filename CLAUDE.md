@@ -3,7 +3,7 @@
 Magazin online demonstrativ (proiect universitar, predare ~sfârșit de decembrie 2026).
 Produse fictive, plăți doar în mod test.
 
-**Citește întâi `docs/PRD.md`** (ce construim, publicul, deciziile de produs, calendarul).
+**Citește întâi `docs/PRD.md`** (ce construim) **și `docs/PLAN.md`** (pasul curent, ce urmează).
 Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`.
 
 ## Comenzi
@@ -41,6 +41,11 @@ Testele stau lângă fișierul testat: `Foo.tsx` + `Foo.test.tsx`.
 
 ## Mod de lucru
 
-Un branch per etapă din plan (`week-N/descriere`), PR la final. Pentru fiecare funcționalitate:
-`/plan` → teste întâi (`tdd-guide`) → implementare → `/code-review` + `typescript-reviewer` →
-`security-reviewer` pentru auth, checkout, webhook și reguli Firestore.
+- **Pași mici:** lucrăm câte un pas din `docs/PLAN.md` (~1 oră). Un pas e gata doar când „Gata când”
+  e adevărat, `npm run check` trece și e într-un commit. Bifează pasul în PLAN.md.
+- **Un branch pe fază** (`faza-N/nume`), un commit pe pas, PR la final de fază.
+- Pentru fiecare pas: teste întâi (`tdd-guide`) → implementare → `/code-review` + `typescript-reviewer`;
+  `security-reviewer` pentru auth, checkout, webhook, reguli Firestore și asistentul AI.
+- **Poarta de testare** la finalul fiecărei faze, după `docs/testing/README.md`: Claude e tester și
+  verifică toată aplicația cap-coadă. Fără poartă trecută, nu începem faza următoare.
+- Docker nu se folosește (ADR 0003); testele rulează pe Firebase Emulator Suite.
