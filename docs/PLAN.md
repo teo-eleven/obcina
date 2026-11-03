@@ -41,7 +41,7 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 | 1.4 ✅ | Iconițe SVG desenate pentru cele 6 categorii                  | fiecare categorie are iconiță, `aria-hidden`      |
 | 1.5 ✅ | Restilizare pagina de start în stilul nou                     | arată ca în BRAND.md pe 375px și desktop          |
 | 1.6 ✅ | Meniu mobil (hamburger accesibil)                             | se deschide/închide cu tastatura, focus gestionat |
-| 1.7 🟡 | Playwright instalat + primul E2E (navigare, 404, meniu mobil) | `npm run test:e2e` trece local și în CI           |
+| 1.7 ✅ | Playwright instalat + primul E2E (navigare, 404, meniu mobil) | `npm run test:e2e` trece local și în CI           |
 | 1.8    | Lighthouse CI configurat (`npm run audit`)                    | raport generat, praguri aplicate                  |
 | 🧪     | **Poarta de testare F1**                                      | raport `faza-1.md`, zero buguri deschise          |
 
