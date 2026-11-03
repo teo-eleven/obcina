@@ -23,6 +23,8 @@ Deschide http://localhost:5180.
 | `npm run check`         | lint, verificare tipuri, formatare și teste |
 | `npm run test:coverage` | teste cu raport de acoperire                |
 | `npm run build`         | build de producție în `dist/`               |
+| `npm run test:e2e`      | teste end-to-end (Chromium și WebKit)       |
+| `npm run lighthouse`    | audit Lighthouse pe mobil, cu praguri       |
 
 ## Documentație
 

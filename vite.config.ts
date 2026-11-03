@@ -12,7 +12,13 @@ export default defineConfig({
     strictPort: true,
     // Generated output (coverage reports, builds); don't reload the browser for it.
     watch: {
-      ignored: ['**/coverage/**', '**/dist/**', '**/test-results/**', '**/playwright-report/**'],
+      ignored: [
+        '**/coverage/**',
+        '**/dist/**',
+        '**/test-results/**',
+        '**/playwright-report/**',
+        '**/lighthouse-report/**',
+      ],
     },
   },
   preview: { port: 4180, strictPort: true },

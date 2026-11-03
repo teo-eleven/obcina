@@ -42,7 +42,7 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 | 1.5 ✅ | Restilizare pagina de start în stilul nou                     | arată ca în BRAND.md pe 375px și desktop          |
 | 1.6 ✅ | Meniu mobil (hamburger accesibil)                             | se deschide/închide cu tastatura, focus gestionat |
 | 1.7 ✅ | Playwright instalat + primul E2E (navigare, 404, meniu mobil) | `npm run test:e2e` trece local și în CI           |
-| 1.8    | Lighthouse CI configurat (`npm run audit`)                    | raport generat, praguri aplicate                  |
+| 1.8 ✅ | Lighthouse configurat (`npm run lighthouse`)                  | raport generat, praguri aplicate                  |
 | 🧪     | **Poarta de testare F1**                                      | raport `faza-1.md`, zero buguri deschise          |
 
 ## F2 — Catalog
@@ -154,14 +154,14 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F11 — Finisare și demo
 
-| #    | Pas                                                                         | Gata când                                                        |
-| ---- | --------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| 11.1 | Stări de eroare și de încărcare peste tot, erori de rețea                   | nicio pagină albă                                                |
-| 11.2 | SEO de bază (titluri, meta, Open Graph) pe fiecare pagină; 404 cu `noindex` | Lighthouse SEO ≥ 90                                              |
-| 11.3 | Flag pentru plată simulată (rezervă pentru demo)                            | comutabil fără redeploy de cod                                   |
-| 11.4 | Date curate pe producție + cont demo                                        | seed de producție verificat                                      |
-| 11.5 | Scenariul de demo (5 minute) + repetiție                                    | parcurs cap-coadă pe link-ul live                                |
-| 🧪   | **Poarta finală: testare cap-coadă a întregii aplicații**                   | raport `faza-11.md`; toate condițiile „Gata când” din PRD bifate |
+| #    | Pas                                                                         | Gata când                                                                                                                                               |
+| ---- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 11.1 | Stări de eroare și de încărcare peste tot, erori de rețea                   | nicio pagină albă                                                                                                                                       |
+| 11.2 | SEO de bază (titluri, meta, Open Graph) pe fiecare pagină; 404 cu `noindex` | Lighthouse SEO ≥ 90; pagina 404 scoasă din pragul SEO în `scripts/lighthouse.mjs` (`noindex` o penalizează intenționat); prag Performance ridicat la 90 |
+| 11.3 | Flag pentru plată simulată (rezervă pentru demo)                            | comutabil fără redeploy de cod                                                                                                                          |
+| 11.4 | Date curate pe producție + cont demo                                        | seed de producție verificat                                                                                                                             |
+| 11.5 | Scenariul de demo (5 minute) + repetiție                                    | parcurs cap-coadă pe link-ul live                                                                                                                       |
+| 🧪   | **Poarta finală: testare cap-coadă a întregii aplicații**                   | raport `faza-11.md`; toate condițiile „Gata când” din PRD bifate                                                                                        |
 
 ---
 

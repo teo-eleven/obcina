@@ -57,7 +57,8 @@ Pe **desktop** și pe **mobil (375px)**:
 ## 5. Calitate
 
 - [ ] `code-reviewer` pe tot diff-ul fazei.
-- [ ] `npm run audit` (Lighthouse, mobil) peste pragurile din PLAN.md.
+- [ ] `npm run lighthouse` (mobil, mediana din 3 rulări) peste pragurile din PLAN.md; rapoarte în
+      `lighthouse-report/`.
 - [ ] Fără scroll orizontal la 375px pe nicio pagină.
 
 ## 6. Anticipare riscuri & profilaxie
