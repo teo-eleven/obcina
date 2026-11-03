@@ -41,7 +41,7 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 | 1.4 ✅ | Iconițe SVG desenate pentru cele 6 categorii                  | fiecare categorie are iconiță, `aria-hidden`      |
 | 1.5 ✅ | Restilizare pagina de start în stilul nou                     | arată ca în BRAND.md pe 375px și desktop          |
 | 1.6 ✅ | Meniu mobil (hamburger accesibil)                             | se deschide/închide cu tastatura, focus gestionat |
-| 1.7    | Playwright instalat + primul E2E (navigare, 404, meniu mobil) | `npm run test:e2e` trece local și în CI           |
+| 1.7 🟡 | Playwright instalat + primul E2E (navigare, 404, meniu mobil) | `npm run test:e2e` trece local și în CI           |
 | 1.8    | Lighthouse CI configurat (`npm run audit`)                    | raport generat, praguri aplicate                  |
 | 🧪     | **Poarta de testare F1**                                      | raport `faza-1.md`, zero buguri deschise          |
 
@@ -100,15 +100,15 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F6 — Checkout și plată
 
-| #   | Pas                                                          | Gata când                                |
-| --- | ------------------------------------------------------------ | ---------------------------------------- |
-| 6.1 | Proiect Vercel + deploy de preview din GitHub                | link live pentru fiecare PR              |
-| 6.2 | Funcțiile `api/` + tsconfig + `firebase-admin`               | `api/health` răspunde; type-check în CI  |
-| 6.3 | Calcul comandă pe server (prețuri + transport din Firestore) | TDD; prețurile din client sunt ignorate  |
-| 6.4 | `api/checkout`: comandă `pending` + sesiune Stripe (test)    | redirect la Stripe cu suma corectă       |
-| 6.5 | Pagina de checkout (adresă, sumar, buton „Plătește”)         | validare, stare de încărcare, erori      |
-| 6.6 | Paginile de succes și anulare                                | succes nu marchează comanda plătită      |
-| 🧪  | **Poarta de testare F6**                                     | raport `faza-6.md`, zero buguri deschise |
+| #   | Pas                                                          | Gata când                                                                                                     |
+| --- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| 6.1 | Proiect Vercel + deploy de preview din GitHub                | link live pentru fiecare PR; un deep link reîncărcat (ex. `/produs/x`) servește aplicația, nu 404-ul hostului |
+| 6.2 | Funcțiile `api/` + tsconfig + `firebase-admin`               | `api/health` răspunde; type-check în CI                                                                       |
+| 6.3 | Calcul comandă pe server (prețuri + transport din Firestore) | TDD; prețurile din client sunt ignorate                                                                       |
+| 6.4 | `api/checkout`: comandă `pending` + sesiune Stripe (test)    | redirect la Stripe cu suma corectă                                                                            |
+| 6.5 | Pagina de checkout (adresă, sumar, buton „Plătește”)         | validare, stare de încărcare, erori                                                                           |
+| 6.6 | Paginile de succes și anulare                                | succes nu marchează comanda plătită                                                                           |
+| 🧪  | **Poarta de testare F6**                                     | raport `faza-6.md`, zero buguri deschise                                                                      |
 
 ## F7 — Comenzi → **MVP complet**
 

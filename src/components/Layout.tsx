@@ -15,7 +15,7 @@ export function Layout() {
         Sari la conținut
       </a>
       <SiteHeader />
-      <main id="continut">
+      <main id="continut" tabIndex={-1} className="outline-none">
         <Outlet />
       </main>
       <SiteFooter />

@@ -52,7 +52,10 @@ describe('Layout', () => {
       'href',
       '#continut',
     )
-    expect(screen.getByRole('main')).toHaveAttribute('id', 'continut')
+    const main = screen.getByRole('main')
+    expect(main).toHaveAttribute('id', 'continut')
+    // Focusable by script/fragment only, so the skip link moves keyboard focus into it.
+    expect(main).toHaveAttribute('tabindex', '-1')
   })
 
   it('links the logo back to the home page', () => {

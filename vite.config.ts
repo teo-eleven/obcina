@@ -1,6 +1,6 @@
-/// <reference types="vitest/config" />
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+import { configDefaults } from 'vitest/config'
 import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
@@ -11,12 +11,16 @@ export default defineConfig({
     port: 5180,
     strictPort: true,
     // Generated output (coverage reports, builds); don't reload the browser for it.
-    watch: { ignored: ['**/coverage/**', '**/dist/**'] },
+    watch: {
+      ignored: ['**/coverage/**', '**/dist/**', '**/test-results/**', '**/playwright-report/**'],
+    },
   },
   preview: { port: 4180, strictPort: true },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+    // Playwright owns e2e/; Vitest would otherwise pick up its *.spec.ts files.
+    exclude: [...configDefaults.exclude, 'e2e/**'],
     css: false,
     coverage: {
       provider: 'v8',
