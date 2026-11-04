@@ -5,7 +5,7 @@
 ## Rezumat
 
 **Trece.** Un bug găsit (severitate mică, accesibilitate) și reparat în fază, cu test. Zero buguri deschise.
-O verificare rămâne la Teodor: o trecere manuală pe Safari real (acoperită automat de WebKit).
+Verificarea manuală pe Safari real a făcut-o Teodor pe 2026-11-04: trece.
 
 ## Jurnal de verificări
 
@@ -23,7 +23,7 @@ Fiecare rând vine dintr-o rulare reală pe commit-ul final al fazei.
 | Rețea                                        | [PASS]          | resurse întârziate 800 ms; conexiune pierdută după încărcare → navigarea merge |
 | Manual — desktop                             | [PASS]          | ordine focus, contur de focus, texte                                           |
 | Manual — mobil 375px                         | [PASS]          | fără scroll orizontal; ținte ≥ 44 px                                           |
-| Manual — Safari                              | n/a             | rămâne la Teodor (pe iPhone/Mac); WebKit automat trece în E2E                  |
+| Manual — Safari                              | [PASS]          | Teodor, Safari real: Tab/Enter/Escape pe „Meniu”, dublă apăsare                |
 | Doar tastatura                               | [FAIL] → [PASS] | bug #2 (contur de focus întârziat), reparat și re-testat                       |
 | Consolă fără erori                           | [PASS]          | impus automat în fiecare test E2E (fixture „healthyPage”)                      |
 | Sincronizare UI ↔ Firestore                  | n/a             | nu există încă date (F2)                                                       |
@@ -102,8 +102,5 @@ Un caz a fost mutat, nu ignorat: o **cale** cu codificare stricată (`/%E0%A4%A`
 
 ## Amânate (doar severitate mică)
 
-- **Safari real (manual):** comportamentul specific Safari e acoperit automat de WebKit (inclusiv
-  regresia meniului), dar o trecere pe un iPhone sau pe Safari pe Mac rămâne de făcut de Teodor:
-  Tab până la „Meniu”, Enter, Escape, apoi apasă „Meniu” de două ori cu degetul/mouse-ul.
 - **5 vulnerabilități moderate în unelte de dezvoltare** (lighthouse → @sentry → glob/minimatch):
   acceptate în ADR 0004, reevaluare la poarta fiecărei faze și cel târziu la 2026-12-01.
