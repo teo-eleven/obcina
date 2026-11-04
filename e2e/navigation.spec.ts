@@ -87,3 +87,36 @@ test('the logo link returns to the home page from another page', async ({ page }
   await expect(page).toHaveTitle('Obcina — cămară de munte din Bucovina')
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Gusturi de munte')
 })
+
+test.describe('keyboard focus', () => {
+  // afina-500, the brand focus colour (src/index.css). A transition on the control must not
+  // fade the ring in from the text colour: the ring has to be there the moment focus lands.
+  const FOCUS_RING = 'rgb(138, 63, 110)'
+
+  for (const path of ['/', '/nu-exista']) {
+    test(`every control on ${path} shows the brand focus ring immediately`, async ({
+      page,
+      browserName,
+    }) => {
+      await page.goto(path)
+      const controls = page.locator('a[href]:visible, button:visible')
+      const count = await controls.count()
+      expect(count).toBeGreaterThan(2)
+
+      for (let i = 0; i < count; i++) {
+        await page.keyboard.press(tabKey(browserName))
+        const ring = await page.evaluate(() => {
+          const element = document.activeElement as HTMLElement
+          const style = getComputedStyle(element)
+          return {
+            label: element.textContent?.trim(),
+            style: style.outlineStyle,
+            color: style.outlineColor,
+          }
+        })
+        expect(ring.style, `${ring.label} outline style`).not.toBe('none')
+        expect(ring.color, `${ring.label} outline colour at the moment of focus`).toBe(FOCUS_RING)
+      }
+    })
+  }
+})

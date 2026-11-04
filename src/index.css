@@ -76,3 +76,13 @@
     @apply outline-afina-500 outline-2 outline-offset-2;
   }
 }
+
+/*
+ * Keyboard focus rings must appear at full colour the moment focus lands. Tailwind's
+ * `transition` utility also animates outline-color, which faded the ring in from the text colour
+ * (near-invisible on light backgrounds). Unlayered, so it wins over the utilities layer; it only
+ * drops outline/box-shadow from the transition while focused — hover colour fades still work.
+ */
+:focus-visible {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+}
