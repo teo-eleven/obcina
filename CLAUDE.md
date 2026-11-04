@@ -12,6 +12,8 @@ Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`.
 - `npm run check` — lint + typecheck + format + teste (rulează înainte de orice commit)
 - `npm run test:watch` / `npm run test:coverage`
 - `npm run build` — build de producție
+- `npm run test:e2e` — Playwright pe build-ul de producție (Chromium + WebKit, desktop + telefon)
+- `npm run lighthouse` — Lighthouse pe mobil, pică sub praguri; rapoarte în `lighthouse-report/`
 
 ## Stack
 
@@ -20,13 +22,25 @@ Vercel (`api/` = funcții de server) · Stripe Checkout în mod test · Vitest +
 
 ## Structură
 
-- `src/pages/` — o componentă per pagină
-- `src/components/` — componente reutilizabile
-- `src/data/` — date statice (până la mutarea în Firestore)
-- `src/test/setup.ts` — setup Vitest
-- `api/` — funcții Vercel (din săpt. 5)
+- `src/pages/` — o componentă per pagină; `src/routes.tsx` — rutele (layout comun + pagini)
+- `src/components/` — componente reutilizabile; `src/components/illustrations/` — desene SVG decorative
+- `src/hooks/` — hook-uri React; `src/lib/` — funcții pure fără React (ex. `contrast.ts`)
+- `src/data/` — date statice în cod (categoriile rămân aici; produsele merg în Firestore în F2)
+- `src/styles/` — teste pe stiluri (contrastul tokenurilor de brand)
+- `src/test/` — setup Vitest și `renderWithRouter` pentru componente care au nevoie de router
+- `e2e/` — Playwright (`fixtures.ts`: pagină „sănătoasă”, `tabKey`, `isNarrow`)
+- `scripts/` — unelte Node (Lighthouse); `api/` — funcții Vercel (din F6)
 
 Testele stau lângă fișierul testat: `Foo.tsx` + `Foo.test.tsx`.
+
+Convenții pentru componente:
+
+- `className` controlează mărimea și poziția; mărimea implicită, dacă există, e înlocuită (nu combinată).
+- Desenele sunt `aria-hidden` și stau în `components/illustrations/`.
+- `data-label` / `data-stamp` sunt cârlige stabile pentru teste unde nu există un rol ARIA potrivit;
+  în rest, testele caută după rol și text.
+- Testele unitare acoperă logica și starea; E2E acoperă doar ce cere un browser real (focus,
+  vizibilitate, scroll, WebKit, rețea). Nu duplica un caz pe ambele niveluri.
 
 ## Reguli ale proiectului
 
@@ -44,8 +58,19 @@ Testele stau lângă fișierul testat: `Foo.tsx` + `Foo.test.tsx`.
 - **Pași mici:** lucrăm câte un pas din `docs/PLAN.md` (~1 oră). Un pas e gata doar când „Gata când”
   e adevărat, `npm run check` trece și e într-un commit. Bifează pasul în PLAN.md.
 - **Un branch pe fază** (`faza-N/nume`), un commit pe pas, PR la final de fază.
-- Pentru fiecare pas: teste întâi (`tdd-guide`) → implementare → `/code-review` + `typescript-reviewer`;
-  `security-reviewer` pentru auth, checkout, webhook, reguli Firestore și asistentul AI.
+- **Fiecare pas folosește agenții din kitul `~/Desktop/claude-code-starter-kit`** (nivel „maxim”, ales de
+  Teodor):
+  1. `tdd-guide` scrie testele care pică (RED), pornind de la „Gata când” al pasului.
+  2. Implementare până trec (GREEN), apoi refactor; verificare vizuală în browser pe 375px și desktop.
+  3. `typescript-reviewer` **și** `code-reviewer`, rulați în paralel pe diff-ul pasului.
+  4. `security-reviewer` în plus când pasul atinge input de la utilizator, auth, checkout, webhook,
+     reguli Firestore, chei sau asistentul AI.
+  5. Constatările valide se repară cu un test care le prinde; cele respinse se explică.
+- Skill-urile kitului se încarcă când pasul le atinge: `react-testing`, `react-patterns`,
+  `frontend-patterns`, `security-review`, `api-design`, `error-handling`, `claude-api`, `eval-harness`.
 - **Poarta de testare** la finalul fiecărei faze, după `docs/testing/README.md`: Claude e tester și
-  verifică toată aplicația cap-coadă. Fără poartă trecută, nu începem faza următoare.
+  verifică toată aplicația cap-coadă (happy path, limite, adversarial, concurență/haos, rețea,
+  securitate OWASP), cu jurnal `[PASS]`/`[FAIL]` din rulări reale și secțiunea „Anticipare riscuri
+  & profilaxie”. Fără poartă trecută, nu începem faza următoare.
+- **Întrebările de decizie** se pun ca grilă cu variante și o recomandare, nu ca text liber.
 - Docker nu se folosește (ADR 0003); testele rulează pe Firebase Emulator Suite.

@@ -33,34 +33,34 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F1 — Schelet și aspect „etichetă de borcan”
 
-| #   | Pas                                                           | Gata când                                         |
-| --- | ------------------------------------------------------------- | ------------------------------------------------- |
-| 1.1 | React Router + layout comun (header, footer, skip link)       | `/` și o rută de test folosesc același layout     |
-| 1.2 | Pagină 404 ilustrată                                          | o rută inexistentă arată 404, cu link înapoi      |
-| 1.3 | Textură de hârtie + chenar de etichetă (componentă `Label`)   | vizibile pe pagina de start, contrast AA păstrat  |
-| 1.4 | Iconițe SVG desenate pentru cele 6 categorii                  | fiecare categorie are iconiță, `aria-hidden`      |
-| 1.5 | Restilizare pagina de start în stilul nou                     | arată ca în BRAND.md pe 375px și desktop          |
-| 1.6 | Meniu mobil (hamburger accesibil)                             | se deschide/închide cu tastatura, focus gestionat |
-| 1.7 | Playwright instalat + primul E2E (navigare, 404, meniu mobil) | `npm run test:e2e` trece local și în CI           |
-| 1.8 | Lighthouse CI configurat (`npm run audit`)                    | raport generat, praguri aplicate                  |
-| 🧪  | **Poarta de testare F1**                                      | raport `faza-1.md`, zero buguri deschise          |
+| #      | Pas                                                           | Gata când                                         |
+| ------ | ------------------------------------------------------------- | ------------------------------------------------- |
+| 1.1 ✅ | React Router + layout comun (header, footer, skip link)       | `/` și o rută de test folosesc același layout     |
+| 1.2 ✅ | Pagină 404 ilustrată                                          | o rută inexistentă arată 404, cu link înapoi      |
+| 1.3 ✅ | Textură de hârtie + chenar de etichetă (componentă `Label`)   | vizibile pe pagina de start, contrast AA păstrat  |
+| 1.4 ✅ | Iconițe SVG desenate pentru cele 6 categorii                  | fiecare categorie are iconiță, `aria-hidden`      |
+| 1.5 ✅ | Restilizare pagina de start în stilul nou                     | arată ca în BRAND.md pe 375px și desktop          |
+| 1.6 ✅ | Meniu mobil (hamburger accesibil)                             | se deschide/închide cu tastatura, focus gestionat |
+| 1.7 ✅ | Playwright instalat + primul E2E (navigare, 404, meniu mobil) | `npm run test:e2e` trece local și în CI           |
+| 1.8 ✅ | Lighthouse configurat (`npm run lighthouse`)                  | raport generat, praguri aplicate                  |
+| 🧪     | **Poarta de testare F1**                                      | raport `faza-1.md`, zero buguri deschise          |
 
 ## F2 — Catalog
 
-| #    | Pas                                                                       | Gata când                                                            |
-| ---- | ------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| 2.1  | Proiect Firebase + config web în `.env.local`                             | aplicația se conectează, fără chei în cod                            |
-| 2.2  | Firebase Emulator Suite (Firestore + Auth) local                          | `npm run emulators` pornește; datele de test nu ating proiectul real |
-| 2.3  | Tipul `Product` + validare cu schemă (zod)                                | teste: produs invalid respins, preț întreg în bani                   |
-| 2.4  | Conținut: 15–20 produse (texte, gramaj, ingrediente, prețuri)             | fișier seed revizuit, ton conform BRAND.md                           |
-| 2.5  | Imagini: prompt-șablon AI pentru borcane + poze Unsplash pentru atmosferă | imagini optimizate (WebP), creditate în CREDITS.md                   |
-| 2.6  | Script de seed în emulator                                                | `npm run seed` încarcă produsele, idempotent                         |
-| 2.7  | Pagina de categorie (listă produse din Firestore)                         | stări: încărcare, gol, eroare; testate                               |
-| 2.8  | Card de produs în stil etichetă (preț formatat RON, badge stoc)           | `formatPrice(1999)` → „19,99 lei”, testat                            |
-| 2.9  | Pagina de produs (`/produs/:slug`)                                        | slug inexistent → 404                                                |
-| 2.10 | Reguli Firestore: produse doar citire publică                             | testate în emulator: scrierea din client e respinsă                  |
-| 2.11 | E2E: start → categorie → produs                                           | trece în CI cu emulatorul                                            |
-| 🧪   | **Poarta de testare F2**                                                  | raport `faza-2.md`, zero buguri deschise                             |
+| #    | Pas                                                                       | Gata când                                                                           |
+| ---- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 2.1  | Proiect Firebase + config web în `.env.local`                             | aplicația se conectează, fără chei în cod                                           |
+| 2.2  | Firebase Emulator Suite (Firestore + Auth) local                          | `npm run emulators` pornește; datele de test nu ating proiectul real                |
+| 2.3  | Tipul `Product` + validare cu schemă (zod)                                | teste: produs invalid respins, preț întreg în bani, categorie doar din `CATEGORIES` |
+| 2.4  | Conținut: 15–20 produse (texte, gramaj, ingrediente, prețuri)             | fișier seed revizuit, ton conform BRAND.md                                          |
+| 2.5  | Imagini: prompt-șablon AI pentru borcane + poze Unsplash pentru atmosferă | imagini optimizate (WebP), creditate în CREDITS.md                                  |
+| 2.6  | Script de seed în emulator                                                | `npm run seed` încarcă produsele, idempotent                                        |
+| 2.7  | Pagina de categorie (listă produse din Firestore)                         | stări: încărcare, gol, eroare; testate                                              |
+| 2.8  | Card de produs în stil etichetă (preț formatat RON, badge stoc)           | `formatPrice(1999)` → „19,99 lei”, testat                                           |
+| 2.9  | Pagina de produs (`/produs/:slug`)                                        | slug inexistent → 404                                                               |
+| 2.10 | Reguli Firestore: produse doar citire publică                             | testate în emulator: scrierea din client e respinsă                                 |
+| 2.11 | E2E: start → categorie → produs                                           | trece în CI cu emulatorul                                                           |
+| 🧪   | **Poarta de testare F2**                                                  | raport `faza-2.md`, zero buguri deschise                                            |
 
 ## F3 — Coș
 
@@ -100,15 +100,15 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F6 — Checkout și plată
 
-| #   | Pas                                                          | Gata când                                |
-| --- | ------------------------------------------------------------ | ---------------------------------------- |
-| 6.1 | Proiect Vercel + deploy de preview din GitHub                | link live pentru fiecare PR              |
-| 6.2 | Funcțiile `api/` + tsconfig + `firebase-admin`               | `api/health` răspunde; type-check în CI  |
-| 6.3 | Calcul comandă pe server (prețuri + transport din Firestore) | TDD; prețurile din client sunt ignorate  |
-| 6.4 | `api/checkout`: comandă `pending` + sesiune Stripe (test)    | redirect la Stripe cu suma corectă       |
-| 6.5 | Pagina de checkout (adresă, sumar, buton „Plătește”)         | validare, stare de încărcare, erori      |
-| 6.6 | Paginile de succes și anulare                                | succes nu marchează comanda plătită      |
-| 🧪  | **Poarta de testare F6**                                     | raport `faza-6.md`, zero buguri deschise |
+| #   | Pas                                                          | Gata când                                                                                                                                                                                                                                                                                                                                                                |
+| --- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 6.1 | Proiect Vercel + deploy de preview din GitHub                | link live pentru fiecare PR; un deep link reîncărcat (ex. `/produs/x`) servește aplicația, nu 404-ul hostului; o cale cu codificare stricată (`/%E0%A4%A`) dă o pagină de eroare curată, nu una goală; `vercel.json` cu antete de securitate (HSTS, nosniff, Referrer-Policy, Permissions-Policy, frame-ancestors) și CSP în Report-Only (vezi `docs/testing/faza-1.md`) |
+| 6.2 | Funcțiile `api/` + tsconfig + `firebase-admin`               | `api/health` răspunde; type-check în CI                                                                                                                                                                                                                                                                                                                                  |
+| 6.3 | Calcul comandă pe server (prețuri + transport din Firestore) | TDD; prețurile din client sunt ignorate                                                                                                                                                                                                                                                                                                                                  |
+| 6.4 | `api/checkout`: comandă `pending` + sesiune Stripe (test)    | redirect la Stripe cu suma corectă                                                                                                                                                                                                                                                                                                                                       |
+| 6.5 | Pagina de checkout (adresă, sumar, buton „Plătește”)         | validare, stare de încărcare, erori                                                                                                                                                                                                                                                                                                                                      |
+| 6.6 | Paginile de succes și anulare                                | succes nu marchează comanda plătită                                                                                                                                                                                                                                                                                                                                      |
+| 🧪  | **Poarta de testare F6**                                     | raport `faza-6.md`, zero buguri deschise                                                                                                                                                                                                                                                                                                                                 |
 
 ## F7 — Comenzi → **MVP complet**
 
@@ -154,14 +154,14 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F11 — Finisare și demo
 
-| #    | Pas                                                       | Gata când                                                        |
-| ---- | --------------------------------------------------------- | ---------------------------------------------------------------- |
-| 11.1 | Stări de eroare și de încărcare peste tot, erori de rețea | nicio pagină albă                                                |
-| 11.2 | SEO de bază (titluri, meta, Open Graph) pe fiecare pagină | Lighthouse SEO ≥ 90                                              |
-| 11.3 | Flag pentru plată simulată (rezervă pentru demo)          | comutabil fără redeploy de cod                                   |
-| 11.4 | Date curate pe producție + cont demo                      | seed de producție verificat                                      |
-| 11.5 | Scenariul de demo (5 minute) + repetiție                  | parcurs cap-coadă pe link-ul live                                |
-| 🧪   | **Poarta finală: testare cap-coadă a întregii aplicații** | raport `faza-11.md`; toate condițiile „Gata când” din PRD bifate |
+| #    | Pas                                                                         | Gata când                                                                                                                                               |
+| ---- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 11.1 | Stări de eroare și de încărcare peste tot, erori de rețea                   | nicio pagină albă                                                                                                                                       |
+| 11.2 | SEO de bază (titluri, meta, Open Graph) pe fiecare pagină; 404 cu `noindex` | Lighthouse SEO ≥ 90; pagina 404 scoasă din pragul SEO în `scripts/lighthouse.mjs` (`noindex` o penalizează intenționat); prag Performance ridicat la 90 |
+| 11.3 | Flag pentru plată simulată (rezervă pentru demo)                            | comutabil fără redeploy de cod                                                                                                                          |
+| 11.4 | Date curate pe producție + cont demo                                        | seed de producție verificat                                                                                                                             |
+| 11.5 | Scenariul de demo (5 minute) + repetiție                                    | parcurs cap-coadă pe link-ul live                                                                                                                       |
+| 🧪   | **Poarta finală: testare cap-coadă a întregii aplicații**                   | raport `faza-11.md`; toate condițiile „Gata când” din PRD bifate                                                                                        |
 
 ---
 

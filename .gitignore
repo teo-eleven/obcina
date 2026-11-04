@@ -36,3 +36,12 @@ coverage
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Lighthouse
+/lighthouse-report/

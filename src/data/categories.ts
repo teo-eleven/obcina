@@ -4,8 +4,9 @@ export interface Category {
   readonly description: string
 }
 
-// Static until the catalog moves to Firestore (week 2).
-export const CATEGORIES: readonly Category[] = [
+// Categories live in code for good (see the note on CategorySlug below); products move to
+// Firestore in phase 2.
+export const CATEGORIES = [
   {
     slug: 'dulceturi',
     name: 'Dulcețuri și gemuri',
@@ -36,4 +37,8 @@ export const CATEGORIES: readonly Category[] = [
     name: 'Coșuri cadou',
     description: 'Câte puțin din toate, gata de dăruit.',
   },
-]
+] as const satisfies readonly Category[]
+
+// Categories stay in code; only products move to Firestore. A product's category arrives as a
+// string and must be validated against these slugs at that boundary (plan step 2.3).
+export type CategorySlug = (typeof CATEGORIES)[number]['slug']

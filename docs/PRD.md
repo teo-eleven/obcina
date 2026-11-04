@@ -102,5 +102,6 @@ Ordinea pașilor, porțile de testare și estimarea de timp (2–3 ore pe zi): [
 - [ ] Transportul e 0 lei la 200 lei subtotal și 19,99 lei la 199,99 lei.
 - [ ] Adminul poate adăuga un produs care apare imediat în catalog.
 - [ ] Asistentul AI nu propune niciodată un produs inexistent sau fără stoc (verificat de evaluări).
-- [ ] Lighthouse ≥ 90 pe mobil la Performance și Accessibility; fără scroll orizontal la 375px.
+- [ ] Lighthouse pe mobil la final (F11): Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90
+      (pragurile intermediare din PLAN.md); fără scroll orizontal la 375px.
 - [ ] `npm run check` și CI trec; acoperire ≥ 80%.
