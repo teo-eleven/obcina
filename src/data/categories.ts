@@ -4,7 +4,8 @@ export interface Category {
   readonly description: string
 }
 
-// Static until the catalog moves to Firestore (week 2).
+// Categories live in code for good (see the note on CategorySlug below); products move to
+// Firestore in phase 2.
 export const CATEGORIES = [
   {
     slug: 'dulceturi',

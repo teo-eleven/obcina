@@ -60,7 +60,7 @@ function CategoryGrid() {
         <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
           Ce găsești în <i className="text-afina-700 font-medium">cămară</i>
         </h2>
-        <p className="text-lemn-600 mt-3">Șase rafturi, toate umplute în Bucovina.</p>
+        <p className="text-lemn-600 mt-3">De la dulceață la ceai, totul umplut în Bucovina.</p>
       </div>
       <ul aria-label="Categorii" className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {CATEGORIES.map((category) => (

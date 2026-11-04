@@ -32,6 +32,9 @@ care rămâne în suită; ce nu se poate automatiza se încearcă manual și se 
 | **Concurență și haos**     | dublu-clic, două taburi deschise, cereri simultane, același eveniment trimis de 3 ori (idempotență)        |
 | **Rețea**                  | rețea lentă, oprită în mijlocul fluxului, timeout, răspuns invalid de la server                            |
 
+Unitar vs. E2E: logica și starea se testează unitar (Vitest); E2E (Playwright) doar ce cere un
+browser real. Un caz nu se scrie pe ambele niveluri.
+
 Ce se aplică depinde de fază (F1 nu are încă date sau server); categoriile care nu au încă
 obiect se marchează „n/a” în jurnal, cu motivul.
 

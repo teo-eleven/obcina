@@ -22,13 +22,25 @@ Vercel (`api/` = funcții de server) · Stripe Checkout în mod test · Vitest +
 
 ## Structură
 
-- `src/pages/` — o componentă per pagină
-- `src/components/` — componente reutilizabile
-- `src/data/` — date statice (până la mutarea în Firestore)
-- `src/test/setup.ts` — setup Vitest
-- `api/` — funcții Vercel (din săpt. 5)
+- `src/pages/` — o componentă per pagină; `src/routes.tsx` — rutele (layout comun + pagini)
+- `src/components/` — componente reutilizabile; `src/components/illustrations/` — desene SVG decorative
+- `src/hooks/` — hook-uri React; `src/lib/` — funcții pure fără React (ex. `contrast.ts`)
+- `src/data/` — date statice în cod (categoriile rămân aici; produsele merg în Firestore în F2)
+- `src/styles/` — teste pe stiluri (contrastul tokenurilor de brand)
+- `src/test/` — setup Vitest și `renderWithRouter` pentru componente care au nevoie de router
+- `e2e/` — Playwright (`fixtures.ts`: pagină „sănătoasă”, `tabKey`, `isNarrow`)
+- `scripts/` — unelte Node (Lighthouse); `api/` — funcții Vercel (din F6)
 
 Testele stau lângă fișierul testat: `Foo.tsx` + `Foo.test.tsx`.
+
+Convenții pentru componente:
+
+- `className` controlează mărimea și poziția; mărimea implicită, dacă există, e înlocuită (nu combinată).
+- Desenele sunt `aria-hidden` și stau în `components/illustrations/`.
+- `data-label` / `data-stamp` sunt cârlige stabile pentru teste unde nu există un rol ARIA potrivit;
+  în rest, testele caută după rol și text.
+- Testele unitare acoperă logica și starea; E2E acoperă doar ce cere un browser real (focus,
+  vizibilitate, scroll, WebKit, rețea). Nu duplica un caz pe ambele niveluri.
 
 ## Reguli ale proiectului
 

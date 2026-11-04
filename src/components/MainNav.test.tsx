@@ -1,7 +1,7 @@
 import { act, fireEvent, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Outlet } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderWithRouter } from '../test/renderWithRouter'
 import { MainNav } from './MainNav'
 
@@ -70,6 +70,20 @@ describe('MainNav', () => {
 
     expect(toggle).toHaveAttribute('aria-expanded', 'false')
     expect(toggle).toHaveFocus()
+  })
+
+  it('closes on Escape without stealing focus from elsewhere on the page', async () => {
+    const { user, toggle } = setup()
+    await user.click(toggle)
+    const outside = screen.getByRole('button', { name: 'În afara meniului' })
+    // Focus can sit outside the menu while it is still open (e.g. a click-only blur in Safari).
+    const activeElement = vi.spyOn(document, 'activeElement', 'get').mockReturnValue(outside)
+
+    await user.keyboard('{Escape}')
+    activeElement.mockRestore()
+
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(toggle).not.toHaveFocus()
   })
 
   it('closes when the keyboard tabs out of the menu', async () => {
