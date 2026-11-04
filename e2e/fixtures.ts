@@ -11,14 +11,26 @@ const ASSET_TYPES = new Set(['image', 'font', 'stylesheet', 'script', 'media'])
  * SPA hosts) answers any unknown path with index.html and status 200, so a missing image or
  * font never produces a 404. The fixture fails the test at teardown if anything was seen.
  */
-export const test = base.extend<{ healthyPage: void }>({
+interface HealthOptions {
+  /** Request URLs allowed to fail, for tests that cut the network on purpose. */
+  allowedRequestFailures: RegExp[]
+}
+
+export const test = base.extend<HealthOptions & { healthyPage: void }>({
+  allowedRequestFailures: [[], { option: true }],
   healthyPage: [
-    async ({ page, baseURL }, use) => {
+    async ({ page, baseURL, allowedRequestFailures }, use) => {
       const problems: string[] = []
       const origin = baseURL ? new URL(baseURL).origin : null
 
+      const isAllowedFailure = (url: string) =>
+        allowedRequestFailures.some((pattern) => pattern.test(url))
+
       page.on('console', (message) => {
-        if (message.type() === 'error') problems.push(`console.error: ${message.text()}`)
+        if (message.type() !== 'error') return
+        // Browsers also log a failed resource load to the console; honour the same allow-list.
+        if (isAllowedFailure(message.location().url)) return
+        problems.push(`console.error: ${message.text()}`)
       })
       page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
       page.on('response', (response) => {
@@ -37,6 +49,7 @@ export const test = base.extend<{ healthyPage: void }>({
       page.on('requestfailed', (request) => {
         const reason = request.failure()?.errorText ?? 'unknown'
         // Aborts are normal when a test navigates away while something is still loading.
+        if (isAllowedFailure(request.url())) return
         if (!/abort|cancel/i.test(reason))
           problems.push(`request failed: ${request.url()} (${reason})`)
       })
