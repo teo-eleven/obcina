@@ -8,6 +8,25 @@
       {
         "allowConstantExport": true
       }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["**/seedProducts"],
+            "message": "Seed data is for the seed script and tests only; the app reads products from Firestore."
+          }
+        ]
+      }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/data/seedProducts.test.ts", "scripts/**"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ]
 }
