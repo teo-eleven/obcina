@@ -54,6 +54,8 @@ Pe **desktop** și pe **mobil (375px)**:
 - [ ] `security-reviewer` pe tot diff-ul fazei (`git diff main...HEAD`), cu verificare OWASP Top 10
       pe ce s-a adăugat (control acces, injecții, configurare, autentificare).
 - [ ] `npm audit` fără vulnerabilități mari; CodeQL fără alerte noi.
+- [ ] `overrides` din `package.json` încă necesare (ADR 0005): `npm ls @grpc/grpc-js`; dacă
+      `@firebase/firestore` cere singur `>= 1.13.6`, override-ul se scoate.
 - [ ] Nicio cheie secretă în cod, în bundle (`dist/`) sau în istoricul git.
 - [ ] Regulile Firestore testate pentru ce s-a adăugat (din F2 încolo).
 

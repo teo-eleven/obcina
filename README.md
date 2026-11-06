@@ -5,11 +5,11 @@ Produsele, prețurile și plățile sunt fictive (Stripe în mod test).
 
 ## Pornire
 
-Ai nevoie de Node.js 20 sau mai nou.
+Ai nevoie de Node.js 24 (versiunea din `.nvmrc`; cu nvm: `nvm use`).
 
 ```bash
 npm install
-cp .env.example .env.local   # completează valorile (din săpt. 2)
+cp .env.example .env.local   # completează valorile Firebase (pasul 2.1)
 npm run dev
 ```
 
