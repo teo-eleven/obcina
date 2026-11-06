@@ -1,7 +1,7 @@
 {
-  // Node scripts written in TypeScript (run directly by Node 24, which strips the types).
-  // Bundler-style resolution because they import src/ files, which use extensionless imports;
-  // those imports must stay type-only (`import type`) so Node can run the stripped output.
+  // Node scripts written in TypeScript. Bundler-style resolution because they import src/ files,
+  // which use extensionless imports. images.ts runs on plain Node (type stripping), so its src/
+  // imports must stay type-only; seed.ts runs on tsx (ADR 0007), which resolves value imports too.
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.scripts.tsbuildinfo",
     "target": "es2023",

@@ -23,7 +23,12 @@
   },
   "overrides": [
     {
-      "files": ["src/data/seedProducts.test.ts", "src/data/productImages.test.ts", "scripts/**"],
+      "files": [
+        "src/data/seedProducts.test.ts",
+        "src/data/productImages.test.ts",
+        "src/lib/catalog.test.ts",
+        "scripts/**"
+      ],
       "rules": {
         "no-restricted-imports": "off"
       }

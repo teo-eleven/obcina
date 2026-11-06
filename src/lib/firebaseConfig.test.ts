@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { EMULATOR_PROJECT_ID, readFirebaseConfig, usesEmulators } from './firebaseConfig'
+import {
+  assertEmulatorOnly,
+  EMULATOR_PROJECT_ID,
+  readFirebaseConfig,
+  usesEmulators,
+} from './firebaseConfig'
 
 const VALID_ENV = {
   VITE_FIREBASE_API_KEY: 'test-api-key',
@@ -96,5 +101,48 @@ describe('usesEmulators', () => {
 describe('emulator project', () => {
   it('uses a demo- project id, which Firebase keeps offline-only', () => {
     expect(EMULATOR_PROJECT_ID.startsWith('demo-')).toBe(true)
+  })
+})
+
+// The seed script writes with the Admin SDK, which ignores security rules. This guard is its second
+// line of defence: even if the emulator host were lost, it refuses anything that could reach a real
+// Google Cloud project.
+describe('assertEmulatorOnly', () => {
+  it('accepts the demo project with a clean environment', () => {
+    expect(() => assertEmulatorOnly({}, EMULATOR_PROJECT_ID)).not.toThrow()
+  })
+
+  it.each(['obcina-4f2a1', 'demo', 'my-demo-obcina'])('refuses the project id %s', (projectId) => {
+    expect(() => assertEmulatorOnly({}, projectId)).toThrow(/demo-/)
+  })
+
+  it('refuses when service-account credentials are in the environment', () => {
+    expect(() =>
+      assertEmulatorOnly({ GOOGLE_APPLICATION_CREDENTIALS: '/keys/sa.json' }, EMULATOR_PROJECT_ID),
+    ).toThrow(/GOOGLE_APPLICATION_CREDENTIALS/)
+  })
+
+  it.each(['GCLOUD_PROJECT', 'GOOGLE_CLOUD_PROJECT'])(
+    'refuses when %s names a real project',
+    (key) => {
+      expect(() => assertEmulatorOnly({ [key]: 'obcina-4f2a1' }, EMULATOR_PROJECT_ID)).toThrow(
+        new RegExp(key),
+      )
+    },
+  )
+
+  it('allows those variables when they name a demo project', () => {
+    expect(() =>
+      assertEmulatorOnly({ GCLOUD_PROJECT: 'demo-obcina' }, EMULATOR_PROJECT_ID),
+    ).not.toThrow()
+  })
+
+  it('never echoes the credential path it found', () => {
+    expect(() =>
+      assertEmulatorOnly(
+        { GOOGLE_APPLICATION_CREDENTIALS: '/keys/secret-sa.json' },
+        EMULATOR_PROJECT_ID,
+      ),
+    ).not.toThrow(/secret-sa/)
   })
 })

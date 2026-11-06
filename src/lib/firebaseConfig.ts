@@ -25,6 +25,32 @@ export const EMULATOR_CONFIG: FirebaseOptions = {
   appId: 'demo-app-id',
 }
 
+const isDemoProject = (projectId: string) => projectId.startsWith('demo-')
+
+/**
+ * Throws unless the given project and the environment can only ever reach the emulators: a `demo-`
+ * project, no service-account credentials, no real project named by Google's own variables.
+ * For Node scripts that write with the Admin SDK, which ignores security rules.
+ */
+export function assertEmulatorOnly(
+  env: Readonly<Record<string, string | undefined>>,
+  projectId: string,
+): void {
+  if (!isDemoProject(projectId)) {
+    throw new Error(`Refusing to run against "${projectId}": only demo- projects are allowed.`)
+  }
+  // Name the variable, never its value (it is a path to a key file).
+  if (env.GOOGLE_APPLICATION_CREDENTIALS) {
+    throw new Error('Refusing to run: GOOGLE_APPLICATION_CREDENTIALS is set. Unset it first.')
+  }
+  for (const key of ['GCLOUD_PROJECT', 'GOOGLE_CLOUD_PROJECT']) {
+    const named = env[key]
+    if (named && !isDemoProject(named)) {
+      throw new Error(`Refusing to run: ${key} names a real project. Unset it first.`)
+    }
+  }
+}
+
 // Set by .env.emulators (`npm run dev:emulators`). Exact match only, so a typo stays on the safe side.
 export function usesEmulators(env: Readonly<Record<string, string | undefined>>): boolean {
   return env.VITE_USE_EMULATORS === 'true'

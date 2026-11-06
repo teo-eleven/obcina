@@ -10,6 +10,7 @@ Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`.
 
 - `npm run dev` — server local (http://localhost:5180)
 - `npm run emulators` — Firestore + Auth locale (proiect `demo-obcina`, UI pe http://127.0.0.1:4000)
+- `npm run seed` — încarcă produsele în emulator (pornește întâi `npm run emulators`)
 - `npm run dev:emulators` — aplicația legată de emulatoare, nu de proiectul real (ADR 0006)
 - `npm run check` — lint + typecheck + format + teste (rulează înainte de orice commit)
 - `npm run test:watch` / `npm run test:coverage`
