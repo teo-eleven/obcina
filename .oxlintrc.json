@@ -27,7 +27,8 @@
         "src/data/seedProducts.test.ts",
         "src/data/productImages.test.ts",
         "src/lib/catalog.test.ts",
-        "scripts/**"
+        "scripts/**",
+        "rules/**"
       ],
       "rules": {
         "no-restricted-imports": "off"
