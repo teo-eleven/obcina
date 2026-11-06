@@ -67,6 +67,24 @@ describe('HomePage', () => {
     }
   })
 
+  it('shows a Bucovina photo in the story, lazy-loaded at the right size, crediting its author', () => {
+    render(<HomePage />)
+
+    const figure = screen.getByRole('figure')
+    const photo = within(figure).getByRole('img', { name: /fânețe.*Poiana Negrii/i })
+    expect(photo).toHaveAttribute('loading', 'lazy')
+    expect(photo).toHaveAttribute('width', '1200')
+    expect(photo).toHaveAttribute('height', '598')
+    expect(photo.getAttribute('srcset')?.split(', ')).toEqual([
+      '/images/atmosfera/poiana-negrii-640.webp 640w',
+      '/images/atmosfera/poiana-negrii-800.webp 800w',
+      '/images/atmosfera/poiana-negrii-1200.webp 1200w',
+    ])
+
+    const credit = within(figure).getByRole('link', { name: 'Sinziana Mihalache' })
+    expect(credit).toHaveAttribute('href', 'https://unsplash.com/@sinzianamihalache')
+  })
+
   it('leads the call to action to the categories', () => {
     render(<HomePage />)
 

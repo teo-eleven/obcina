@@ -26,6 +26,7 @@ Deschide http://localhost:5180.
 | `npm run test:coverage` | teste cu raport de acoperire                  |
 | `npm run build`         | build de producție în `dist/`                 |
 | `npm run test:e2e`      | teste end-to-end (Chromium și WebKit)         |
+| `npm run images`        | imaginile produselor și pozele, în WebP       |
 | `npm run lighthouse`    | audit Lighthouse pe mobil, cu praguri         |
 
 ## Documentație

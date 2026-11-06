@@ -50,3 +50,6 @@ coverage
 
 # Firebase CLI cache (emulator logs are covered by *.log)
 .firebase/
+
+# Image originals (AI products, photos): large; only the optimised WebP in public/images is committed
+/assets/

@@ -15,6 +15,7 @@ Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`.
 - `npm run test:watch` / `npm run test:coverage`
 - `npm run build` — build de producție
 - `npm run test:e2e` — Playwright pe build-ul de producție (Chromium + WebKit, desktop + telefon)
+- `npm run images` — imaginile din `public/images/` (WebP), din originalele din `assets/` sau desene provizorii
 - `npm run lighthouse` — Lighthouse pe mobil, pică sub praguri; rapoarte în `lighthouse-report/`
 
 ## Stack

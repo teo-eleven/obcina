@@ -21,6 +21,7 @@
     "build-and-preview": "npm run build && vite preview",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "images": "node scripts/images.ts",
     "lighthouse": "npm run build && node scripts/lighthouse.mjs"
   },
   "dependencies": {
@@ -52,6 +53,7 @@
     "oxlint": "^1.89.0",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "sharp": "0.35.5",
     "tailwindcss": "^4.3.3",
     "typescript": "~7.0.2",
     "vite": "^8.3.5",

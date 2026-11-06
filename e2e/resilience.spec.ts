@@ -122,9 +122,11 @@ test.describe('network trouble', () => {
     expect(headingFont).toContain('Fraunces')
   })
 
-  // Pages not visited yet may need fonts that can't download offline; the app must still work.
+  // Pages not visited yet may need fonts or lazy images that can't download offline; the app must
+  // still work.
   test.describe(() => {
-    test.use({ allowedRequestFailures: [/\.woff2$/] })
+    // One pattern: Playwright reads a two-element array in test.use as [value, fixtureOptions].
+    test.use({ allowedRequestFailures: [/\.woff2$|\/images\/.+\.webp$/] })
 
     test('losing the connection after load keeps in-app navigation working', async ({
       page,
