@@ -4,6 +4,7 @@ import { EmptyJar } from '../components/illustrations/EmptyJar'
 export function NotFoundPage() {
   return (
     <div className="mx-auto flex max-w-xl flex-col items-center px-4 py-20 text-center">
+      <title>Pagină negăsită — Obcina</title>
       <EmptyJar className="mx-auto h-44 w-auto sm:h-52" />
       <p className="text-brad-700 mt-8 text-sm font-semibold tracking-widest uppercase">
         Eroare 404

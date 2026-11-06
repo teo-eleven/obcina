@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { CategoryIcon } from '../components/CategoryIcon'
 import { LindenLeaf } from '../components/illustrations/LindenLeaf'
 import { PantryShelf } from '../components/illustrations/PantryShelf'
@@ -64,12 +65,24 @@ function CategoryGrid() {
       </div>
       <ul aria-label="Categorii" className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {CATEGORIES.map((category) => (
-          <li key={category.slug}>
+          // The heading link stretches over the whole label, so the card is one target with one name;
+          // the card, not just the heading, shows the keyboard focus.
+          <li
+            key={category.slug}
+            className="has-[a:focus-visible]:outline-afina-500 relative outline-offset-4 has-[a:focus-visible]:outline-2"
+          >
             <Label className="h-full">
               <div className="flex items-start gap-4">
                 <CategoryIcon slug={category.slug} />
                 <div>
-                  <h3 className="text-xl font-semibold">{category.name}</h3>
+                  <h3 className="text-xl font-semibold">
+                    <Link
+                      to={`/categorie/${category.slug}`}
+                      className="hover:text-afina-700 after:absolute after:inset-0"
+                    >
+                      {category.name}
+                    </Link>
+                  </h3>
                   <p className="text-lemn-600 mt-2">{category.description}</p>
                 </div>
               </div>

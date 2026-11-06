@@ -27,6 +27,9 @@
         "src/data/seedProducts.test.ts",
         "src/data/productImages.test.ts",
         "src/lib/catalog.test.ts",
+        "src/lib/productsRepository.test.ts",
+        "src/hooks/useCategoryProducts.test.ts",
+        "src/pages/CategoryPage.test.tsx",
         "scripts/**",
         "rules/**"
       ],
