@@ -50,7 +50,7 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 | #      | Pas                                                                       | Gata când                                                                                                                         |
 | ------ | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | 2.1 ✅ | Proiect Firebase + config web în `.env.local`                             | aplicația se conectează, fără chei în cod                                                                                         |
-| 2.2    | Firebase Emulator Suite (Firestore + Auth) local                          | `npm run emulators` pornește; datele de test nu ating proiectul real                                                              |
+| 2.2 ✅ | Firebase Emulator Suite (Firestore + Auth) local                          | `npm run emulators` pornește; datele de test nu ating proiectul real                                                              |
 | 2.3    | Tipul `Product` + validare cu schemă (zod)                                | teste: produs invalid respins, preț întreg în bani, categorie doar din `CATEGORIES`                                               |
 | 2.4    | Conținut: 15–20 produse (texte, gramaj, ingrediente, prețuri)             | fișier seed revizuit, ton conform BRAND.md                                                                                        |
 | 2.5    | Imagini: prompt-șablon AI pentru borcane + poze Unsplash pentru atmosferă | imagini optimizate (WebP), creditate în CREDITS.md                                                                                |
@@ -59,7 +59,7 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 | 2.8    | Card de produs în stil etichetă (preț formatat RON, badge stoc)           | `formatPrice(1999)` → „19,99 lei”, testat                                                                                         |
 | 2.9    | Pagina de produs (`/produs/:slug`)                                        | slug inexistent → 404                                                                                                             |
 | 2.10   | Reguli Firestore: produse doar citire publică                             | testate în emulator: scrierea din client e respinsă; implicit `deny` pe orice altă colecție; interogările din client au `limit()` |
-| 2.11   | E2E: start → categorie → produs                                           | trece în CI cu emulatorul                                                                                                         |
+| 2.11   | E2E: start → categorie → produs                                           | trece în CI cu emulatorul (build `--mode emulators`, Java 21 în CI)                                                               |
 | 🧪     | **Poarta de testare F2**                                                  | raport `faza-2.md`, zero buguri deschise                                                                                          |
 
 ## F3 — Coș

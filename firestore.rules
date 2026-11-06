@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// Locked until step 2.10 writes the real rules (public read on products only).
+// Same as the live project, which was created in production mode.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

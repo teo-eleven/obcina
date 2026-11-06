@@ -8,6 +8,12 @@
       "port": 5180
     },
     {
+      "name": "obcina-dev-emulators",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev:emulators"],
+      "port": 5180
+    },
+    {
       "name": "obcina-preview",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "build-and-preview"],

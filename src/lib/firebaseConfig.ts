@@ -11,6 +11,25 @@ const ENV_KEYS = {
 
 type ConfigField = keyof typeof ENV_KEYS
 
+// Firebase keeps any `demo-` project offline: with it, test data can never reach the live project.
+export const EMULATOR_PROJECT_ID = 'demo-obcina'
+// Must match firebase.json (guarded by emulatorSetup.test.ts).
+export const EMULATOR_HOST = '127.0.0.1'
+export const FIRESTORE_EMULATOR_PORT = 8080
+export const AUTH_EMULATOR_PORT = 9099
+
+export const EMULATOR_CONFIG: FirebaseOptions = {
+  apiKey: 'demo-api-key',
+  authDomain: `${EMULATOR_PROJECT_ID}.firebaseapp.com`,
+  projectId: EMULATOR_PROJECT_ID,
+  appId: 'demo-app-id',
+}
+
+// Set by .env.emulators (`npm run dev:emulators`). Exact match only, so a typo stays on the safe side.
+export function usesEmulators(env: Readonly<Record<string, string | undefined>>): boolean {
+  return env.VITE_USE_EMULATORS === 'true'
+}
+
 export function readFirebaseConfig(
   env: Readonly<Record<string, string | undefined>>,
 ): FirebaseOptions {

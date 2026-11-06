@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { readFirebaseConfig } from './firebaseConfig'
+import { EMULATOR_PROJECT_ID, readFirebaseConfig, usesEmulators } from './firebaseConfig'
 
 const VALID_ENV = {
   VITE_FIREBASE_API_KEY: 'test-api-key',
@@ -73,5 +73,28 @@ describe('readFirebaseConfig', () => {
     for (const value of ['test-api-key', 'demo-obcina.firebaseapp.com', '1:123:web:test-app-id']) {
       expect(message).not.toContain(value)
     }
+  })
+})
+
+describe('usesEmulators', () => {
+  it.each([
+    ['true', true],
+    ['TRUE', false],
+    ['True', false],
+    ['1', false],
+    ['yes', false],
+    [' true', false],
+    ['true ', false],
+    ['false', false],
+    ['', false],
+    [undefined, false],
+  ])('VITE_USE_EMULATORS=%j gives %s', (value, expected) => {
+    expect(usesEmulators({ VITE_USE_EMULATORS: value })).toBe(expected)
+  })
+})
+
+describe('emulator project', () => {
+  it('uses a demo- project id, which Firebase keeps offline-only', () => {
+    expect(EMULATOR_PROJECT_ID.startsWith('demo-')).toBe(true)
   })
 })
