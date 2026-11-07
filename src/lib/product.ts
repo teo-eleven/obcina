@@ -14,7 +14,7 @@ const SINGLE_CATEGORY_SLUGS = CATEGORIES.map((category) => category.slug).filter
 
 // Also the Firestore doc id and the /produs/:slug URL, so: lowercase kebab-case only.
 const KEBAB = '[a-z0-9]+(?:-[a-z0-9]+)*'
-const slugSchema = z
+export const slugSchema = z
   .string()
   .min(3)
   .max(80)

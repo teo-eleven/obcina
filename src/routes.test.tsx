@@ -5,7 +5,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Layout } from './components/Layout'
 import { RouteError } from './components/RouteFallbacks'
 import { routes } from './routes'
-import { fetchCategoryProducts } from './lib/productsRepository'
+import { SEED_PRODUCTS } from './data/seedProducts'
+import { fetchCategoryProducts, fetchProduct } from './lib/productsRepository'
+import { stubMatchMedia } from './test/matchMedia'
 import { renderWithRouter } from './test/renderWithRouter'
 
 vi.mock('./lib/productsRepository')
@@ -36,6 +38,17 @@ describe('app routes', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument()
   })
 
+  it('renders the product page for /produs/:slug', async () => {
+    const tea = SEED_PRODUCTS.find((product) => product.slug === 'miere-de-tei') ?? null
+    vi.mocked(fetchProduct).mockResolvedValue(tea)
+
+    renderWithRouter(routes, '/produs/miere-de-tei')
+
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Miere de tei' }),
+    ).toBeInTheDocument()
+  })
+
   it('shows a fallback while a lazy page loads on first visit, and a Romanian error page', () => {
     expect(rootRoute?.HydrateFallback).toBeDefined()
     expect(rootRoute?.ErrorBoundary).toBe(RouteError)
@@ -56,6 +69,19 @@ describe('app routes', () => {
       await screen.findByRole('heading', { level: 1, name: 'Pagina nu s-a putut deschide' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Reîncarcă pagina' })).toBeInTheDocument()
+  })
+
+  it('starts a newly opened page at the top', async () => {
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
+    const { router } = renderWithRouter(TEST_ROUTES, '/')
+    scrollTo.mockClear()
+
+    await act(async () => {
+      await router.navigate('/test')
+    })
+
+    expect(scrollTo).toHaveBeenCalledWith(0, 0)
+    scrollTo.mockRestore()
   })
 
   it('marks the page busy while the next page is still loading', async () => {
@@ -124,6 +150,23 @@ describe('app routes', () => {
     await waitFor(() => {
       expect(scrollIntoView.mock.contexts.at(-1)).toBe(document.getElementById('povestea'))
     })
+  })
+
+  // Smooth scrolling is only for jumping to a section; the page itself has no global smooth
+  // scroll, so starting a new page at the top is instant and can't be cut short by a reflow.
+  it.each([
+    [false, 'smooth'],
+    [true, 'auto'],
+  ])('scrolls to a section smoothly unless reduced motion is %s', async (reduce, behavior) => {
+    const scrollIntoView = vi.fn()
+    Element.prototype.scrollIntoView = scrollIntoView
+    stubMatchMedia(reduce)
+    renderWithRouter(TEST_ROUTES, '/test')
+
+    await userEvent.click(screen.getByRole('link', { name: 'Povestea' }))
+
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledWith({ behavior }))
+    stubMatchMedia()
   })
 
   it.each(['/nu-exista', '/produse/dulceata/inexistent'])(

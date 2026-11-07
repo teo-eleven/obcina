@@ -57,9 +57,9 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 | 2.6 ✅  | Script de seed în emulator                                                | `npm run seed` încarcă produsele, idempotent; fiecare produs trece prin `productSchema`; componentele coșurilor există și sunt produse simple                                                                                                                                                                                    |
 | 2.7 ✅  | Pagina de categorie (listă produse din Firestore)                         | stări: încărcare, gol, eroare; testate; fiecare document validat separat (unul greșit e sărit și logat, nu golește pagina); măsurat bundle-ul cu `zod` (Lighthouse): fragmentul paginii 170 KB gzip; `/categorie/miere` Performance 90, Best Practices 96 (eroarea logată fără emulator, absentă pe site-ul cu reguli publicate) |
 | 2.8 ✅  | Card de produs în stil etichetă (preț formatat RON, badge stoc)           | `formatPrice(1999)` → „19,99 lei”, testat                                                                                                                                                                                                                                                                                        |
-| 2.9     | Pagina de produs (`/produs/:slug`)                                        | slug inexistent → 404                                                                                                                                                                                                                                                                                                            |
+| 2.9 ✅  | Pagina de produs (`/produs/:slug`)                                        | slug inexistent → 404                                                                                                                                                                                                                                                                                                            |
 | 2.10 ✅ | Reguli Firestore: produse doar citire publică                             | testate în emulator: scrierea din client e respinsă; implicit `deny` pe orice altă colecție; interogările din client au `limit()` (făcut înaintea lui 2.7; `npm run test:rules`, job `rules` în CI)                                                                                                                              |
-| 2.11    | E2E: start → categorie → produs                                           | trece în CI cu emulatorul (build `--mode emulators`, Java 21 în CI)                                                                                                                                                                                                                                                              |
+| 2.11    | E2E: start → categorie → produs                                           | trece în CI cu emulatorul (build `--mode emulators`, Java 21 în CI); navigare prin linkuri reale (nu URL direct), produsul deschis de jos din raft pornește de sus (pe WebKit și telefon), `/produs/nu-exista` → 404 fără cerere Firestore                                                                                       |
 | 🧪      | **Poarta de testare F2**                                                  | raport `faza-2.md`, zero buguri deschise                                                                                                                                                                                                                                                                                         |
 
 ## F3 — Coș
@@ -77,14 +77,14 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F4 — Căutare și filtre
 
-| #   | Pas                                                                | Gata când                                                                                     |
-| --- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| 4.1 | Căutare după nume (fără diacritice: „dulceata” găsește „dulceață”) | testat cu și fără diacritice                                                                  |
-| 4.2 | Filtre: categorie, interval de preț, „în stoc”                     | se combină corect; teste                                                                      |
-| 4.3 | Sortare (preț, nume, noutăți)                                      | teste; `createdAt` cu date fixe din fișierul de conținut, ca re-seed-ul să nu schimbe ordinea |
-| 4.4 | Starea filtrelor în URL                                            | link-ul copiat redeschide aceleași rezultate                                                  |
-| 4.5 | E2E: caută, filtrează, sortează, distribuie link                   | trece în CI                                                                                   |
-| 🧪  | **Poarta de testare F4**                                           | raport `faza-4.md`, zero buguri deschise                                                      |
+| #   | Pas                                                                | Gata când                                                                                                                                                                                                            |
+| --- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 4.1 | Căutare după nume (fără diacritice: „dulceata” găsește „dulceață”) | testat cu și fără diacritice                                                                                                                                                                                         |
+| 4.2 | Filtre: categorie, interval de preț, „în stoc”                     | se combină corect; teste                                                                                                                                                                                             |
+| 4.3 | Sortare (preț, nume, noutăți)                                      | teste; `createdAt` cu date fixe din fișierul de conținut, ca re-seed-ul să nu schimbe ordinea                                                                                                                        |
+| 4.4 | Starea filtrelor în URL                                            | link-ul copiat redeschide aceleași rezultate; Înapoi de pe un produs revine la poziția din raft (datele raftului încărcate printr-un loader de rută, înainte de afișare, ca `ScrollRestoration` să aibă unde reveni) |
+| 4.5 | E2E: caută, filtrează, sortează, distribuie link                   | trece în CI                                                                                                                                                                                                          |
+| 🧪  | **Poarta de testare F4**                                           | raport `faza-4.md`, zero buguri deschise                                                                                                                                                                             |
 
 ## F5 — Cont
 
@@ -124,12 +124,12 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F8 — Coșuri cadou
 
-| #   | Pas                                                   | Gata când                                                    |
-| --- | ----------------------------------------------------- | ------------------------------------------------------------ |
-| 8.1 | Model de produs compus + stoc = minimul componentelor | TDD                                                          |
-| 8.2 | 3–4 coșuri cadou în seed + pagina lor                 | afișează ce conține fiecare coș                              |
-| 8.3 | Webhook: la plată scad componentele                   | testat, inclusiv coș + produs separat din aceeași componentă |
-| 🧪  | **Poarta de testare F8**                              | raport `faza-8.md`, zero buguri deschise                     |
+| #   | Pas                                                   | Gata când                                                                                                                                                                                   |
+| --- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 8.1 | Model de produs compus + stoc = minimul componentelor | TDD; pagina de coș are deja componentele (`BasketContents`): `basketStock(components)` pur în `src/lib/stock.ts`, refolosește `stockLevel`/`stockLabel`; pe server se recalculează la plată |
+| 8.2 | 3–4 coșuri cadou în seed + pagina lor                 | afișează ce conține fiecare coș                                                                                                                                                             |
+| 8.3 | Webhook: la plată scad componentele                   | testat, inclusiv coș + produs separat din aceeași componentă                                                                                                                                |
+| 🧪  | **Poarta de testare F8**                              | raport `faza-8.md`, zero buguri deschise                                                                                                                                                    |
 
 ## F9 — Panou de admin
 
@@ -156,7 +156,7 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 | #    | Pas                                                                         | Gata când                                                                                                                                                                                                                       |
 | ---- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 11.1 | Stări de eroare și de încărcare peste tot, erori de rețea                   | nicio pagină albă                                                                                                                                                                                                               |
+| 11.1 | Stări de eroare și de încărcare peste tot, erori de rețea                   | nicio pagină albă; timeout pe încărcări (o conexiune blocată nu rămâne la nesfârșit în „Se încarcă…”); cache scurt în memorie pentru citiri repetate                                                                            |
 | 11.2 | SEO de bază (titluri, meta, Open Graph) pe fiecare pagină; 404 cu `noindex` | Lighthouse SEO ≥ 90; pagina 404 scoasă din pragul SEO în `scripts/lighthouse.mjs` (`noindex` o penalizează intenționat); prag Performance ridicat la 90; pagina de categorie (90 la 2.7): încercat Firestore Lite și `zod/mini` |
 | 11.3 | Flag pentru plată simulată (rezervă pentru demo)                            | comutabil fără redeploy de cod                                                                                                                                                                                                  |
 | 11.4 | Date curate pe producție + cont demo                                        | seed de producție verificat                                                                                                                                                                                                     |

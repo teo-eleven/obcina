@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 import { formatPrice } from '../lib/money'
 import type { Product } from '../lib/product'
-import { stockLevel } from '../lib/stock'
+import { stockLabel, stockLevel } from '../lib/stock'
 import { Label } from './Label'
 import { Stamp } from './Stamp'
 import { STRETCHED_CARD, STRETCHED_LINK } from './stretchedLink'
@@ -19,6 +19,7 @@ export function ProductCard({ product, isPriority }: ProductCardProps) {
   const detail =
     product.kind === 'product' ? `${product.weightGrams} g` : `${product.components.length} produse`
   const stock = product.kind === 'product' ? stockLevel(product.stock) : null
+  const warning = stock && stockLabel(stock)
 
   return (
     <div className={`${STRETCHED_CARD} h-full`}>
@@ -43,8 +44,7 @@ export function ProductCard({ product, isPriority }: ProductCardProps) {
           <Stamp tone="brad" className="rotate-1">
             {detail}
           </Stamp>
-          {stock?.kind === 'out' && <Stamp>Stoc epuizat</Stamp>}
-          {stock?.kind === 'low' && <Stamp>{`Doar ${stock.left} în stoc`}</Stamp>}
+          {warning && <Stamp>{warning}</Stamp>}
         </div>
       </Label>
     </div>

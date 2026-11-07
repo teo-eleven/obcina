@@ -5,6 +5,7 @@ const fakeDb = { type: 'fake-firestore' }
 // A server read: offline, getDocs would answer from the empty local cache and show an empty shelf.
 const getDocsFromServer = vi.hoisted(() => vi.fn())
 const getDocs = vi.hoisted(() => vi.fn())
+const getDocFromServer = vi.hoisted(() => vi.fn())
 
 vi.mock('./firebase', () => ({ getDb: () => fakeDb }))
 vi.mock('firebase/firestore', () => ({
@@ -12,12 +13,16 @@ vi.mock('firebase/firestore', () => ({
   where: vi.fn((field: string, op: string, value: string) => ({ where: [field, op, value] })),
   limit: vi.fn((n: number) => ({ limit: n })),
   query: vi.fn((...parts: unknown[]) => ({ query: parts })),
+  doc: vi.fn((_db: unknown, name: string, id: string) => ({ doc: [name, id] })),
+  documentId: vi.fn(() => '__name__'),
   getDocs,
   getDocsFromServer,
+  getDocFromServer,
 }))
 
-const { collection, limit, query, where } = await import('firebase/firestore')
-const { CATEGORY_PAGE_LIMIT, fetchCategoryProducts } = await import('./productsRepository')
+const { collection, doc, documentId, limit, query, where } = await import('firebase/firestore')
+const { CATEGORY_PAGE_LIMIT, fetchCategoryProducts, fetchProduct, fetchProductsBySlugs } =
+  await import('./productsRepository')
 
 const honey = SEED_PRODUCTS.filter((product) => product.category === 'miere')
 const toDoc = (data: unknown, id: string) => ({ id, data: () => data })
@@ -115,5 +120,144 @@ describe('fetchCategoryProducts', () => {
     getDocsFromServer.mockRejectedValue(new Error('permission-denied'))
 
     await expect(fetchCategoryProducts('miere')).rejects.toThrow('permission-denied')
+  })
+})
+
+const tea = SEED_PRODUCTS.find((product) => product.slug === 'miere-de-tei')
+const snapshotOf = (data: unknown, id: string) => ({
+  exists: () => data !== undefined,
+  id,
+  data: () => data,
+})
+
+describe('fetchProduct', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('reads one document from the server by its slug', async () => {
+    getDocFromServer.mockResolvedValue(snapshotOf(tea, 'miere-de-tei'))
+
+    const product = await fetchProduct('miere-de-tei')
+
+    expect(product).toEqual(tea)
+    expect(doc).toHaveBeenCalledWith(fakeDb, 'products', 'miere-de-tei')
+    expect(getDocFromServer).toHaveBeenCalledWith({ doc: ['products', 'miere-de-tei'] })
+  })
+
+  it.each([
+    '',
+    'ab',
+    'Miere-De-Tei',
+    'miere_de_tei',
+    'a/b',
+    '-miere',
+    'miere-',
+    'a--b',
+    '..',
+    '__name__',
+    'miere%2Fde-tei',
+    'x'.repeat(81),
+  ])('returns null without calling Firestore for the malformed slug %j', async (slug) => {
+    const product = await fetchProduct(slug)
+
+    expect(product).toBeNull()
+    expect(getDocFromServer).not.toHaveBeenCalled()
+  })
+
+  it('returns null for a missing document', async () => {
+    getDocFromServer.mockResolvedValue(snapshotOf(undefined, 'nu-exista'))
+
+    expect(await fetchProduct('nu-exista')).toBeNull()
+  })
+
+  it('warns with field paths only and returns null for invalid data', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    getDocFromServer.mockResolvedValue(snapshotOf({ ...tea, priceBani: 'leak-me' }, 'miere-de-tei'))
+
+    const product = await fetchProduct('miere-de-tei')
+
+    expect(product).toBeNull()
+    const logged = String(warn.mock.calls[0]?.[0])
+    expect(logged).toContain('miere-de-tei')
+    expect(logged).toContain('priceBani')
+    expect(logged).not.toContain('leak-me')
+  })
+
+  it('warns and returns null when the data slug is not the requested one', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    getDocFromServer.mockResolvedValue(snapshotOf(tea, 'alt-slug'))
+
+    expect(await fetchProduct('alt-slug')).toBeNull()
+    expect(String(warn.mock.calls[0]?.[0])).toContain('alt-slug')
+  })
+
+  it('propagates a Firestore failure', async () => {
+    getDocFromServer.mockRejectedValue(new Error('unavailable'))
+
+    await expect(fetchProduct('miere-de-tei')).rejects.toThrow('unavailable')
+  })
+})
+
+describe('fetchProductsBySlugs', () => {
+  const wanted = ['miere-de-tei', 'branza-de-burduf', 'gem-de-zmeura']
+  const wantedProducts = wanted.map((slug) => SEED_PRODUCTS.find((p) => p.slug === slug))
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('returns [] without a query for no slugs', async () => {
+    expect(await fetchProductsBySlugs([])).toEqual([])
+    expect(getDocsFromServer).not.toHaveBeenCalled()
+  })
+
+  it('queries by document id with a limit equal to the number of slugs', async () => {
+    getDocsFromServer.mockResolvedValue({ docs: [] })
+
+    await fetchProductsBySlugs(wanted)
+
+    expect(documentId).toHaveBeenCalled()
+    expect(where).toHaveBeenCalledWith('__name__', 'in', wanted)
+    expect(limit).toHaveBeenCalledWith(3)
+    expect(getDocsFromServer).toHaveBeenCalledTimes(1)
+  })
+
+  it('returns the products in the order of the input slugs', async () => {
+    getDocsFromServer.mockResolvedValue({
+      docs: wantedProducts.toReversed().map((p) => toDoc(p, p?.slug ?? '')),
+    })
+
+    expect(await fetchProductsBySlugs(wanted)).toEqual(wantedProducts)
+  })
+
+  it('skips an invalid document and one whose id is not its slug, with warnings', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    getDocsFromServer.mockResolvedValue({
+      docs: [
+        toDoc({ name: 'broken' }, 'bad-doc'),
+        toDoc(tea, 'other-id'),
+        toDoc(wantedProducts[1], 'branza-de-burduf'),
+      ],
+    })
+
+    const products = await fetchProductsBySlugs(wanted)
+
+    expect(products).toEqual([wantedProducts[1]])
+    expect(warn).toHaveBeenCalledTimes(2)
+  })
+
+  it('propagates a Firestore failure', async () => {
+    getDocsFromServer.mockRejectedValue(new Error('permission-denied'))
+
+    await expect(fetchProductsBySlugs(wanted)).rejects.toThrow('permission-denied')
   })
 })

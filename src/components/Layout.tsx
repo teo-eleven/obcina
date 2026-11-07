@@ -1,4 +1,4 @@
-import { Outlet, useNavigation } from 'react-router'
+import { Outlet, ScrollRestoration, useNavigation } from 'react-router'
 import { useScrollToHash } from '../hooks/useScrollToHash'
 import { SiteFooter } from './SiteFooter'
 import { SiteHeader } from './SiteHeader'
@@ -27,6 +27,8 @@ export function Layout() {
         <Outlet />
       </main>
       <SiteFooter />
+      {/* A new page starts at the top; Back returns to where the visitor was. */}
+      <ScrollRestoration />
     </>
   )
 }

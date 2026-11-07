@@ -29,6 +29,8 @@
         "src/lib/catalog.test.ts",
         "src/lib/productsRepository.test.ts",
         "src/hooks/useCategoryProducts.test.ts",
+        "src/pages/ProductPage.test.tsx",
+        "src/routes.test.tsx",
         "src/pages/CategoryPage.test.tsx",
         "src/components/ProductCard.test.tsx",
         "scripts/**",
