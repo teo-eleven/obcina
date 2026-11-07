@@ -5,6 +5,7 @@ import { PantryShelf } from '../components/illustrations/PantryShelf'
 import { Label } from '../components/Label'
 import { Ornament } from '../components/Ornament'
 import { Stamp } from '../components/Stamp'
+import { STRETCHED_CARD, STRETCHED_LINK } from '../components/stretchedLink'
 import { CATEGORIES } from '../data/categories'
 
 function Hero() {
@@ -65,21 +66,13 @@ function CategoryGrid() {
       </div>
       <ul aria-label="Categorii" className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {CATEGORIES.map((category) => (
-          // The heading link stretches over the whole label, so the card is one target with one name;
-          // the card, not just the heading, shows the keyboard focus.
-          <li
-            key={category.slug}
-            className="has-[a:focus-visible]:outline-afina-500 relative outline-offset-4 has-[a:focus-visible]:outline-2"
-          >
+          <li key={category.slug} className={STRETCHED_CARD}>
             <Label className="h-full">
               <div className="flex items-start gap-4">
                 <CategoryIcon slug={category.slug} />
                 <div>
                   <h3 className="text-xl font-semibold">
-                    <Link
-                      to={`/categorie/${category.slug}`}
-                      className="hover:text-afina-700 after:absolute after:inset-0"
-                    >
+                    <Link to={`/categorie/${category.slug}`} className={STRETCHED_LINK}>
                       {category.name}
                     </Link>
                   </h3>

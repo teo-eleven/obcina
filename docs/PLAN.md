@@ -56,7 +56,7 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 | 2.5 ✅  | Imagini: prompt-șablon AI pentru borcane + poze Unsplash pentru atmosferă | imagini optimizate (WebP), creditate în CREDITS.md; acum desene provizorii, înlocuite de imaginile ChatGPT prin `npm run images`                                                                                                                                                                                                 |
 | 2.6 ✅  | Script de seed în emulator                                                | `npm run seed` încarcă produsele, idempotent; fiecare produs trece prin `productSchema`; componentele coșurilor există și sunt produse simple                                                                                                                                                                                    |
 | 2.7 ✅  | Pagina de categorie (listă produse din Firestore)                         | stări: încărcare, gol, eroare; testate; fiecare document validat separat (unul greșit e sărit și logat, nu golește pagina); măsurat bundle-ul cu `zod` (Lighthouse): fragmentul paginii 170 KB gzip; `/categorie/miere` Performance 90, Best Practices 96 (eroarea logată fără emulator, absentă pe site-ul cu reguli publicate) |
-| 2.8     | Card de produs în stil etichetă (preț formatat RON, badge stoc)           | `formatPrice(1999)` → „19,99 lei”, testat                                                                                                                                                                                                                                                                                        |
+| 2.8 ✅  | Card de produs în stil etichetă (preț formatat RON, badge stoc)           | `formatPrice(1999)` → „19,99 lei”, testat                                                                                                                                                                                                                                                                                        |
 | 2.9     | Pagina de produs (`/produs/:slug`)                                        | slug inexistent → 404                                                                                                                                                                                                                                                                                                            |
 | 2.10 ✅ | Reguli Firestore: produse doar citire publică                             | testate în emulator: scrierea din client e respinsă; implicit `deny` pe orice altă colecție; interogările din client au `limit()` (făcut înaintea lui 2.7; `npm run test:rules`, job `rules` în CI)                                                                                                                              |
 | 2.11    | E2E: start → categorie → produs                                           | trece în CI cu emulatorul (build `--mode emulators`, Java 21 în CI)                                                                                                                                                                                                                                                              |
@@ -64,16 +64,16 @@ Setup Vite + React + TS + Tailwind, branding, pagina de start, CI, PRD, repo Git
 
 ## F3 — Coș
 
-| #   | Pas                                                              | Gata când                                                        |
-| --- | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
-| 3.1 | Logica coșului, funcții pure (add / remove / setQty / total)     | TDD, 100% acoperire pe modul, imutabil                           |
-| 3.2 | Calcul transport (19,99 lei, gratuit ≥ 200 lei)                  | teste la 199,99 și 200,00 lei                                    |
-| 3.3 | Store de coș + persistență localStorage                          | supraviețuiește refresh-ului; date corupte → coș gol, fără crash |
-| 3.4 | Buton „Adaugă în coș” + limită de stoc                           | nu poți depăși stocul; mesaj clar                                |
-| 3.5 | Sertar de coș (mini-coș) în header, cu numărul de produse        | accesibil cu tastatura, anunță schimbările                       |
-| 3.6 | Pagina `/cos` (cantități, eliminare, subtotal, transport, total) | stare de coș gol ilustrată                                       |
-| 3.7 | E2E: adaugă, modifică, șterge, refresh                           | trece în CI                                                      |
-| 🧪  | **Poarta de testare F3**                                         | raport `faza-3.md`, zero buguri deschise                         |
+| #   | Pas                                                              | Gata când                                                                                                                      |
+| --- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 3.1 | Logica coșului, funcții pure (add / remove / setQty / total)     | TDD, 100% acoperire pe modul, imutabil                                                                                         |
+| 3.2 | Calcul transport (19,99 lei, gratuit ≥ 200 lei)                  | teste la 199,99 și 200,00 lei                                                                                                  |
+| 3.3 | Store de coș + persistență localStorage                          | supraviețuiește refresh-ului; date corupte → coș gol, fără crash                                                               |
+| 3.4 | Buton „Adaugă în coș” + limită de stoc                           | nu poți depăși stocul; mesaj clar; pe card, butonul primește `relative z-10`, altfel linkul întins al cardului îi preia clicul |
+| 3.5 | Sertar de coș (mini-coș) în header, cu numărul de produse        | accesibil cu tastatura, anunță schimbările                                                                                     |
+| 3.6 | Pagina `/cos` (cantități, eliminare, subtotal, transport, total) | stare de coș gol ilustrată                                                                                                     |
+| 3.7 | E2E: adaugă, modifică, șterge, refresh                           | trece în CI                                                                                                                    |
+| 🧪  | **Poarta de testare F3**                                         | raport `faza-3.md`, zero buguri deschise                                                                                       |
 
 ## F4 — Căutare și filtre
 

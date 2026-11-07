@@ -30,6 +30,7 @@
         "src/lib/productsRepository.test.ts",
         "src/hooks/useCategoryProducts.test.ts",
         "src/pages/CategoryPage.test.tsx",
+        "src/components/ProductCard.test.tsx",
         "scripts/**",
         "rules/**"
       ],

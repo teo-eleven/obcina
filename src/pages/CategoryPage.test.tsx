@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CATEGORIES } from '../data/categories'
 import { SEED_PRODUCTS } from '../data/seedProducts'
+import { formatPrice } from '../lib/money'
 import { fetchCategoryProducts } from '../lib/productsRepository'
 import { renderWithRouter } from '../test/renderWithRouter'
 import { CategoryPage } from './CategoryPage'
@@ -86,6 +87,19 @@ describe('CategoryPage', () => {
       expect(image).toHaveAttribute('width', '800')
       expect(image).toHaveAttribute('height', '800')
     }
+  })
+
+  it('renders each item as a label card with its formatted price', async () => {
+    renderWithRouter(ROUTES, '/categorie/miere')
+
+    const list = await screen.findByRole('list', { name: 'Produse' })
+    const items = within(list).getAllByRole('listitem')
+    items.forEach((item, index) => {
+      expect(item.querySelector('[data-label]')).not.toBeNull()
+      const price = honey[index]?.priceBani ?? -1
+      expect(item.querySelector('[data-stamp]')).not.toBeNull()
+      expect(item.textContent).toContain(formatPrice(price))
+    })
   })
 
   it('shows an empty shelf with a way back to the categories', async () => {

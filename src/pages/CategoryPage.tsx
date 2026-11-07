@@ -1,11 +1,10 @@
 import { useRef } from 'react'
 import { Link, useParams } from 'react-router'
+import { ProductCard } from '../components/ProductCard'
 import { CATEGORIES, type CategorySlug } from '../data/categories'
 import { useCategoryProducts } from '../hooks/useCategoryProducts'
-import type { Product } from '../lib/product'
 import { NotFoundPage } from './NotFoundPage'
 
-const PRODUCT_IMAGE_SIZE = 800 // matches public/images/products (productImages.test.ts)
 // The first row (three columns on desktop) is above the fold: load it at once, it is the LCP.
 const EAGER_IMAGES = 3
 
@@ -69,33 +68,12 @@ function ShelfContents({ slug }: { slug: CategorySlug }) {
       {state.status === 'ready' && state.products.length > 0 && (
         <ul aria-label="Produse" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {state.products.map((product, index) => (
-            <ProductItem key={product.slug} product={product} isPriority={index < EAGER_IMAGES} />
+            <li key={product.slug}>
+              <ProductCard product={product} isPriority={index < EAGER_IMAGES} />
+            </li>
           ))}
         </ul>
       )}
     </div>
-  )
-}
-
-// Plain for now; plan step 2.8 turns it into the jar-label card with price and stock.
-function ProductItem({ product, isPriority }: { product: Product; isPriority: boolean }) {
-  return (
-    <li className="bg-in-100 rounded-sm p-4">
-      <img
-        src={product.image.src}
-        alt={product.image.alt}
-        width={PRODUCT_IMAGE_SIZE}
-        height={PRODUCT_IMAGE_SIZE}
-        loading={isPriority ? 'eager' : 'lazy'}
-        fetchPriority={isPriority ? 'high' : undefined}
-        decoding="async"
-        className="h-auto w-full"
-      />
-      <h2 className="mt-3 text-xl font-semibold">
-        <Link to={`/produs/${product.slug}`} className="hover:text-afina-700">
-          {product.name}
-        </Link>
-      </h2>
-    </li>
   )
 }
