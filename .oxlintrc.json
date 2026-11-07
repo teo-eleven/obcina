@@ -34,7 +34,8 @@
         "src/pages/CategoryPage.test.tsx",
         "src/components/ProductCard.test.tsx",
         "scripts/**",
-        "rules/**"
+        "rules/**",
+        "e2e/catalog.spec.ts"
       ],
       "rules": {
         "no-restricted-imports": "off"

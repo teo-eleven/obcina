@@ -16,7 +16,7 @@ Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`.
 - `npm run test:watch` / `npm run test:coverage`
 - `npm run test:rules` — regulile Firestore în emulator (Java 21+; nu intră în `npm run check`, rulează în CI)
 - `npm run build` — build de producție
-- `npm run test:e2e` — Playwright pe build-ul de producție (Chromium + WebKit, desktop + telefon)
+- `npm run test:e2e` — Playwright (Chromium + WebKit, desktop + telefon) pe un build `--mode emulators`; pornește singur emulatorul Firestore (Java 21+) sau îl refolosește pe cel deschis, și face seed (lasă în `dist/` un build de emulator; `npm run build` îl reface)
 - `npm run images` — imaginile din `public/images/` (WebP), din originalele din `assets/` sau desene provizorii
 - `npm run lighthouse` — Lighthouse pe mobil, pică sub praguri; rapoarte în `lighthouse-report/`
 

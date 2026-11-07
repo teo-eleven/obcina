@@ -17,6 +17,7 @@ sau dintr-o acțiune reală în browser.
 - [ ] `/test-coverage` (kit): `npm run test:coverage` — toate trec, acoperire ≥ 80%, fără fișiere
       sub prag.
 - [ ] `npm run test:e2e` — **toate** fluxurile E2E, inclusiv cele din fazele anterioare.
+      Rulează pe emulator (Java 21+): îl pornește singur sau îl refolosește pe cel deschis și face seed.
 - [ ] `/quality-gate . --strict` (kit): formatare, lint, tipuri, fără avertismente.
 
 ## 2. Bateria de teste pe categorii

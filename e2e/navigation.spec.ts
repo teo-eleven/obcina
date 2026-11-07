@@ -69,6 +69,16 @@ test.describe('section navigation', () => {
   }
 })
 
+// The only test that keeps the default motion: the jump to a section is smooth (useScrollOnNavigation).
+test('a section link from another page scrolls smoothly to that section', async ({ page }) => {
+  await page.goto('/nu-exista')
+
+  await page.getByRole('link', { name: 'Vezi categoriile' }).click()
+
+  await expect(page).toHaveURL(/\/#categorii$/)
+  await expect(page.locator('#categorii')).toBeInViewport()
+})
+
 test('deep link to /#povestea lands with that section in view', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
 

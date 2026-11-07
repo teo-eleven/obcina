@@ -1,10 +1,10 @@
-import { Outlet, ScrollRestoration, useNavigation } from 'react-router'
-import { useScrollToHash } from '../hooks/useScrollToHash'
+import { Outlet, useNavigation } from 'react-router'
+import { useScrollOnNavigation } from '../hooks/useScrollOnNavigation'
 import { SiteFooter } from './SiteFooter'
 import { SiteHeader } from './SiteHeader'
 
 export function Layout() {
-  useScrollToHash()
+  useScrollOnNavigation()
   // A lazy page can take a moment to download; say so instead of looking frozen.
   const isNavigating = useNavigation().state !== 'idle'
 
@@ -27,8 +27,6 @@ export function Layout() {
         <Outlet />
       </main>
       <SiteFooter />
-      {/* A new page starts at the top; Back returns to where the visitor was. */}
-      <ScrollRestoration />
     </>
   )
 }
