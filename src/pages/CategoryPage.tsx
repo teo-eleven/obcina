@@ -1,8 +1,10 @@
 import { useRef } from 'react'
 import { Link, useParams } from 'react-router'
+import { LoadError } from '../components/LoadError'
 import { ProductCard } from '../components/ProductCard'
 import { CATEGORIES, type CategorySlug } from '../data/categories'
-import { useCategoryProducts } from '../hooks/useCategoryProducts'
+import { useRemoteData } from '../hooks/useRemoteData'
+import { fetchCategoryProducts } from '../lib/productsRepository'
 import { NotFoundPage } from './NotFoundPage'
 
 // The first row (three columns on desktop) is above the fold: load it at once, it is the LCP.
@@ -30,7 +32,7 @@ function Shelf({ category }: { category: ShelfCategory }) {
 }
 
 function ShelfContents({ slug }: { slug: CategorySlug }) {
-  const state = useCategoryProducts(slug)
+  const state = useRemoteData(`the ${slug} shelf`, () => fetchCategoryProducts(slug))
   // Retry swaps the button for the loading state; keep keyboard focus here instead of on <body>.
   const region = useRef<HTMLDivElement>(null)
 
@@ -40,21 +42,15 @@ function ShelfContents({ slug }: { slug: CategorySlug }) {
         <output className="text-lemn-600 block">Se încarcă produsele…</output>
       )}
       {state.status === 'error' && (
-        <div role="alert" className="flex flex-col items-start gap-4">
-          <p>Nu am putut încărca produsele.</p>
-          <button
-            type="button"
-            onClick={() => {
-              state.retry()
-              region.current?.focus()
-            }}
-            className="bg-brad-700 text-crema-50 hover:bg-afina-700 rounded-full px-6 py-3 font-semibold transition"
-          >
-            Încearcă din nou
-          </button>
-        </div>
+        <LoadError
+          message="Nu am putut încărca produsele."
+          onRetry={() => {
+            state.retry()
+            region.current?.focus()
+          }}
+        />
       )}
-      {state.status === 'ready' && state.products.length === 0 && (
+      {state.status === 'ready' && state.data.length === 0 && (
         <div className="flex flex-col items-start gap-4">
           <p>Raftul ăsta e gol deocamdată.</p>
           <Link
@@ -65,9 +61,9 @@ function ShelfContents({ slug }: { slug: CategorySlug }) {
           </Link>
         </div>
       )}
-      {state.status === 'ready' && state.products.length > 0 && (
+      {state.status === 'ready' && state.data.length > 0 && (
         <ul aria-label="Produse" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {state.products.map((product, index) => (
+          {state.data.map((product, index) => (
             <li key={product.slug}>
               <ProductCard product={product} isPriority={index < EAGER_IMAGES} />
             </li>

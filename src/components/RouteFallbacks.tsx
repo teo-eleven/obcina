@@ -1,4 +1,5 @@
 import { EmptyJar } from './illustrations/EmptyJar'
+import { PRIMARY_BUTTON } from './LoadError'
 
 // Shown by the router on a first visit straight to a lazy page, while its code downloads.
 export function AppLoading() {
@@ -21,7 +22,7 @@ export function RouteError() {
       <button
         type="button"
         onClick={() => window.location.reload()}
-        className="bg-brad-700 text-crema-50 hover:bg-afina-700 mt-8 rounded-full px-6 py-3 font-semibold transition"
+        className={`${PRIMARY_BUTTON} mt-8`}
       >
         Reîncarcă pagina
       </button>

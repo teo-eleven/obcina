@@ -1,5 +1,8 @@
 import { useRef } from 'react'
-import { Link, useParams } from 'react-router'
+import { useParams } from 'react-router'
+import { LoadError } from '../components/LoadError'
+import { OnceLink } from '../components/OnceLink'
+import { ProductImage } from '../components/ProductImage'
 import { Stamp } from '../components/Stamp'
 import { CATEGORIES } from '../data/categories'
 import { useRemoteData } from '../hooks/useRemoteData'
@@ -8,8 +11,6 @@ import { slugSchema, type GiftBasket, type Product } from '../lib/product'
 import { fetchProduct, fetchProductsBySlugs } from '../lib/productsRepository'
 import { stockLabel, stockLevel } from '../lib/stock'
 import { NotFoundPage } from './NotFoundPage'
-
-const PRODUCT_IMAGE_SIZE = 800 // matches public/images/products (productImages.test.ts)
 
 export function ProductPage() {
   // fetchProduct refuses anything that can't be a slug before it reaches Firestore.
@@ -30,19 +31,13 @@ export function ProductPage() {
         <output className="text-lemn-600 block">Se încarcă produsul…</output>
       )}
       {state.status === 'error' && (
-        <div role="alert" className="flex flex-col items-start gap-4">
-          <p>Nu am putut încărca produsul.</p>
-          <button
-            type="button"
-            onClick={() => {
-              state.retry()
-              region.current?.focus()
-            }}
-            className="bg-brad-700 text-crema-50 hover:bg-afina-700 rounded-full px-6 py-3 font-semibold transition"
-          >
-            Încearcă din nou
-          </button>
-        </div>
+        <LoadError
+          message="Nu am putut încărca produsul."
+          onRetry={() => {
+            state.retry()
+            region.current?.focus()
+          }}
+        />
       )}
       {state.status === 'ready' && state.data && <ProductDetails product={state.data} />}
     </div>
@@ -57,25 +52,15 @@ function ProductDetails({ product }: { product: Product }) {
   return (
     <article className="grid gap-10 md:grid-cols-2">
       <title>{`${product.name} — Obcina`}</title>
-      {/* The picture is the page's largest paint: load it at once. */}
-      <img
-        src={product.image.src}
-        alt={product.image.alt}
-        width={PRODUCT_IMAGE_SIZE}
-        height={PRODUCT_IMAGE_SIZE}
-        loading="eager"
-        fetchPriority="high"
-        decoding="async"
-        className={`h-auto w-full ${stock?.kind === 'out' ? 'opacity-60' : ''}`}
-      />
+      <ProductImage product={product} isPriority isSoldOut={stock?.kind === 'out'} />
       <div>
         {shelf && (
-          <Link
+          <OnceLink
             to={`/categorie/${shelf.slug}`}
             className="text-brad-700 hover:text-afina-700 text-sm font-semibold underline"
           >
             <span aria-hidden="true">← </span>Înapoi la {shelf.name}
-          </Link>
+          </OnceLink>
         )}
         <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">{product.name}</h1>
         <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -121,19 +106,15 @@ function BasketContents({ basket }: { basket: GiftBasket }) {
         <output className="text-lemn-600 mt-3 block">Se încarcă produsele din coș…</output>
       )}
       {state.status === 'error' && (
-        <p role="alert" className="mt-3">
-          Nu am putut încărca produsele din coș.{' '}
-          <button
-            type="button"
-            onClick={() => {
+        <div className="mt-3">
+          <LoadError
+            message="Nu am putut încărca produsele din coș."
+            onRetry={() => {
               state.retry()
               section.current?.focus()
             }}
-            className="text-brad-700 underline"
-          >
-            Încearcă din nou
-          </button>
-        </p>
+          />
+        </div>
       )}
       {isIncomplete && (
         <p className="text-lemn-600 mt-3">Unele produse din coș nu sunt disponibile acum.</p>
@@ -142,12 +123,12 @@ function BasketContents({ basket }: { basket: GiftBasket }) {
         <ul aria-labelledby="ce-contine" className="mt-3 list-disc pl-5">
           {state.data.map((component) => (
             <li key={component.slug}>
-              <Link
+              <OnceLink
                 to={`/produs/${component.slug}`}
                 className="text-brad-700 hover:text-afina-700 underline"
               >
                 {component.name}
-              </Link>
+              </OnceLink>
             </li>
           ))}
         </ul>

@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CATEGORIES } from '../data/categories'
@@ -145,5 +145,30 @@ describe('CategoryPage', () => {
     expect(document.activeElement?.contains(screen.getByRole('list', { name: 'Produse' }))).toBe(
       true,
     )
+  })
+
+  it('shows the shelf you moved to, even if the previous one answers late', async () => {
+    const teas = SEED_PRODUCTS.filter((product) => product.category === 'ceaiuri')
+    let answerHoney: (products: typeof honey) => void = () => undefined
+    vi.mocked(fetchCategoryProducts).mockImplementation((category) =>
+      category === 'miere'
+        ? new Promise((resolve) => {
+            answerHoney = resolve
+          })
+        : Promise.resolve(teas),
+    )
+    const { router } = renderWithRouter(ROUTES, '/categorie/miere')
+
+    await act(async () => {
+      await router.navigate('/categorie/ceaiuri')
+    })
+    const list = await screen.findByRole('list', { name: 'Produse' })
+    await act(async () => answerHoney(honey))
+
+    const names = within(list)
+      .getAllByRole('heading', { level: 2 })
+      .map((h) => h.textContent)
+    expect(names).toEqual(teas.map((product) => product.name))
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Ceaiuri de munte')
   })
 })

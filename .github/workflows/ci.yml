@@ -28,7 +28,8 @@ jobs:
       - run: npm ci
 
       # Known vulnerabilities: any in production deps, or high+ anywhere (incl. dev tooling), block.
-      # Moderate dev-only ones are accepted in docs/adr/0004 and reviewed at each phase gate.
+      # Moderate dev-only ones are accepted in docs/adr/0004 (lighthouse) and 0006 (firebase-tools)
+      # and reviewed at each phase gate. No secrets and no pull_request_target in these jobs, ever.
       - name: Dependency audit (production)
         run: npm audit --omit=dev --audit-level=low
 

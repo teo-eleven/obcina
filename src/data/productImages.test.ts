@@ -3,9 +3,9 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { basename, extname, resolve } from 'node:path'
 import sharp from 'sharp'
 import { describe, expect, it } from 'vitest'
+import { PRODUCT_IMAGE_SIZE } from '../lib/product'
 import { SEED_PRODUCTS } from './seedProducts'
 
-const IMAGE_SIZE = 800
 const MAX_IMAGE_BYTES = 120 * 1024
 const IMAGES_DIR = resolve(process.cwd(), 'public/images/products')
 
@@ -23,8 +23,8 @@ describe('product images', () => {
     const { format, width, height } = await sharp(path).metadata()
     expect({ format, width, height }).toEqual({
       format: 'webp',
-      width: IMAGE_SIZE,
-      height: IMAGE_SIZE,
+      width: PRODUCT_IMAGE_SIZE,
+      height: PRODUCT_IMAGE_SIZE,
     })
   })
 

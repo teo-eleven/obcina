@@ -65,6 +65,25 @@ describe('useRemoteData', () => {
     expect(result.current).toEqual({ status: 'ready', data: 'B' })
   })
 
+  it('ignores a late failure for an old key, without logging it', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    let rejectFirst: (reason: unknown) => void = () => undefined
+    const first = new Promise<string>((_resolve, reject) => {
+      rejectFirst = reject
+    })
+    const { result, rerender } = renderHook(
+      ({ key, load }: { key: string; load: () => Promise<string> }) => useRemoteData(key, load),
+      { initialProps: { key: 'miere', load: () => first } },
+    )
+
+    rerender({ key: 'ceaiuri', load: () => Promise.resolve('ceai') })
+    await waitFor(() => expect(result.current).toEqual({ status: 'ready', data: 'ceai' }))
+    await act(async () => rejectFirst(new Error('late')))
+
+    expect(result.current).toEqual({ status: 'ready', data: 'ceai' })
+    expect(error).not.toHaveBeenCalled()
+  })
+
   it('logs a failure with the key', async () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => undefined)
     const failure = new Error('permission-denied')

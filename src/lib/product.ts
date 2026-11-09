@@ -27,6 +27,9 @@ const MULTI_LINE = /^(?:[^\p{Cc}\p{Cf}\p{Zl}\p{Zp}]|\n)*$/u
 const text = (min: number, max: number, pattern = SINGLE_LINE) =>
   z.string().trim().min(min).max(max).regex(pattern)
 
+// Every product picture is a square WebP of this size (scripts/images.ts, productImages.test.ts).
+export const PRODUCT_IMAGE_SIZE = 800
+
 const MAX_PRICE_BANI = 100_000 // 1000 lei: anything above is a typo, not a jar of honey
 
 const commonFields = {

@@ -1,8 +1,8 @@
-import { Link } from 'react-router'
 import { CategoryIcon } from '../components/CategoryIcon'
 import { LindenLeaf } from '../components/illustrations/LindenLeaf'
 import { PantryShelf } from '../components/illustrations/PantryShelf'
 import { Label } from '../components/Label'
+import { OnceLink } from '../components/OnceLink'
 import { Ornament } from '../components/Ornament'
 import { Stamp } from '../components/Stamp'
 import { STRETCHED_CARD, STRETCHED_LINK } from '../components/stretchedLink'
@@ -72,9 +72,9 @@ function CategoryGrid() {
                 <CategoryIcon slug={category.slug} />
                 <div>
                   <h3 className="text-xl font-semibold">
-                    <Link to={`/categorie/${category.slug}`} className={STRETCHED_LINK}>
+                    <OnceLink to={`/categorie/${category.slug}`} className={STRETCHED_LINK}>
                       {category.name}
-                    </Link>
+                    </OnceLink>
                   </h3>
                   <p className="text-lemn-600 mt-2">{category.description}</p>
                 </div>

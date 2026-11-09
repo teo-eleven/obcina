@@ -1,4 +1,4 @@
-// Builds the images served from public/images/ (WebP). Node 24 runs this file directly.
+// Builds the images served from public/images/ (WebP). Run by tsx (it imports src/ values).
 //
 // Product images, public/images/products/<slug>.webp (800×800), for each seed product:
 //   1. assets/products/<slug>.(png|jpg|jpeg|webp) exists → crop to a square, resize, encode WebP.
@@ -21,9 +21,8 @@ import { resolve } from 'node:path'
 import sharp from 'sharp'
 import type { CategorySlug } from '../src/data/categories.ts'
 import { SEED_PRODUCTS } from '../src/data/seedProducts.ts'
-import type { Product } from '../src/lib/product.ts'
+import { PRODUCT_IMAGE_SIZE, type Product } from '../src/lib/product.ts'
 
-const PRODUCT_SIZE = 800 // must match productImages.test.ts
 const WEBP = { quality: 80, effort: 6 }
 const PHOTO_WEBP = { quality: 74, effort: 6 }
 // Our originals are a few megapixels; refuse anything absurd rather than exhaust memory.
@@ -118,7 +117,7 @@ function placeholderSvg(product: Product): string {
         `<text x="400" y="${firstLineY + i * 42}" font-size="34">${escapeXml(line)}</text>`,
     )
     .join('')
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${PRODUCT_SIZE}" height="${PRODUCT_SIZE}" viewBox="0 0 800 800">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${PRODUCT_IMAGE_SIZE}" height="${PRODUCT_IMAGE_SIZE}" viewBox="0 0 800 800">
     <rect width="800" height="800" fill="${COLOR.paper}"/>
     <ellipse cx="400" cy="705" rx="260" ry="26" fill="${COLOR.ink}" opacity=".12"/>
     ${vessel(product)}
@@ -147,7 +146,7 @@ async function buildProductImages(redrawPlaceholders: boolean) {
     const original = findOriginal(PRODUCT_ORIGINALS, product.slug, ORIGINAL_EXTENSIONS)
     if (original) {
       await load(original)
-        .resize(PRODUCT_SIZE, PRODUCT_SIZE, { fit: 'cover' })
+        .resize(PRODUCT_IMAGE_SIZE, PRODUCT_IMAGE_SIZE, { fit: 'cover' })
         .webp(WEBP)
         .toFile(output)
       counts.original++
