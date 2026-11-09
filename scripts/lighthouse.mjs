@@ -23,6 +23,7 @@ const PAGES = [
   { slug: '404', path: '/pagina-care-nu-exista' },
   // Carries Firebase and zod (lazy chunk). Without data it shows the error state; the JS cost is the same.
   { slug: 'categorie', path: '/categorie/miere' },
+  { slug: 'produs', path: '/produs/miere-de-tei' },
 ]
 
 // Minimum category scores, 0–1. Performance rises to 0.9 at step 11.2.
