@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatPrice } from './money'
+import { assertBani, formatPrice } from './money'
 import { NBSP } from '../constants'
 
 describe('formatPrice', () => {
@@ -17,6 +17,21 @@ describe('formatPrice', () => {
     'throws RangeError for %s',
     (bani) => {
       expect(() => formatPrice(bani)).toThrow(RangeError)
+    },
+  )
+})
+
+describe('assertBani', () => {
+  it.each([[0], [1], [1999], [Number.MAX_SAFE_INTEGER]])('accepts %i bani', (bani) => {
+    expect(() => assertBani(bani, 'A total')).not.toThrow()
+  })
+
+  it.each([[19.99], [-1], [Number.NaN], [Number.POSITIVE_INFINITY], [2 ** 53]])(
+    'throws a RangeError naming the amount for %s',
+    (bani) => {
+      expect(() => assertBani(bani, 'A total')).toThrow(
+        new RangeError(`A total must be a whole, non-negative number of bani, got ${bani}`),
+      )
     },
   )
 })
