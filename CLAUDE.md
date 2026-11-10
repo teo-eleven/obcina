@@ -47,6 +47,19 @@ Convenții pentru componente:
 - Testele unitare acoperă logica și starea; E2E acoperă doar ce cere un browser real (focus,
   vizibilitate, scroll, WebKit, rețea). Nu duplica un caz pe ambele niveluri.
 
+Organizarea codului (cerută de Teodor pe 2026-11-10; mutarea fișierelor existente se face la pasul 3.R):
+
+- **O componentă pe fișier.** Subcomponentele folosite de o singură pagină stau în folderul paginii
+  (`pages/HomePage/Hero.tsx`); `components/` e pentru ce se refolosește.
+- **Foldere pe tipuri:** `components/`, `hooks/`, `utils/` (logică pură, fără hooks), `schemas/` (zod),
+  `types/`, `constants/`, `services/` (Firebase și tot ce vorbește cu rețeaua), fiecare cu `index.ts`.
+  `services/` se importă direct, nu prin `index.ts`, ca Firebase să rămână în fragmentul încărcat leneș.
+- **Primitive de interfață:** componente shadcn copiate manual, construite pe Base UI (nu Radix),
+  colorate doar cu tokenurile de brand.
+- **Formulare:** React Hook Form + Zod.
+- **Parolele nu apar niciodată în clar în loguri:** orice log care atinge date de autentificare le
+  maschează.
+
 ## Reguli ale proiectului
 
 - **Bani în bani, nu în lei:** prețurile sunt numere întregi în bani (`1999` = 19,99 lei). Fără float.
@@ -62,7 +75,10 @@ Convenții pentru componente:
 
 - **Pași mici:** lucrăm câte un pas din `docs/PLAN.md` (~1 oră). Un pas e gata doar când „Gata când”
   e adevărat, `npm run check` trece și e într-un commit. Bifează pasul în PLAN.md.
-- **Un branch pe fază** (`faza-N/nume`), un commit pe pas, PR la final de fază.
+- **Un PR pe pas** (ADR 0008): branch scurt din `main` la zi (ex. `3.2-transport`), PR → CI verde →
+  squash merge → branch șters automat → `git pull`. Un singur branch de lucru deschis odată; poarta
+  fazei e și ea un PR. Merge: Claude pe pașii obișnuiți; Teodor aprobă poarta, infrastructura și pașii
+  sensibili; Teodor poate da oricând merge pe GitHub (verifică `main` înainte de pasul următor).
 - **Fiecare pas folosește agenții din kitul `~/Desktop/claude-code-starter-kit`** (nivel „maxim”, ales de
   Teodor):
   1. `tdd-guide` scrie testele care pică (RED), pornind de la „Gata când” al pasului.
