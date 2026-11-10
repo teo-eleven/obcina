@@ -7,6 +7,7 @@
 
 import { MAX_LINE_QUANTITY } from '../constants'
 import type { Cart } from '../types'
+import { assertBani } from './money'
 
 function assertProductId(productId: string): void {
   if (productId === '') throw new RangeError('A cart line needs a product id')
@@ -52,12 +53,6 @@ export function setQuantity(cart: Cart, productId: string, quantity: number): Ca
 
 export function itemCount(cart: Cart): number {
   return cart.reduce((sum, line) => sum + line.quantity, 0)
-}
-
-function assertBani(amount: number, what: string): void {
-  if (!Number.isSafeInteger(amount) || amount < 0) {
-    throw new RangeError(`${what} must be a whole, non-negative number of bani, got ${amount}`)
-  }
 }
 
 /**
