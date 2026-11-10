@@ -1,0 +1,28 @@
+{
+  // Everything that runs in Node: the Vite config, Playwright (e2e/) and the tsx scripts (ADR 0007).
+  // Bundler-style resolution, so the extensionless imports from src/ resolve as they do in Vite.
+  // DOM is in lib for the callbacks e2e tests run inside the page (page.evaluate); the trade-off is
+  // that scripts/ and the configs could use a browser global without a type error.
+  "compilerOptions": {
+    "tsBuildInfoFile": "../node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "types": ["node"],
+    "skipLibCheck": true,
+
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": ["../vite.config.ts", "../firebase/vitest.config.ts", "../e2e", "../scripts/**/*.ts"]
+}

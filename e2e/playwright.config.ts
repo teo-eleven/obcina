@@ -12,11 +12,15 @@ const isCI = Boolean(process.env.CI)
  * so no test can touch the live project (docs/adr/0006).
  */
 export default defineConfig({
-  testDir: './e2e',
+  // This file lives in e2e/; the servers and reports work from the repository root.
+  testDir: '.',
+  outputDir: '../test-results',
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 1 : 0,
-  reporter: isCI ? [['github'], ['html', { open: 'never' }]] : [['list']],
+  reporter: isCI
+    ? [['github'], ['html', { open: 'never', outputFolder: '../playwright-report' }]]
+    : [['list']],
   use: {
     baseURL: PREVIEW_URL,
     trace: 'on-first-retry',
@@ -32,6 +36,7 @@ export default defineConfig({
   webServer: [
     {
       command: 'npx firebase emulators:start --only firestore --project demo-obcina',
+      cwd: '..',
       url: FIRESTORE_EMULATOR_URL,
       // Locally an emulator you already started (npm run emulators) is fine; it gets reseeded.
       reuseExistingServer: !isCI,
@@ -43,6 +48,7 @@ export default defineConfig({
     },
     {
       command: 'npm run e2e:serve',
+      cwd: '..',
       url: PREVIEW_URL,
       // Always build fresh: reusing a running preview could test an old dist/. A busy port fails loudly.
       reuseExistingServer: false,

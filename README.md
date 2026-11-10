@@ -31,6 +31,23 @@ Deschide http://localhost:5180.
 | `npm run images`        | imaginile produselor și pozele, în WebP                       |
 | `npm run lighthouse`    | audit Lighthouse pe mobil, cu praguri                         |
 
+## Structură
+
+```
+src/          aplicația (React): pagini, componente, hook-uri, logică
+e2e/          teste end-to-end (Playwright) și configurația lor
+firebase/     regulile Firestore și testele lor în emulator
+scripts/      unelte Node: seed, imagini, Lighthouse
+public/       fișiere servite ca atare (imagini WebP, favicon)
+docs/         PRD, plan, brand, decizii (ADR), rapoarte de testare
+config/       configurările TypeScript
+.github/      CI, CodeQL, Dependabot, șablonul de PR
+```
+
+În rădăcină rămân doar fișierele pe care uneltele le caută acolo: `package.json`, `index.html` și
+`vite.config.ts` (Vite), `tsconfig.json`, `firebase.json` (Firebase CLI), `.oxlintrc.json` (editoarele îl caută aici), `.nvmrc`,
+fișierele `.env`.
+
 ## Documentație
 
 - [Specificația produsului (PRD)](docs/PRD.md)

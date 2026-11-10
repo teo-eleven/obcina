@@ -61,7 +61,7 @@ beforeAll(async () => {
   env = await initializeTestEnvironment({
     projectId: EMULATOR_PROJECT_ID,
     firestore: {
-      rules: readFileSync(new URL('../firestore.rules', import.meta.url), 'utf8'),
+      rules: readFileSync(new URL('./firestore.rules', import.meta.url), 'utf8'),
       host: EMULATOR_HOST,
       port: FIRESTORE_EMULATOR_PORT,
     },
