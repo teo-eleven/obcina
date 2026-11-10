@@ -19,9 +19,10 @@ import { existsSync } from 'node:fs'
 import { mkdir, readdir, rm } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import sharp from 'sharp'
-import type { CategorySlug } from '../src/data/categories.ts'
-import { SEED_PRODUCTS } from '../src/data/seedProducts.ts'
-import { PRODUCT_IMAGE_SIZE, type Product } from '../src/lib/product.ts'
+import type { CategorySlug } from '../src/types/category.ts'
+import { SEED_PRODUCTS } from '../src/constants/seedProducts.ts'
+import { PRODUCT_IMAGE_SIZE } from '../src/constants/product.ts'
+import type { Product } from '../src/types/product.ts'
 
 const WEBP = { quality: 80, effort: 6 }
 const PHOTO_WEBP = { quality: 74, effort: 6 }
@@ -31,7 +32,7 @@ const PRODUCT_ORIGINALS = resolve('assets/products')
 const PRODUCT_OUTPUT = resolve('public/images/products')
 const ORIGINAL_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp']
 
-// Credited in docs/CREDITS.md; srcset in src/pages/HomePage.tsx uses the same widths.
+// Credited in docs/CREDITS.md; srcset in src/pages/HomePage/Story.tsx uses the same widths.
 const ATMOSPHERE = [{ name: 'poiana-negrii', widths: [640, 800, 1200] }]
 const ATMOSPHERE_ORIGINALS = resolve('assets/atmosfera')
 const ATMOSPHERE_OUTPUT = resolve('public/images/atmosfera')

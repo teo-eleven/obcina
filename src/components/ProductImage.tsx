@@ -1,4 +1,5 @@
-import { PRODUCT_IMAGE_SIZE, type Product } from '../lib/product'
+import { PRODUCT_IMAGE_SIZE } from '../constants'
+import type { Product } from '../types'
 
 interface ProductImageProps {
   readonly product: Product

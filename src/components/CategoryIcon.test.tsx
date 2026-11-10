@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { CATEGORIES } from '../data/categories'
+import { CATEGORIES } from '../constants'
 import { CategoryIcon } from './CategoryIcon'
 
 describe('CategoryIcon', () => {

@@ -1,5 +1,5 @@
 import { Outlet, useNavigation } from 'react-router'
-import { useScrollOnNavigation } from '../hooks/useScrollOnNavigation'
+import { useScrollOnNavigation } from '../hooks'
 import { SiteFooter } from './SiteFooter'
 import { SiteHeader } from './SiteHeader'
 

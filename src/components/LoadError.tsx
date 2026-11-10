@@ -1,5 +1,4 @@
-export const PRIMARY_BUTTON =
-  'bg-brad-700 text-crema-50 hover:bg-afina-700 rounded-full px-6 py-3 font-semibold transition'
+import { PRIMARY_BUTTON } from '../constants'
 
 interface LoadErrorProps {
   readonly message: string

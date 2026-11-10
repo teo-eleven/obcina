@@ -8,12 +8,12 @@ Accepted
 
 ## Context
 
-Pasul 2.6 cere `npm run seed`: produsele din `src/data/seedProducts.ts` încărcate în emulator,
+Pasul 2.6 cere `npm run seed`: produsele din `src/data/seedProducts.ts` (acum `src/constants/seedProducts.ts`) încărcate în emulator,
 idempotent, fiecare validat cu `productSchema`. Două lucruri nu mergeau „din cutie”:
 
 - **Scrierea:** regulile Firestore refuză orice scriere din client (și vor rămâne așa pentru
   produse). SDK-ul de client nu poate scrie catalogul.
-- **Rularea:** scriptul importă `productSchema` (valoare), care importă `../data/categories` fără
+- **Rularea:** scriptul importă `productSchema` (valoare), care importă `../data/categories` (acum `../constants`) fără
   extensie, ca tot codul din `src/`. Node 24 rulează TypeScript direct (type stripping), dar nu
   completează extensii, așa că un import de valoare fără `.ts` pică. `scripts/images.ts` merge cu
   Node simplu doar pentru că importă din `src/` numai tipuri.
@@ -31,7 +31,7 @@ idempotent, fiecare validat cu `productSchema`. Două lucruri nu mergeau „din 
   2. `assertEmulatorOnly` (testat) refuză să pornească dacă proiectul nu e `demo-`, dacă
      `GOOGLE_APPLICATION_CREDENTIALS` e setat sau dacă `GCLOUD_PROJECT` / `GOOGLE_CLOUD_PROJECT`
      numesc un proiect real.
-- Logica e pură și testată în `src/lib/catalog.ts`: `validateCatalog` (schema, slug-uri unice,
+- Logica e pură și testată în `src/lib/catalog.ts` (acum `src/utils/catalog.ts`): `validateCatalog` (schema, slug-uri unice,
   componentele coșurilor există și sunt produse simple, catalog gol refuzat) și `planSync` (ce se
   scrie, ce se șterge). Scriptul face un singur batch, deci o eroare nu lasă baza pe jumătate.
 

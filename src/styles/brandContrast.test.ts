@@ -1,13 +1,13 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { contrastRatio } from '../lib/contrast'
+import { contrastRatio } from '../utils'
 
 // WCAG 2.2 AA for normal-size text.
 const AA_NORMAL_TEXT = 4.5
 
 // Read from disk: Vitest runs with `css: false`, so importing the stylesheet would yield nothing.
-const INDEX_CSS = readFileSync(resolve(process.cwd(), 'src/index.css'), 'utf8')
+const INDEX_CSS = readFileSync(resolve(process.cwd(), 'src/styles/index.css'), 'utf8')
 
 function readBrandTokens(): Record<string, string> {
   const tokens: Record<string, string> = {}
@@ -35,7 +35,7 @@ function readTextureInk(): TextureInk {
     .split(/\s+/)
     .map(Number)
   if (!values || values.length !== 20) {
-    throw new Error('Could not read the paper texture feColorMatrix from src/index.css')
+    throw new Error('Could not read the paper texture feColorMatrix from src/styles/index.css')
   }
   const at = (index: number) => values[index] ?? Number.NaN
   const toByte = (unit: number) => Math.round(unit * 255)

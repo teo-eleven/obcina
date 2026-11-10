@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
-import { SEED_PRODUCTS } from '../src/data/seedProducts'
-import { formatPrice } from '../src/lib/money'
-import { EMULATOR_HOST, FIRESTORE_EMULATOR_PORT } from '../src/lib/firebaseConfig'
+import { SEED_PRODUCTS } from '../src/constants/seedProducts'
+import { formatPrice } from '../src/utils/money'
+import { EMULATOR_HOST, FIRESTORE_EMULATOR_PORT } from '../src/constants/firebase'
 import { expect, test } from './fixtures'
 
 /*

@@ -1,6 +1,5 @@
 import type { RouteObject } from 'react-router'
-import { Layout } from './components/Layout'
-import { AppLoading, RouteError } from './components/RouteFallbacks'
+import { Layout, AppLoading, RouteError } from './components'
 import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 

@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
-import { SEED_PRODUCTS } from '../data/seedProducts'
-import { formatPrice } from '../lib/money'
-import type { Product } from '../lib/product'
+import { SEED_PRODUCTS } from '../constants/seedProducts'
+import { formatPrice } from '../utils'
+import type { Product } from '../types'
 import { ProductCard } from './ProductCard'
 
 function seed(slug: string): Product {

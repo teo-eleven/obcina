@@ -99,7 +99,7 @@ test('the logo link returns to the home page from another page', async ({ page }
 })
 
 test.describe('keyboard focus', () => {
-  // afina-500, the brand focus colour (src/index.css). A transition on the control must not
+  // afina-500, the brand focus colour (src/styles/index.css). A transition on the control must not
   // fade the ring in from the text colour: the ring has to be there the moment focus lands.
   const FOCUS_RING = 'rgb(138, 63, 110)'
 

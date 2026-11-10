@@ -1,4 +1,4 @@
-// Loads the seed catalogue (src/data/seedProducts.ts) into the local Firestore emulator.
+// Loads the seed catalogue (src/constants/seedProducts.ts) into the local Firestore emulator.
 //
 // Idempotent: every product is written with set() under its slug, so running it twice gives the
 // same database; products no longer in the catalogue are deleted. The whole catalogue is validated
@@ -12,14 +12,15 @@
 
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
-import { SEED_PRODUCTS } from '../src/data/seedProducts.ts'
-import { PRODUCTS_COLLECTION, planSync, validateCatalog } from '../src/lib/catalog.ts'
+import { SEED_PRODUCTS } from '../src/constants/seedProducts.ts'
+import { PRODUCTS_COLLECTION } from '../src/constants/product.ts'
+import { planSync, validateCatalog } from '../src/utils/catalog.ts'
+import { assertEmulatorOnly } from '../src/services/firebaseConfig.ts'
 import {
-  assertEmulatorOnly,
   EMULATOR_HOST,
   EMULATOR_PROJECT_ID,
   FIRESTORE_EMULATOR_PORT,
-} from '../src/lib/firebaseConfig.ts'
+} from '../src/constants/firebase.ts'
 
 const EMULATOR_ADDRESS = `${EMULATOR_HOST}:${FIRESTORE_EMULATOR_PORT}`
 const EMULATOR_CHECK_TIMEOUT_MS = 2000

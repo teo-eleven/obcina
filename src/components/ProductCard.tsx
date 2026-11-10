@@ -1,11 +1,10 @@
-import { formatPrice } from '../lib/money'
-import type { Product } from '../lib/product'
-import { stockLabel, stockLevel } from '../lib/stock'
+import { formatPrice, stockLabel, stockLevel } from '../utils'
+import type { Product } from '../types'
 import { Label } from './Label'
 import { OnceLink } from './OnceLink'
 import { ProductImage } from './ProductImage'
 import { Stamp } from './Stamp'
-import { STRETCHED_CARD, STRETCHED_LINK } from './stretchedLink'
+import { STRETCHED_CARD, STRETCHED_LINK } from '../constants'
 
 interface ProductCardProps {
   readonly product: Product

@@ -51,6 +51,10 @@ jobs:
       - name: Build
         run: npm run build
 
+      # zod and Firebase must stay out of the code every visitor downloads first (CLAUDE.md).
+      - name: Entry chunk stays light
+        run: npm run check:bundle
+
   rules:
     runs-on: ubuntu-latest
     timeout-minutes: 10

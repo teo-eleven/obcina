@@ -19,18 +19,19 @@
           }
         ]
       }
-    ]
+    ],
+    "no-duplicate-imports": "error"
   },
   "overrides": [
     {
       "files": [
-        "src/data/seedProducts.test.ts",
-        "src/data/productImages.test.ts",
-        "src/lib/catalog.test.ts",
-        "src/lib/productsRepository.test.ts",
-        "src/pages/ProductPage.test.tsx",
+        "src/constants/seedProducts.test.ts",
+        "src/constants/productImages.test.ts",
+        "src/utils/catalog.test.ts",
+        "src/services/productsRepository.test.ts",
+        "src/pages/ProductPage/ProductPage.test.tsx",
         "src/routes.test.tsx",
-        "src/pages/CategoryPage.test.tsx",
+        "src/pages/CategoryPage/CategoryPage.test.tsx",
         "src/components/ProductCard.test.tsx",
         "scripts/**",
         "firebase/**",
