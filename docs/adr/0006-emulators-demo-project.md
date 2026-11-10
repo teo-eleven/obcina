@@ -24,7 +24,7 @@ conectare uitată) trimite scrierile de test în producție.
   folosim „doar în dev”, pentru că la 2.11 E2E rulează pe un build `--mode emulators`.
 - `firestore.rules` (acum `firebase/firestore.rules`) e închis pentru tot, ca proiectul real; regulile adevărate vin la 2.10.
 - Porturile (Firestore 8080, Auth 9099, UI 4000) sunt în `firebase.json` și în
-  `src/lib/firebaseConfig.ts`; `emulatorSetup.test.ts` pică dacă se despart.
+  `src/lib/firebaseConfig.ts` (acum `src/constants/firebase.ts`); `emulatorSetup.test.ts` pică dacă se despart.
 - `firebase-tools` 15.34.1, fixat exact, ca dependență de dezvoltare. Aduce 12 vulnerabilități
   **moderate** noi (total 16 în dev: `@opentelemetry/core`, `glob`, `minimatch`, `uuid`), zero mari.
   Le acceptăm: rulează doar local, pe 127.0.0.1, fără input de la utilizatori; gate-urile din CI

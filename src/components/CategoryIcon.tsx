@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { CategorySlug } from '../data/categories'
+import type { CategorySlug } from '../types'
 
 /*
  * Hand-drawn category icons: 48×48, round strokes in the current text colour, brand-token accents.

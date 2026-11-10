@@ -3,11 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "dev": "vite",
     "dev:emulators": "vite --mode emulators",
     "emulators": "firebase emulators:start --project demo-obcina",
     "build": "tsc -b && vite build",
+    "check:bundle": "tsx scripts/checkBundle.ts",
     "preview": "vite preview",
     "lint": "oxlint --deny-warnings",
     "typecheck": "tsc -b",

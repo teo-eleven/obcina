@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const PREVIEW_URL = 'http://localhost:4180'
-// The Firestore emulator answers "Ok" here once it is ready (firebase.json, src/lib/firebaseConfig.ts).
+// The Firestore emulator answers "Ok" here once it is ready (firebase.json, src/constants/firebase.ts).
 const FIRESTORE_EMULATOR_URL = 'http://127.0.0.1:8080'
 const isCI = Boolean(process.env.CI)
 

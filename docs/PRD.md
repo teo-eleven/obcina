@@ -35,7 +35,7 @@ Diaspora nu e un segment țintă (fără livrare internațională).
   singur loc și se calculează pe server.
 - **Plată:** Stripe Checkout în mod test ([ADR 0002](adr/0002-stripe-checkout-test-mode.md)).
 - **Monedă:** RON; toate sumele în bani, numere întregi.
-- **Catalog:** 15–20 produse fictive în 6 categorii (vezi `src/data/categories.ts`), plus 3–4 coșuri cadou.
+- **Catalog:** 15–20 produse fictive în 6 categorii (vezi `src/constants/categories.ts`), plus 3–4 coșuri cadou.
 
 ## Funcționalități
 

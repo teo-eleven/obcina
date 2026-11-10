@@ -1,4 +1,4 @@
-import { EMULATOR_HOST, FIRESTORE_EMULATOR_PORT } from '../src/lib/firebaseConfig'
+import { EMULATOR_HOST, FIRESTORE_EMULATOR_PORT } from '../src/constants/firebase'
 import { expect, test } from './fixtures'
 
 /*

@@ -26,14 +26,14 @@ import {
   type Query,
 } from 'firebase/firestore'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import type { CategorySlug } from '../src/data/categories'
-import { SEED_PRODUCTS } from '../src/data/seedProducts'
-import { PRODUCTS_COLLECTION } from '../src/lib/catalog'
+import type { CategorySlug } from '../src/types/category'
+import { SEED_PRODUCTS } from '../src/constants/seedProducts'
+import { PRODUCTS_COLLECTION } from '../src/constants/product'
 import {
   EMULATOR_HOST,
   EMULATOR_PROJECT_ID,
   FIRESTORE_EMULATOR_PORT,
-} from '../src/lib/firebaseConfig'
+} from '../src/constants/firebase'
 
 // Must match the limit in firestore.rules.
 const MAX_LIST_SIZE = 100

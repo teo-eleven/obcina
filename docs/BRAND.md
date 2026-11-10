@@ -46,7 +46,7 @@ Magazinul arată ca o cămară cu borcane etichetate de mână:
 | `in-100`    | `#f1eadb` | carduri                       |
 | `crema-50`  | `#faf6ee` | fundalul paginii              |
 
-Tokenurile sunt definite o singură dată, în `src/index.css` (`@theme`), și se folosesc ca
+Tokenurile sunt definite o singură dată, în `src/styles/index.css` (`@theme`), și se folosesc ca
 clase Tailwind (`bg-brad-700`, `text-afina-500` etc.). Nu folosim culori hardcodate în componente.
 
 ## Tipografie

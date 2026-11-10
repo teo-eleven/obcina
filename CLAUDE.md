@@ -16,6 +16,7 @@ Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`.
 - `npm run test:watch` / `npm run test:coverage`
 - `npm run test:rules` — regulile Firestore în emulator (Java 21+; nu intră în `npm run check`, rulează în CI)
 - `npm run build` — build de producție
+- `npm run check:bundle` — după build: zod și Firebase nu au voie în fragmentul principal (rulează în CI)
 - `npm run test:e2e` — Playwright (Chromium + WebKit, desktop + telefon) pe un build `--mode emulators`; pornește singur emulatorul Firestore (Java 21+) sau îl refolosește pe cel deschis, și face seed (lasă în `dist/` un build de emulator; `npm run build` îl reface)
 - `npm run images` — imaginile din `public/images/` (WebP), din originalele din `assets/` sau desene provizorii
 - `npm run lighthouse` — Lighthouse pe mobil, pică sub praguri; rapoarte în `lighthouse-report/`
@@ -27,12 +28,18 @@ Vercel (`api/` = funcții de server) · Stripe Checkout în mod test · Vitest +
 
 ## Structură
 
-- `src/pages/` — o componentă per pagină; `src/routes.tsx` — rutele (layout comun + pagini)
-- `src/components/` — componente reutilizabile; `src/components/illustrations/` — desene SVG decorative
-- `src/hooks/` — hook-uri React; `src/lib/` — funcții pure fără React (ex. `contrast.ts`)
-- `src/data/` — date statice în cod (categoriile rămân aici; produsele merg în Firestore în F2)
-- `src/styles/` — teste pe stiluri (contrastul tokenurilor de brand)
-- `src/test/` — setup Vitest și `renderWithRouter` pentru componente care au nevoie de router
+- `src/pages/<Nume>Page/` — câte un folder pe pagină: pagina, subcomponentele ei și `index.ts`;
+  `src/routes.tsx` — rutele (layout comun + pagini, cele cu date încărcate leneș)
+- `src/components/` — componente refolosite; `components/illustrations/` — desene SVG decorative
+- `src/hooks/` — hook-uri React (`use*.ts`)
+- `src/utils/` — logică pură, fără React (bani, stoc, coș, catalog, contrast)
+- `src/schemas/` — scheme zod (validarea datelor la granițe)
+- `src/types/` — tipuri TypeScript (cele de produs vin din schemă, cu `z.infer`)
+- `src/constants/` — valori fixe (categorii, limite, clase Tailwind comune, porturile emulatorului);
+  `seedProducts.ts` stă aici, dar nu în `index.ts`: îl importă doar seed-ul și testele
+- `src/services/` — Firebase și citirile din Firestore (singurul loc care importă `firebase/*`)
+- `src/styles/` — `index.css` (tokenurile de brand) și testul de contrast
+- `src/test/` — setup Vitest, `renderWithRouter` și `codeOrganisation.test.ts`, care păzește structura de mai sus
 - `e2e/` — Playwright: `playwright.config.ts` și testele (`fixtures.ts`: pagină „sănătoasă”, `tabKey`, `isNarrow`)
 - `firebase/` — `firestore.rules`, testele lor în emulator și configurația Vitest pentru ele (`firebase.json` rămâne
   în rădăcină, unde îl caută Firebase CLI)
@@ -51,13 +58,16 @@ Convenții pentru componente:
 - Testele unitare acoperă logica și starea; E2E acoperă doar ce cere un browser real (focus,
   vizibilitate, scroll, WebKit, rețea). Nu duplica un caz pe ambele niveluri.
 
-Organizarea codului (cerută de Teodor pe 2026-11-10; mutarea fișierelor existente se face la pasul 3.R):
+Organizarea codului (cerută de Teodor pe 2026-11-10; aplicată la pasul 3.R, păzită de
+`src/test/codeOrganisation.test.ts`):
 
 - **O componentă pe fișier.** Subcomponentele folosite de o singură pagină stau în folderul paginii
   (`pages/HomePage/Hero.tsx`); `components/` e pentru ce se refolosește.
 - **Foldere pe tipuri:** `components/`, `hooks/`, `utils/` (logică pură, fără hooks), `schemas/` (zod),
   `types/`, `constants/`, `services/` (Firebase și tot ce vorbește cu rețeaua), fiecare cu `index.ts`.
-  `services/` se importă direct, nu prin `index.ts`, ca Firebase să rămână în fragmentul încărcat leneș.
+  Importurile între foldere trec prin `index.ts`; în același folder, direct (`./money`). Firebase și zod
+  rămân în afara paginii de start pentru că `package.json` declară `"sideEffects": ["**/*.css"]` și
+  `npm run check:bundle` verifică asta după build (în CI).
 - **Primitive de interfață:** componente shadcn copiate manual, construite pe Base UI (nu Radix),
   colorate doar cu tokenurile de brand.
 - **Formulare:** React Hook Form + Zod.
@@ -70,7 +80,7 @@ Organizarea codului (cerută de Teodor pe 2026-11-10; mutarea fișierelor existe
 - **Prețul se calculează pe server.** Clientul trimite doar `{ productId, quantity }`.
 - **O comandă e `paid` doar din webhook-ul Stripe** cu semnătura verificată.
 - **Secretele** (`STRIPE_*`, service account Firebase) doar în `.env.local` și în Vercel. Niciodată cu prefix `VITE_`.
-- **Culori doar din tokenurile de brand** (`src/index.css` → `@theme`), fără hex în componente.
+- **Culori doar din tokenurile de brand** (`src/styles/index.css` → `@theme`), fără hex în componente.
 - **Texte de interfață în română, cu diacritice.** Cod, nume de variabile și commit-uri în engleză.
 - **Accesibilitate:** un singur `h1` per pagină, etichete pe butoane și formulare, focus vizibil.
 - **Mobil întâi:** verifică la 375px lățime, fără scroll orizontal.

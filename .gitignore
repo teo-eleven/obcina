@@ -27,7 +27,7 @@ dist-ssr
 .env
 .env.*
 !.env.example
-# Emulator mode only: a flag, no keys (see src/lib/firebaseConfig.ts)
+# Emulator mode only: a flag, no keys (see src/services/firebaseConfig.ts)
 !.env.emulators
 
 # Test output

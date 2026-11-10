@@ -2,15 +2,14 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { RouteObject } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Layout } from './components/Layout'
-import { RouteError } from './components/RouteFallbacks'
+import { Layout, RouteError } from './components'
 import { routes } from './routes'
-import { SEED_PRODUCTS } from './data/seedProducts'
-import { fetchCategoryProducts, fetchProduct } from './lib/productsRepository'
+import { SEED_PRODUCTS } from './constants/seedProducts'
+import { fetchCategoryProducts, fetchProduct } from './services'
 import { stubMatchMedia } from './test/matchMedia'
 import { renderWithRouter } from './test/renderWithRouter'
 
-vi.mock('./lib/productsRepository')
+vi.mock('./services/productsRepository')
 
 // The real app routes plus one extra page, to test navigation from outside the home page.
 const rootRoute = routes[0]
