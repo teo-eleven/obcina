@@ -38,6 +38,8 @@ Vercel (`api/` = funcții de server) · Stripe Checkout în mod test · Vitest +
 - `src/constants/` — valori fixe (categorii, limite, clase Tailwind comune, porturile emulatorului);
   `seedProducts.ts` stă aici, dar nu în `index.ts`: îl importă doar seed-ul și testele
 - `src/services/` — Firebase și citirile din Firestore (singurul loc care importă `firebase/*`)
+- `src/stores/` — stare comună a aplicației, fără React (ex. coșul și salvarea lui în `localStorage`);
+  componentele o folosesc prin hook-uri (`useCart`)
 - `src/styles/` — `index.css` (tokenurile de brand) și testul de contrast
 - `src/test/` — setup Vitest, `renderWithRouter` și `codeOrganisation.test.ts`, care păzește structura de mai sus
 - `e2e/` — Playwright: `playwright.config.ts` și testele (`fixtures.ts`: pagină „sănătoasă”, `tabKey`, `isNarrow`)
@@ -64,7 +66,8 @@ Organizarea codului (cerută de Teodor pe 2026-11-10; aplicată la pasul 3.R, p�
 - **O componentă pe fișier.** Subcomponentele folosite de o singură pagină stau în folderul paginii
   (`pages/HomePage/Hero.tsx`); `components/` e pentru ce se refolosește.
 - **Foldere pe tipuri:** `components/`, `hooks/`, `utils/` (logică pură, fără hooks), `schemas/` (zod),
-  `types/`, `constants/`, `services/` (Firebase și tot ce vorbește cu rețeaua), fiecare cu `index.ts`.
+  `types/`, `constants/`, `services/` (Firebase și tot ce vorbește cu rețeaua), `stores/` (stare comună,
+  fără React), fiecare cu `index.ts`.
   Importurile între foldere trec prin `index.ts`; în același folder, direct (`./money`). Firebase și zod
   rămân în afara paginii de start pentru că `package.json` declară `"sideEffects": ["**/*.css"]` și
   `npm run check:bundle` verifică asta după build (în CI).

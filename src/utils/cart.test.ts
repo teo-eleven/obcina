@@ -75,9 +75,12 @@ describe('addItem', () => {
     expect(() => addItem(EMPTY_CART, MIERE, quantity)).toThrow(RangeError)
   })
 
-  it('throws RangeError for an empty product id', () => {
-    expect(() => addItem(EMPTY_CART, '')).toThrow(RangeError)
-  })
+  it.each(['', 'ab', 'Miere De Tei', '../x', 'miere-'])(
+    'throws RangeError for the product id %j (not a slug)',
+    (productId) => {
+      expect(() => addItem(EMPTY_CART, productId)).toThrow(RangeError)
+    },
+  )
 })
 
 describe('removeItem', () => {
