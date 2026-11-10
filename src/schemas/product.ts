@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { CATEGORIES } from '../constants'
+import { CATEGORIES, SLUG_BODY, SLUG_MAX_LENGTH, SLUG_MIN_LENGTH, SLUG_PATTERN } from '../constants'
 import type { CategorySlug } from '../types'
 
 // The single validation point for product data coming from Firestore, the seed file or the admin
@@ -13,13 +13,9 @@ const SINGLE_CATEGORY_SLUGS = CATEGORIES.map((category) => category.slug).filter
   (slug): slug is SingleCategorySlug => slug !== GIFT_BASKET_CATEGORY,
 )
 
-// Also the Firestore doc id and the /produs/:slug URL, so: lowercase kebab-case only.
-const KEBAB = '[a-z0-9]+(?:-[a-z0-9]+)*'
-export const slugSchema = z
-  .string()
-  .min(3)
-  .max(80)
-  .regex(new RegExp(`^${KEBAB}$`))
+// The slug rule lives in constants/product.ts; image paths reuse its kebab-case body.
+const KEBAB = SLUG_BODY
+export const slugSchema = z.string().min(SLUG_MIN_LENGTH).max(SLUG_MAX_LENGTH).regex(SLUG_PATTERN)
 
 // No control, format or separator characters (NUL, zero-width, RTL override...): they can make a
 // name render as something else or break logs and Stripe metadata. Diacritics are letters, so fine.

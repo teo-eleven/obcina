@@ -5,12 +5,12 @@ import { describe, expect, it } from 'vitest'
 
 // Pins the folder layout described in CLAUDE.md ("Organizarea codului").
 const SRC = join(process.cwd(), 'src')
-const BARREL_FOLDERS = ['hooks', 'utils', 'schemas', 'types', 'constants', 'services']
+const BARREL_FOLDERS = ['hooks', 'utils', 'schemas', 'types', 'constants', 'services', 'stores']
 const INDEXED_FOLDERS = ['components', 'components/illustrations', ...BARREL_FOLDERS]
 const PAGE_NAMES = ['HomePage', 'CategoryPage', 'ProductPage', 'NotFoundPage']
 const ALLOWED_TOP_LEVEL = [
-  'components', 'constants', 'hooks', 'pages', 'schemas', 'services', 'styles', 'test', 'types',
-  'utils', 'main.tsx', 'routes.tsx', 'routes.test.tsx', 'vite-env.d.ts',
+  'components', 'constants', 'hooks', 'pages', 'schemas', 'services', 'stores', 'styles', 'test',
+  'types', 'utils', 'main.tsx', 'routes.tsx', 'routes.test.tsx', 'vite-env.d.ts',
 ] // prettier-ignore
 const SEED_FILE = 'seedProducts'
 // A heuristic, not a parser: top-level `function Foo` or `const Foo = (` / `x =>` / memo / forwardRef.
@@ -115,6 +115,14 @@ describe('code organisation (CLAUDE.md)', () => {
       .filter((f) => /from\s+['"](react(\/[^'"]*)?|(\.\.\/)+hooks(\/[^'"]*)?)['"]/.test(read(f)))
       .map(rel)
     expect(offenders, 'utils must be plain logic, no React or hooks').toEqual([])
+  })
+
+  it('keeps stores free of React and hooks', () => {
+    const offenders = sourceFiles('stores')
+      .filter((f) => !isIndex(f))
+      .filter((f) => /from\s+['"](react(\/[^'"]*)?|(\.\.\/)+hooks(\/[^'"]*)?)['"]/.test(read(f)))
+      .map(rel)
+    expect(offenders, 'stores must not import React or hooks').toEqual([])
   })
 
   it.each(['components', ...BARREL_FOLDERS])(

@@ -8,9 +8,11 @@
 import { MAX_LINE_QUANTITY } from '../constants'
 import type { Cart } from '../types'
 import { assertBani } from './money'
+import { isProductId } from './productId'
 
+// The same rule parseCart applies on load, so anything added here survives a refresh.
 function assertProductId(productId: string): void {
-  if (productId === '') throw new RangeError('A cart line needs a product id')
+  if (!isProductId(productId)) throw new RangeError('A cart line needs a product slug as its id')
 }
 
 function assertQuantity(quantity: number, { allowZero }: { allowZero: boolean }): void {
