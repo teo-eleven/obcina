@@ -47,6 +47,19 @@ Convenții pentru componente:
 - Testele unitare acoperă logica și starea; E2E acoperă doar ce cere un browser real (focus,
   vizibilitate, scroll, WebKit, rețea). Nu duplica un caz pe ambele niveluri.
 
+Organizarea codului (cerută de Teodor pe 2026-11-10; mutarea fișierelor existente se face la pasul 3.R):
+
+- **O componentă pe fișier.** Subcomponentele folosite de o singură pagină stau în folderul paginii
+  (`pages/HomePage/Hero.tsx`); `components/` e pentru ce se refolosește.
+- **Foldere pe tipuri:** `components/`, `hooks/`, `utils/` (logică pură, fără hooks), `schemas/` (zod),
+  `types/`, `constants/`, `services/` (Firebase și tot ce vorbește cu rețeaua), fiecare cu `index.ts`.
+  `services/` se importă direct, nu prin `index.ts`, ca Firebase să rămână în fragmentul încărcat leneș.
+- **Primitive de interfață:** componente shadcn copiate manual, construite pe Base UI (nu Radix),
+  colorate doar cu tokenurile de brand.
+- **Formulare:** React Hook Form + Zod.
+- **Parolele nu apar niciodată în clar în loguri:** orice log care atinge date de autentificare le
+  maschează.
+
 ## Reguli ale proiectului
 
 - **Bani în bani, nu în lei:** prețurile sunt numere întregi în bani (`1999` = 19,99 lei). Fără float.
