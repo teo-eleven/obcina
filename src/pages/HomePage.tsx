@@ -2,8 +2,10 @@ import { CategoryIcon } from '../components/CategoryIcon'
 import { LindenLeaf } from '../components/illustrations/LindenLeaf'
 import { PantryShelf } from '../components/illustrations/PantryShelf'
 import { Label } from '../components/Label'
+import { OnceLink } from '../components/OnceLink'
 import { Ornament } from '../components/Ornament'
 import { Stamp } from '../components/Stamp'
+import { STRETCHED_CARD, STRETCHED_LINK } from '../components/stretchedLink'
 import { CATEGORIES } from '../data/categories'
 
 function Hero() {
@@ -64,12 +66,16 @@ function CategoryGrid() {
       </div>
       <ul aria-label="Categorii" className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {CATEGORIES.map((category) => (
-          <li key={category.slug}>
+          <li key={category.slug} className={STRETCHED_CARD}>
             <Label className="h-full">
               <div className="flex items-start gap-4">
                 <CategoryIcon slug={category.slug} />
                 <div>
-                  <h3 className="text-xl font-semibold">{category.name}</h3>
+                  <h3 className="text-xl font-semibold">
+                    <OnceLink to={`/categorie/${category.slug}`} className={STRETCHED_LINK}>
+                      {category.name}
+                    </OnceLink>
+                  </h3>
                   <p className="text-lemn-600 mt-2">{category.description}</p>
                 </div>
               </div>
@@ -84,7 +90,32 @@ function CategoryGrid() {
 function Story() {
   return (
     <section id="povestea" className="bg-in-100 paper scroll-mt-20">
-      <div className="mx-auto grid max-w-4xl items-center gap-8 px-4 py-16 md:grid-cols-[1fr_auto]">
+      <figure className="mx-auto max-w-4xl px-4 pt-16">
+        {/* Below the fold, so lazy; width/height reserve the space, srcset lets phones skip the 1200 px file. */}
+        <img
+          src="/images/atmosfera/poiana-negrii-1200.webp"
+          srcSet="/images/atmosfera/poiana-negrii-640.webp 640w, /images/atmosfera/poiana-negrii-800.webp 800w, /images/atmosfera/poiana-negrii-1200.webp 1200w"
+          sizes="(min-width: 56rem) 54rem, calc(100vw - 2rem)"
+          width={1200}
+          height={598}
+          loading="lazy"
+          decoding="async"
+          alt="Fânețe cu căpițe de fân, case de lemn și brazi la Poiana Negrii, în Bucovina"
+          className="chamfer h-auto w-full [--chamfer:14px]"
+        />
+        <figcaption className="text-lemn-600 mt-2 text-right text-sm">
+          Foto:{' '}
+          <a
+            href="https://unsplash.com/@sinzianamihalache"
+            className="underline underline-offset-2"
+            rel="noopener noreferrer"
+          >
+            Sinziana Mihalache
+          </a>{' '}
+          / Unsplash
+        </figcaption>
+      </figure>
+      <div className="mx-auto grid max-w-4xl items-center gap-8 px-4 pt-8 pb-16 md:grid-cols-[1fr_auto]">
         <div>
           <h2 className="text-3xl font-semibold sm:text-4xl">
             Povestea <i className="text-afina-700 font-medium">noastră</i>

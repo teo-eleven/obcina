@@ -27,6 +27,8 @@ dist-ssr
 .env
 .env.*
 !.env.example
+# Emulator mode only: a flag, no keys (see src/lib/firebaseConfig.ts)
+!.env.emulators
 
 # Test output
 coverage
@@ -45,3 +47,9 @@ coverage
 
 # Lighthouse
 /lighthouse-report/
+
+# Firebase CLI cache (emulator logs are covered by *.log)
+.firebase/
+
+# Image originals (AI products, photos): large; only the optimised WebP in public/images is committed
+/assets/

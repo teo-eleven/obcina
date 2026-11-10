@@ -9,10 +9,15 @@ Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`.
 ## Comenzi
 
 - `npm run dev` — server local (http://localhost:5180)
+- `npm run emulators` — Firestore + Auth locale (proiect `demo-obcina`, UI pe http://127.0.0.1:4000)
+- `npm run seed` — încarcă produsele în emulator (pornește întâi `npm run emulators`)
+- `npm run dev:emulators` — aplicația legată de emulatoare, nu de proiectul real (ADR 0006)
 - `npm run check` — lint + typecheck + format + teste (rulează înainte de orice commit)
 - `npm run test:watch` / `npm run test:coverage`
+- `npm run test:rules` — regulile Firestore în emulator (Java 21+; nu intră în `npm run check`, rulează în CI)
 - `npm run build` — build de producție
-- `npm run test:e2e` — Playwright pe build-ul de producție (Chromium + WebKit, desktop + telefon)
+- `npm run test:e2e` — Playwright (Chromium + WebKit, desktop + telefon) pe un build `--mode emulators`; pornește singur emulatorul Firestore (Java 21+) sau îl refolosește pe cel deschis, și face seed (lasă în `dist/` un build de emulator; `npm run build` îl reface)
+- `npm run images` — imaginile din `public/images/` (WebP), din originalele din `assets/` sau desene provizorii
 - `npm run lighthouse` — Lighthouse pe mobil, pică sub praguri; rapoarte în `lighthouse-report/`
 
 ## Stack

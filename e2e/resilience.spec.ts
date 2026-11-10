@@ -6,14 +6,6 @@ import { expect, isNarrow, nextFrames, test } from './fixtures'
  * network trouble. The health fixture also fails any test that logs an error or loses a request.
  */
 
-// Any alert/confirm/prompt means injected script ran.
-function failOnDialog(page: Page) {
-  page.on('dialog', async (dialog) => {
-    await dialog.dismiss()
-    throw new Error(`Unexpected dialog (script injection?): ${dialog.message()}`)
-  })
-}
-
 async function expectSinglePage(page: Page) {
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1)
   await expect(page.getByRole('banner')).toBeVisible()
@@ -34,8 +26,6 @@ test.describe('limits and corrupt input', () => {
     ['a query string the app does not use', '/?pret=-1&cantitate=999999999999'],
   ] as const) {
     test(`renders a usable page for ${label}`, async ({ page }) => {
-      failOnDialog(page)
-
       await page.goto(path)
 
       await expectSinglePage(page)
@@ -45,8 +35,6 @@ test.describe('limits and corrupt input', () => {
 
 test.describe('adversarial input', () => {
   test('a script tag in the path is never executed or echoed', async ({ page }) => {
-    failOnDialog(page)
-
     await page.goto('/%3Cscript%3Ealert(1)%3C%2Fscript%3E')
 
     await expect(page.getByRole('heading', { level: 1 })).toContainText('nu e în cămară')
@@ -54,8 +42,6 @@ test.describe('adversarial input', () => {
   })
 
   test('markup in the hash does not inject elements or run handlers', async ({ page }) => {
-    failOnDialog(page)
-
     await page.goto('/#%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E')
     await nextFrames(page)
 
@@ -122,9 +108,11 @@ test.describe('network trouble', () => {
     expect(headingFont).toContain('Fraunces')
   })
 
-  // Pages not visited yet may need fonts that can't download offline; the app must still work.
+  // Pages not visited yet may need fonts or lazy images that can't download offline; the app must
+  // still work.
   test.describe(() => {
-    test.use({ allowedRequestFailures: [/\.woff2$/] })
+    // One pattern: Playwright reads a two-element array in test.use as [value, fixtureOptions].
+    test.use({ allowedRequestFailures: [/\.woff2$|\/images\/.+\.webp$/] })
 
     test('losing the connection after load keeps in-app navigation working', async ({
       page,

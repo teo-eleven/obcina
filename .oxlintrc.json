@@ -8,6 +8,38 @@
       {
         "allowConstantExport": true
       }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["**/seedProducts"],
+            "message": "Seed data is for the seed script and tests only; the app reads products from Firestore."
+          }
+        ]
+      }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/data/seedProducts.test.ts",
+        "src/data/productImages.test.ts",
+        "src/lib/catalog.test.ts",
+        "src/lib/productsRepository.test.ts",
+        "src/hooks/useCategoryProducts.test.ts",
+        "src/pages/ProductPage.test.tsx",
+        "src/routes.test.tsx",
+        "src/pages/CategoryPage.test.tsx",
+        "src/components/ProductCard.test.tsx",
+        "scripts/**",
+        "rules/**",
+        "e2e/catalog.spec.ts"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ]
 }

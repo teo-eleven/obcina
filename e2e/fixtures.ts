@@ -6,7 +6,7 @@ const ASSET_TYPES = new Set(['image', 'font', 'stylesheet', 'script', 'media'])
 
 /*
  * Every spec also asserts a healthy page: an automatic fixture records console errors,
- * uncaught page errors, failed requests, same-origin 4xx/5xx responses, and assets that came
+ * uncaught page errors, dialogs (alert/confirm/prompt: injected script), failed requests, same-origin 4xx/5xx responses, and assets that came
  * back as HTML. That last one is how a missing file shows up here: `vite preview` (like most
  * SPA hosts) answers any unknown path with index.html and status 200, so a missing image or
  * font never produces a 404. The fixture fails the test at teardown if anything was seen.
@@ -14,12 +14,15 @@ const ASSET_TYPES = new Set(['image', 'font', 'stylesheet', 'script', 'media'])
 interface HealthOptions {
   /** Request URLs allowed to fail, for tests that cut the network on purpose. */
   allowedRequestFailures: RegExp[]
+  /** Console errors the app logs on purpose in such tests (e.g. "Could not load …"). */
+  allowedConsoleErrors: RegExp[]
 }
 
 export const test = base.extend<HealthOptions & { healthyPage: void }>({
   allowedRequestFailures: [[], { option: true }],
+  allowedConsoleErrors: [[], { option: true }],
   healthyPage: [
-    async ({ page, baseURL, allowedRequestFailures }, use) => {
+    async ({ page, baseURL, allowedRequestFailures, allowedConsoleErrors }, use) => {
       const problems: string[] = []
       const origin = baseURL ? new URL(baseURL).origin : null
 
@@ -30,9 +33,16 @@ export const test = base.extend<HealthOptions & { healthyPage: void }>({
         if (message.type() !== 'error') return
         // Browsers also log a failed resource load to the console; honour the same allow-list.
         if (isAllowedFailure(message.location().url)) return
+        if (allowedConsoleErrors.some((pattern) => pattern.test(message.text()))) return
         problems.push(`console.error: ${message.text()}`)
       })
       page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
+      // The app never opens alert/confirm/prompt, so any dialog means injected script ran. Recorded
+      // here (a throw inside the handler would not fail the test) and dismissed so the page goes on.
+      page.on('dialog', (dialog) => {
+        problems.push(`dialog (script injection?): ${dialog.message()}`)
+        void dialog.dismiss()
+      })
       page.on('response', (response) => {
         const url = new URL(response.url())
         if (url.origin !== origin) return

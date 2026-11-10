@@ -1,10 +1,12 @@
-import { Outlet } from 'react-router'
-import { useScrollToHash } from '../hooks/useScrollToHash'
+import { Outlet, useNavigation } from 'react-router'
+import { useScrollOnNavigation } from '../hooks/useScrollOnNavigation'
 import { SiteFooter } from './SiteFooter'
 import { SiteHeader } from './SiteHeader'
 
 export function Layout() {
-  useScrollToHash()
+  useScrollOnNavigation()
+  // A lazy page can take a moment to download; say so instead of looking frozen.
+  const isNavigating = useNavigation().state !== 'idle'
 
   return (
     <>
@@ -14,8 +16,14 @@ export function Layout() {
       >
         Sari la conținut
       </a>
+      {isNavigating && (
+        <div
+          aria-hidden="true"
+          className="bg-afina-500 fixed inset-x-0 top-0 z-30 h-1 animate-pulse"
+        />
+      )}
       <SiteHeader />
-      <main id="continut" tabIndex={-1} className="outline-none">
+      <main id="continut" tabIndex={-1} aria-busy={isNavigating} className="outline-none">
         <Outlet />
       </main>
       <SiteFooter />

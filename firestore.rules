@@ -1,0 +1,17 @@
+rules_version = '2';
+
+// Tested in the emulator by rules/firestore.rules.test.ts (npm run test:rules).
+// Anything not matched below is denied: there is no catch-all allow.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // The catalogue is public to read and never written from a browser: products are loaded by the
+    // seed script and, later, by server code with the Admin SDK (which bypasses these rules).
+    match /products/{slug} {
+      allow get: if true;
+      // Every list query must be bounded, so one page can't read (and bill) the whole collection.
+      allow list: if request.query.limit != null && request.query.limit <= 100;
+      allow write: if false;
+    }
+  }
+}

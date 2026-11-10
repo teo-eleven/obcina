@@ -69,6 +69,16 @@ test.describe('section navigation', () => {
   }
 })
 
+// The only test that keeps the default motion: the jump to a section is smooth (useScrollOnNavigation).
+test('a section link from another page scrolls smoothly to that section', async ({ page }) => {
+  await page.goto('/nu-exista')
+
+  await page.getByRole('link', { name: 'Vezi categoriile' }).click()
+
+  await expect(page).toHaveURL(/\/#categorii$/)
+  await expect(page.locator('#categorii')).toBeInViewport()
+})
+
 test('deep link to /#povestea lands with that section in view', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
 
@@ -93,12 +103,20 @@ test.describe('keyboard focus', () => {
   // fade the ring in from the text colour: the ring has to be there the moment focus lands.
   const FOCUS_RING = 'rgb(138, 63, 110)'
 
-  for (const path of ['/', '/nu-exista']) {
+  // Pages with Firestore data wait for it, so their links (product cards, basket contents) count.
+  const pages: readonly (readonly [string, string | null])[] = [
+    ['/', null],
+    ['/nu-exista', null],
+    ['/categorie/miere', 'Produse'],
+    ['/produs/cos-mic-dejun-la-stana', 'Ce conține'],
+  ]
+  for (const [path, dataList] of pages) {
     test(`every control on ${path} shows the brand focus ring immediately`, async ({
       page,
       browserName,
     }) => {
       await page.goto(path)
+      if (dataList) await expect(page.getByRole('list', { name: dataList })).toBeVisible()
       const controls = page.locator('a[href]:visible, button:visible')
       const count = await controls.count()
       expect(count).toBeGreaterThan(2)

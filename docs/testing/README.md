@@ -17,6 +17,7 @@ sau dintr-o acțiune reală în browser.
 - [ ] `/test-coverage` (kit): `npm run test:coverage` — toate trec, acoperire ≥ 80%, fără fișiere
       sub prag.
 - [ ] `npm run test:e2e` — **toate** fluxurile E2E, inclusiv cele din fazele anterioare.
+      Rulează pe emulator (Java 21+): îl pornește singur sau îl refolosește pe cel deschis și face seed.
 - [ ] `/quality-gate . --strict` (kit): formatare, lint, tipuri, fără avertismente.
 
 ## 2. Bateria de teste pe categorii
@@ -54,8 +55,11 @@ Pe **desktop** și pe **mobil (375px)**:
 - [ ] `security-reviewer` pe tot diff-ul fazei (`git diff main...HEAD`), cu verificare OWASP Top 10
       pe ce s-a adăugat (control acces, injecții, configurare, autentificare).
 - [ ] `npm audit` fără vulnerabilități mari; CodeQL fără alerte noi.
+- [ ] `overrides` din `package.json` încă necesare (ADR 0005): `npm ls @grpc/grpc-js`; dacă
+      `@firebase/firestore` cere singur `>= 1.13.6`, override-ul se scoate.
 - [ ] Nicio cheie secretă în cod, în bundle (`dist/`) sau în istoricul git.
-- [ ] Regulile Firestore testate pentru ce s-a adăugat (din F2 încolo).
+- [ ] Regulile Firestore testate pentru ce s-a adăugat (din F2 încolo): `npm run test:rules` verde și
+      jobul `rules` verde în CI; fiecare colecție nouă are teste pentru vizitator, utilizator și admin.
 
 ## 5. Calitate
 

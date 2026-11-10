@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:emulators": "vite --mode emulators",
+    "emulators": "firebase emulators:start --project demo-obcina",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "oxlint --deny-warnings",
@@ -14,21 +16,28 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-obcina \"vitest run --config vitest.rules.config.ts\"",
     "check": "npm run lint && npm run typecheck && npm run format:check && npm run test",
     "prepare": "husky",
     "build-and-preview": "npm run build && vite preview",
+    "e2e:serve": "npm run seed && vite build --mode emulators && vite preview",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "images": "tsx scripts/images.ts",
+    "seed": "tsx scripts/seed.ts",
     "lighthouse": "npm run build && node scripts/lighthouse.mjs"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",
     "@fontsource-variable/inter": "^5.3.0",
+    "firebase": "13.1.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "react-router": "^8.5.1"
+    "react-router": "^8.5.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "6.0.0",
     "@playwright/test": "^1.64.1",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
@@ -40,6 +49,8 @@
     "@vitejs/plugin-react": "^6.1.2",
     "@vitest/coverage-v8": "^5.0.5",
     "chrome-launcher": "^1.2.2",
+    "firebase-admin": "14.5.0",
+    "firebase-tools": "15.34.1",
     "husky": "^9.1.7",
     "jsdom": "^30.1.3",
     "lighthouse": "^13.6.0",
@@ -47,13 +58,18 @@
     "oxlint": "^1.89.0",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "sharp": "0.35.5",
     "tailwindcss": "^4.3.3",
+    "tsx": "4.23.15",
     "typescript": "~7.0.2",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
   },
   "engines": {
-    "node": ">=22.22.0"
+    "node": ">=24.12.0"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "1.13.7"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
@@ -63,5 +79,12 @@
     "*.{json,md,css,html,yml}": [
       "prettier --write"
     ]
+  },
+  "allowScripts": {
+    "protobufjs": false,
+    "re2": false,
+    "@firebase/util": false,
+    "fsevents": false,
+    "esbuild": false
   }
 }

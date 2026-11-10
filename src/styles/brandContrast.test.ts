@@ -71,6 +71,7 @@ const TEXT_ON_BACKGROUND = [
   ['afina-700', 'crema-50'], // link hover, italic heading accents
   ['afina-700', 'brad-100'], // italic accent in the hero heading
   ['afina-700', 'in-100'], // stamp and italic accent in the story
+  ['brad-700', 'in-100'], // price and weight stamps on product labels
 ] as const
 
 // Tokens never used for text or behind text: illustrations, focus rings, decorative fills.
