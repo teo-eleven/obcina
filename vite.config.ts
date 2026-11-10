@@ -26,8 +26,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     // Playwright owns e2e/; Vitest would otherwise pick up its *.spec.ts files.
-    // rules/ needs the Firestore emulator; it runs separately with `npm run test:rules`.
-    exclude: [...configDefaults.exclude, 'e2e/**', 'rules/**'],
+    // firebase/ needs the Firestore emulator; it runs separately with `npm run test:rules`.
+    exclude: [...configDefaults.exclude, 'e2e/**', 'firebase/**'],
     css: false,
     coverage: {
       provider: 'v8',

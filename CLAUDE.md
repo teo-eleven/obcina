@@ -33,8 +33,12 @@ Vercel (`api/` = funcții de server) · Stripe Checkout în mod test · Vitest +
 - `src/data/` — date statice în cod (categoriile rămân aici; produsele merg în Firestore în F2)
 - `src/styles/` — teste pe stiluri (contrastul tokenurilor de brand)
 - `src/test/` — setup Vitest și `renderWithRouter` pentru componente care au nevoie de router
-- `e2e/` — Playwright (`fixtures.ts`: pagină „sănătoasă”, `tabKey`, `isNarrow`)
-- `scripts/` — unelte Node (Lighthouse); `api/` — funcții Vercel (din F6)
+- `e2e/` — Playwright: `playwright.config.ts` și testele (`fixtures.ts`: pagină „sănătoasă”, `tabKey`, `isNarrow`)
+- `firebase/` — `firestore.rules`, testele lor în emulator și configurația Vitest pentru ele (`firebase.json` rămâne
+  în rădăcină, unde îl caută Firebase CLI)
+- `config/` — `tsconfig.app` / `.test` / `.node` (rădăcina are doar `tsconfig.json`, care le leagă);
+  Prettier e configurat în `package.json`; `.oxlintrc.json` rămâne în rădăcină, unde îl găsesc editoarele
+- `scripts/` — unelte Node (seed, imagini, Lighthouse); `api/` — funcții Vercel (din F6)
 
 Testele stau lângă fișierul testat: `Foo.tsx` + `Foo.test.tsx`.
 

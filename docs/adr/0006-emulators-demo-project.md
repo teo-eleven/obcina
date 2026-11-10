@@ -22,7 +22,7 @@ conectare uitată) trimite scrierile de test în producție.
 - Un build cu `MODE === 'production'` (cel de pe Vercel) refuză steagul cu o eroare clară: altfel
   fiecare vizitator ar fi trimis la propriul 127.0.0.1, cu erori de rețea greu de înțeles. Nu
   folosim „doar în dev”, pentru că la 2.11 E2E rulează pe un build `--mode emulators`.
-- `firestore.rules` e închis pentru tot, ca proiectul real; regulile adevărate vin la 2.10.
+- `firestore.rules` (acum `firebase/firestore.rules`) e închis pentru tot, ca proiectul real; regulile adevărate vin la 2.10.
 - Porturile (Firestore 8080, Auth 9099, UI 4000) sunt în `firebase.json` și în
   `src/lib/firebaseConfig.ts`; `emulatorSetup.test.ts` pică dacă se despart.
 - `firebase-tools` 15.34.1, fixat exact, ca dependență de dezvoltare. Aduce 12 vulnerabilități
