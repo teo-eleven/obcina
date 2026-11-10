@@ -6,34 +6,34 @@
 
 **Trece**, cu un bug mic amânat explicit. Poarta a găsit un bug (#5, severitate mică), reparat parțial
 și documentat ca risc acceptat, plus două defecte ale testelor, reparate. Zero buguri critice sau
-mari. CI-ul cu joburile noi (`rules`, `e2e` pe emulator) rulează după push.
+mari. CI-ul pe GitHub, cu joburile noi (`rules`, `e2e` pe emulator), e verde (PR #6).
 
 ## Jurnal de verificări
 
 Fiecare rând vine dintr-o rulare reală pe codul final al porții.
 
-| Verificare                                   | Rezultat     | Detalii                                                                                            |
-| -------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------- |
-| Teste unitare + integrare (`/test-coverage`) | [PASS]       | 525 teste; acoperire 100% instrucțiuni / ramuri / funcții / linii                                  |
-| Reguli Firestore (`npm run test:rules`)      | [PASS]       | 64 teste în emulator: vizitator, utilizator, admin; 4 reguli prea permisive prinse (mutanți)       |
-| E2E (toate fluxurile)                        | [PASS]       | 151 trecute, 21 sărite (20 intenționat, 1 `fixme` pentru #5), 0 picate, 4 profiluri, pe emulator   |
-| `/quality-gate . --strict`                   | [PASS]       | Prettier curat; oxlint 0 diagnostice; `tsc -b --force` pe 6 configurări                            |
-| Happy path                                   | [PASS]       | acasă → raft → produs → înapoi; raft de coșuri → coș → produs din coș (linkuri reale)              |
-| Limite și date corupte                       | [PASS]       | slug invalid (`..`, `__name__`, `%2F`, spații) → 404 fără cerere; raft gol; document invalid sărit |
-| Adversarial                                  | [PASS]       | markup/script în slug de produs și de categorie → 404, nimic executat; scrieri din client refuzate |
-| Concurență și haos                           | [PASS]       | schimbare rapidă de raft (răspuns întârziat ignorat); dublu-clic pe produs → bug #5 (vezi mai jos) |
-| Rețea                                        | [PASS]       | Firestore indisponibil → eroare + „Încearcă din nou” → produse; rețea lentă → stare de încărcare   |
-| Manual — desktop                             | [PASS]       | toate rafturile și produsele, coșuri, 404                                                          |
-| Manual — mobil 375px                         | [PASS]       | fără scroll orizontal pe acasă, raft, coș, produs epuizat, 404                                     |
-| Manual — Safari                              | n/a          | fără formulare noi; WebKit (desktop + telefon) rulează toată suita E2E                             |
-| Doar tastatura                               | [PASS]       | contur de focus imediat pe fiecare control: acasă, 404, raft, coș (16 teste E2E)                   |
-| Consolă fără erori                           | [PASS]       | impus automat în fiecare test E2E; trecerea manuală prin 26 de pagini: 0 erori                     |
-| Sincronizare UI ↔ Firestore                  | [PASS]       | 20 produse × (nume, titlu, preț, gramaj, stoc) și 6 rafturi × număr de produse, identice cu baza   |
-| `security-reviewer` (OWASP)                  | [PASS]       | 0 critice/mari; 2 medii programate la 6.1 (vezi Securitate)                                        |
-| `npm audit` + CodeQL                         | [PASS]       | producție 0; total 16 moderate, doar în unelte (ADR 0004, 0006); CodeQL după push                  |
-| `code-reviewer`                              | [PASS]       | APPROVE; constatările medii aplicate în poartă (vezi mai jos)                                      |
-| Lighthouse (mobil, mediana din 3)            | [PASS]       | `/` 92 · 404 96 · `/categorie/miere` 90 · `/produs/miere-de-tei` 89–90 (vezi nota)                 |
-| CI pe GitHub                                 | în așteptare | rulează după push: check, `rules`, `e2e` pe emulator, lighthouse, CodeQL                           |
+| Verificare                                   | Rezultat | Detalii                                                                                            |
+| -------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| Teste unitare + integrare (`/test-coverage`) | [PASS]   | 525 teste; acoperire 100% instrucțiuni / ramuri / funcții / linii                                  |
+| Reguli Firestore (`npm run test:rules`)      | [PASS]   | 64 teste în emulator: vizitator, utilizator, admin; 4 reguli prea permisive prinse (mutanți)       |
+| E2E (toate fluxurile)                        | [PASS]   | 151 trecute, 21 sărite (20 intenționat, 1 `fixme` pentru #5), 0 picate, 4 profiluri, pe emulator   |
+| `/quality-gate . --strict`                   | [PASS]   | Prettier curat; oxlint 0 diagnostice; `tsc -b --force` pe 6 configurări                            |
+| Happy path                                   | [PASS]   | acasă → raft → produs → înapoi; raft de coșuri → coș → produs din coș (linkuri reale)              |
+| Limite și date corupte                       | [PASS]   | slug invalid (`..`, `__name__`, `%2F`, spații) → 404 fără cerere; raft gol; document invalid sărit |
+| Adversarial                                  | [PASS]   | markup/script în slug de produs și de categorie → 404, nimic executat; scrieri din client refuzate |
+| Concurență și haos                           | [PASS]   | schimbare rapidă de raft (răspuns întârziat ignorat); dublu-clic pe produs → bug #5 (vezi mai jos) |
+| Rețea                                        | [PASS]   | Firestore indisponibil → eroare + „Încearcă din nou” → produse; rețea lentă → stare de încărcare   |
+| Manual — desktop                             | [PASS]   | toate rafturile și produsele, coșuri, 404                                                          |
+| Manual — mobil 375px                         | [PASS]   | fără scroll orizontal pe acasă, raft, coș, produs epuizat, 404                                     |
+| Manual — Safari                              | n/a      | fără formulare noi; WebKit (desktop + telefon) rulează toată suita E2E                             |
+| Doar tastatura                               | [PASS]   | contur de focus imediat pe fiecare control: acasă, 404, raft, coș (16 teste E2E)                   |
+| Consolă fără erori                           | [PASS]   | impus automat în fiecare test E2E; trecerea manuală prin 26 de pagini: 0 erori                     |
+| Sincronizare UI ↔ Firestore                  | [PASS]   | 20 produse × (nume, titlu, preț, gramaj, stoc) și 6 rafturi × număr de produse, identice cu baza   |
+| `security-reviewer` (OWASP)                  | [PASS]   | 0 critice/mari; 2 medii programate la 6.1 (vezi Securitate)                                        |
+| `npm audit` + CodeQL                         | [PASS]   | producție 0; total 16 moderate, doar în unelte (ADR 0004, 0006); CodeQL după push                  |
+| `code-reviewer`                              | [PASS]   | APPROVE; constatările medii aplicate în poartă (vezi mai jos)                                      |
+| Lighthouse (mobil, mediana din 3)            | [PASS]   | `/` 92 · 404 96 · `/categorie/miere` 90 · `/produs/miere-de-tei` 89–90 (vezi nota)                 |
+| CI pe GitHub                                 | [PASS]   | PR #6: check, `rules`, `e2e` pe emulator (6 min), lighthouse, CodeQL, toate verzi                  |
 
 **Notă Lighthouse.** O primă rulare, cu Mac-ul încărcat (load average ~8), a dat 84 pe pagina de produs,
 sub pragul de 85. Două rulări cu load ~3–4 au dat 90 și 89. Diferența vine din mașină, dar marja e mică:
