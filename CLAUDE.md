@@ -62,7 +62,10 @@ Convenții pentru componente:
 
 - **Pași mici:** lucrăm câte un pas din `docs/PLAN.md` (~1 oră). Un pas e gata doar când „Gata când”
   e adevărat, `npm run check` trece și e într-un commit. Bifează pasul în PLAN.md.
-- **Un branch pe fază** (`faza-N/nume`), un commit pe pas, PR la final de fază.
+- **Un PR pe pas** (ADR 0008): branch scurt din `main` la zi (ex. `3.2-transport`), PR → CI verde →
+  squash merge → branch șters automat → `git pull`. Un singur branch de lucru deschis odată; poarta
+  fazei e și ea un PR. Merge: Claude pe pașii obișnuiți; Teodor aprobă poarta, infrastructura și pașii
+  sensibili; Teodor poate da oricând merge pe GitHub (verifică `main` înainte de pasul următor).
 - **Fiecare pas folosește agenții din kitul `~/Desktop/claude-code-starter-kit`** (nivel „maxim”, ales de
   Teodor):
   1. `tdd-guide` scrie testele care pică (RED), pornind de la „Gata când” al pasului.

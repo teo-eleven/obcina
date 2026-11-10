@@ -7,7 +7,7 @@ Ce construim: [PRD.md](PRD.md). Acest fișier spune **în ce ordine**. Îl actua
 - **2–3 ore pe zi, zile flexibile.** Planul numără pași, nu zile din calendar.
 - **Un pas ≈ 1 oră** → 2 pași pe zi de lucru. Un pas e terminat doar când „Gata când” e adevărat,
   `npm run check` trece și pasul e într-un commit.
-- **Un branch pe fază** (`faza-N/nume`), câte un commit pe pas. La final de fază: testare → PR → merge în `main`.
+- **Un PR pe pas** ([ADR 0008](adr/0008-one-pr-per-step-squash-merge.md)): branch scurt din `main`, CI verde, squash merge. La final de fază: poarta de testare, tot într-un PR.
 - Predare: ~sfârșit de decembrie. Dacă rămânem în urmă, tăiem de la coadă (F10, apoi F9), niciodată din MVP (F1–F7).
 
 ## Poarta de testare (la finalul fiecărei faze)

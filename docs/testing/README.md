@@ -8,7 +8,8 @@ sau dintr-o acțiune reală în browser.
 
 ## Pregătire
 
-- [ ] Branch-ul fazei e la zi, `npm run check` trece, CI e verde (inclusiv CodeQL și audit).
+- [ ] Toți pașii fazei sunt în `main` (un PR pe pas, ADR 0008); branch-ul porții e tăiat din `main` la zi,
+      `npm run check` trece, CI e verde (inclusiv CodeQL și audit).
 - [ ] Emulatorul Firebase pornit cu date proaspete (`npm run seed`), din F2 încolo.
 - [ ] Aplicația pornită pe http://localhost:5180.
 
