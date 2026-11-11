@@ -6,7 +6,13 @@ import { describe, expect, it } from 'vitest'
 // Pins the folder layout described in CLAUDE.md ("Organizarea codului").
 const SRC = join(process.cwd(), 'src')
 const BARREL_FOLDERS = ['hooks', 'utils', 'schemas', 'types', 'constants', 'services', 'stores']
-const INDEXED_FOLDERS = ['components', 'components/illustrations', ...BARREL_FOLDERS]
+const INDEXED_FOLDERS = [
+  'components',
+  'components/illustrations',
+  'components/ui',
+  'components/ui/sheet',
+  ...BARREL_FOLDERS,
+]
 const PAGE_NAMES = ['HomePage', 'CategoryPage', 'ProductPage', 'NotFoundPage']
 const ALLOWED_TOP_LEVEL = [
   'components', 'constants', 'hooks', 'pages', 'schemas', 'services', 'stores', 'styles', 'test',
@@ -65,6 +71,10 @@ function areaOf(path: string): string {
   const [first = '', second = ''] = relative(SRC, path).split(sep)
   return first === 'pages' && second ? `pages/${second}` : first
 }
+
+/** Names of the direct subfolders of a src folder. */
+const subfolders = (dir: string) =>
+  existsSync(abs(dir)) ? readdirSync(abs(dir)).filter((name) => isFolder(join(abs(dir), name))) : []
 
 const isFolder = (path: string) => existsSync(path) && statSync(path).isDirectory()
 
@@ -125,7 +135,7 @@ describe('code organisation (CLAUDE.md)', () => {
     expect(offenders, 'stores must not import React or hooks').toEqual([])
   })
 
-  it.each(['components', ...BARREL_FOLDERS])(
+  it.each(['components', 'components/ui', 'components/ui/sheet', ...BARREL_FOLDERS])(
     're-exports every module of src/%s from its index.ts',
     (folder) => {
       const indexFile = join(abs(folder), 'index.ts')
@@ -137,6 +147,28 @@ describe('code organisation (CLAUDE.md)', () => {
       expect(missing, `not exported by src/${folder}/index.ts`).toEqual([])
     },
   )
+
+  it('re-exports every subfolder of components/ui from components/ui/index.ts', () => {
+    const indexFile = abs('components/ui/index.ts')
+    const barrel = existsSync(indexFile) ? read(indexFile) : ''
+    const folders = ['sheet', ...subfolders('components/ui')]
+    const missing = [...new Set(folders)].filter((name) => !barrel.includes(`from './${name}'`))
+    expect(missing, 'not exported by src/components/ui/index.ts').toEqual([])
+  })
+
+  it('gives every subfolder of components/ui its own index.ts', () => {
+    const missing = subfolders('components/ui').filter(
+      (name) => !existsSync(join(abs('components/ui'), name, 'index.ts')),
+    )
+    expect(missing).toEqual([])
+  })
+
+  it('holds subfolders of components to the one-component-per-file rules', () => {
+    const nested = componentFiles()
+      .map(rel)
+      .filter((f) => f.startsWith('components/ui/sheet/'))
+    expect(nested.length, 'componentFiles() must walk components/ui/sheet').toBeGreaterThan(0)
+  })
 
   it('re-exports every illustration from components/illustrations/index.ts', () => {
     const indexFile = abs('components/illustrations/index.ts')

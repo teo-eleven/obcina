@@ -35,3 +35,25 @@ test('keeps keyboard focus on the button after adding the last unit in stock', a
   await expect(button).toBeFocused()
   await expect(button).toHaveAttribute('aria-disabled', 'true')
 })
+
+// Needs a real browser: the drawer is a lazy chunk, and only a browser shows where focus goes.
+test('opens the cart drawer from the keyboard and returns focus to the button on Escape', async ({
+  page,
+}) => {
+  await page.goto('/')
+  const cartButton = page.getByRole('button', { name: /^Coș \d/ })
+
+  await cartButton.focus()
+  await page.keyboard.press('Enter')
+
+  const drawer = page.getByRole('dialog', { name: 'Coșul tău' })
+  await expect(drawer).toBeVisible()
+  await expect
+    .poll(() => drawer.evaluate((element) => element.contains(document.activeElement)))
+    .toBe(true)
+
+  await page.keyboard.press('Escape')
+
+  await expect(drawer).toBeHidden()
+  await expect(cartButton).toBeFocused()
+})

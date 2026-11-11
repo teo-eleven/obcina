@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { CartButton } from './CartButton'
 import { Logo } from './Logo'
 import { MainNav } from './MainNav'
 
@@ -9,7 +10,10 @@ export function SiteHeader() {
         <Link to="/">
           <Logo />
         </Link>
-        <MainNav />
+        <div className="flex items-center gap-2">
+          <MainNav />
+          <CartButton />
+        </div>
       </div>
     </header>
   )
