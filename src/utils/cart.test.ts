@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { addItem, cartSubtotal, itemCount, removeItem, setQuantity } from './cart'
+import { addItem, cartSubtotal, itemCount, lineQuantity, removeItem, setQuantity } from './cart'
 import { EMPTY_CART, MAX_LINE_QUANTITY } from '../constants'
 import type { Cart } from '../types'
 
@@ -251,5 +251,125 @@ describe('immutability', () => {
     const cart = frozenCart([{ productId: MIERE, quantity: 1 }])
 
     expect(addItem(cart, MIERE)).not.toBe(cart)
+  })
+})
+
+const INVALID_LIMITS = [[-1], [1.5], [Number.NaN], [Number.POSITIVE_INFINITY]]
+
+describe('addItem with a stock limit', () => {
+  it('removes a line whose product has since sold out (limit 0): a line never exceeds its stock', () => {
+    const cart = frozenCart([
+      { productId: MIERE, quantity: 2 },
+      { productId: ZACUSCA, quantity: 1 },
+    ])
+
+    expect(addItem(cart, MIERE, 1, 0)).toEqual([{ productId: ZACUSCA, quantity: 1 }])
+  })
+
+  it('adds a new product up to the limit', () => {
+    expect(addItem(EMPTY_CART, MIERE, 5, 3)).toEqual([{ productId: MIERE, quantity: 3 }])
+  })
+
+  it('caps an existing line at the limit', () => {
+    const cart = frozenCart([{ productId: MIERE, quantity: 2 }])
+
+    expect(addItem(cart, MIERE, 5, 3)).toEqual([{ productId: MIERE, quantity: 3 }])
+  })
+
+  it('never goes above MAX_LINE_QUANTITY even with a larger limit', () => {
+    const cart = frozenCart([{ productId: MIERE, quantity: MAX_LINE_QUANTITY - 1 }])
+
+    expect(addItem(cart, MIERE, 5, MAX_LINE_QUANTITY + 50)).toEqual([
+      { productId: MIERE, quantity: MAX_LINE_QUANTITY },
+    ])
+  })
+
+  it('returns the same cart when the line is already at the limit', () => {
+    const cart = frozenCart([{ productId: MIERE, quantity: 3 }])
+
+    expect(addItem(cart, MIERE, 1, 3)).toBe(cart)
+  })
+
+  it('returns the same cart when the limit is 0 and the product is new', () => {
+    const cart = frozenCart([{ productId: ZACUSCA, quantity: 1 }])
+
+    expect(addItem(cart, MIERE, 1, 0)).toBe(cart)
+  })
+
+  it('brings a line that is above a lowered limit down to the limit', () => {
+    const cart = frozenCart([{ productId: MIERE, quantity: 7 }])
+
+    expect(addItem(cart, MIERE, 1, 3)).toEqual([{ productId: MIERE, quantity: 3 }])
+  })
+
+  it('behaves like MAX_LINE_QUANTITY when the limit is undefined', () => {
+    const cart = frozenCart([{ productId: MIERE, quantity: MAX_LINE_QUANTITY - 1 }])
+
+    expect(addItem(cart, MIERE, 5, undefined)).toEqual([
+      { productId: MIERE, quantity: MAX_LINE_QUANTITY },
+    ])
+  })
+
+  it.each(INVALID_LIMITS)('throws RangeError for limit %s', (limit) => {
+    expect(() => addItem(EMPTY_CART, MIERE, 1, limit)).toThrow(RangeError)
+  })
+})
+
+describe('setQuantity with a stock limit', () => {
+  it('clamps the quantity to the limit', () => {
+    const cart = frozenCart([{ productId: MIERE, quantity: 1 }])
+
+    expect(setQuantity(cart, MIERE, 9, 4)).toEqual([{ productId: MIERE, quantity: 4 }])
+  })
+
+  it('clamps to MAX_LINE_QUANTITY when the limit is larger', () => {
+    const cart = frozenCart([{ productId: MIERE, quantity: 1 }])
+
+    expect(setQuantity(cart, MIERE, 500, 1000)).toEqual([
+      { productId: MIERE, quantity: MAX_LINE_QUANTITY },
+    ])
+  })
+
+  it('returns the same cart when the clamped quantity equals the current one', () => {
+    const cart = frozenCart([{ productId: MIERE, quantity: 4 }])
+
+    expect(setQuantity(cart, MIERE, 9, 4)).toBe(cart)
+  })
+
+  it('does not add a product that is not in the cart, even with a limit', () => {
+    const cart = frozenCart([{ productId: ZACUSCA, quantity: 1 }])
+
+    expect(setQuantity(cart, MIERE, 2, 4)).toBe(cart)
+  })
+
+  it('still removes the line when the quantity is 0', () => {
+    const cart = frozenCart([{ productId: MIERE, quantity: 2 }])
+
+    expect(setQuantity(cart, MIERE, 0, 4)).toEqual([])
+  })
+
+  it.each(INVALID_LIMITS)('throws RangeError for limit %s', (limit) => {
+    const cart = frozenCart([{ productId: MIERE, quantity: 1 }])
+
+    expect(() => setQuantity(cart, MIERE, 2, limit)).toThrow(RangeError)
+  })
+})
+
+describe('lineQuantity', () => {
+  const cart = frozenCart([
+    { productId: MIERE, quantity: 3 },
+    { productId: ZACUSCA, quantity: 1 },
+  ])
+
+  it("returns the line's quantity", () => {
+    expect(lineQuantity(cart, MIERE)).toBe(3)
+  })
+
+  it('returns 0 for a product that is not in the cart', () => {
+    expect(lineQuantity(cart, BRANZA)).toBe(0)
+  })
+
+  it('returns 0 for the empty cart', () => {
+    expect(lineQuantity(EMPTY_CART, MIERE)).toBe(0)
   })
 })

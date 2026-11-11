@@ -1,4 +1,4 @@
-import { OnceLink, ProductImage, Stamp } from '../../components'
+import { AddToCartButton, OnceLink, ProductImage, Stamp } from '../../components'
 import { CATEGORIES } from '../../constants'
 import { formatPrice, stockLabel, stockLevel } from '../../utils'
 import type { Product } from '../../types'
@@ -30,7 +30,8 @@ export function ProductDetails({ product }: { product: Product }) {
           )}
           {warning && <Stamp>{warning}</Stamp>}
         </div>
-        <p className="mt-6 text-lg whitespace-pre-line">{product.description}</p>
+        <AddToCartButton product={product} className="mt-6" />
+        <p className="mt-4 text-lg whitespace-pre-line">{product.description}</p>
         {product.kind === 'product' ? (
           <section className="mt-8">
             <h2 id="ingrediente" className="text-xl font-semibold">

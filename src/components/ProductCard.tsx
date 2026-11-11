@@ -1,5 +1,6 @@
 import { formatPrice, stockLabel, stockLevel } from '../utils'
 import type { Product } from '../types'
+import { AddToCartButton } from './AddToCartButton'
 import { Label } from './Label'
 import { OnceLink } from './OnceLink'
 import { ProductImage } from './ProductImage'
@@ -35,6 +36,7 @@ export function ProductCard({ product, isPriority }: ProductCardProps) {
           </Stamp>
           {warning && <Stamp>{warning}</Stamp>}
         </div>
+        <AddToCartButton product={product} className="mt-5" />
       </Label>
     </div>
   )

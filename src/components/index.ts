@@ -1,3 +1,4 @@
+export * from './AddToCartButton'
 export * from './AppLoading'
 export * from './CategoryIcon'
 export * from './Label'

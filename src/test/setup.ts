@@ -1,10 +1,16 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import { afterEach } from 'vitest'
+import { cartStore } from '../stores'
 import { stubMatchMedia } from './matchMedia'
 
 afterEach(() => {
   cleanup()
+  // The app has one cart store; every test starts with an empty cart (no state leaks between tests).
+  if (typeof window !== 'undefined') {
+    cartStore.clear()
+    window.localStorage.clear()
+  }
 })
 
 // jsdom lacks these browser APIs; give every test a quiet default (tests can still override them).

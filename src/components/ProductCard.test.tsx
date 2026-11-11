@@ -1,8 +1,11 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { SEED_PRODUCTS } from '../constants/seedProducts'
-import { formatPrice } from '../utils'
+import { cartStore } from '../stores'
+import { renderWithRouter } from '../test/renderWithRouter'
+import { formatPrice, lineQuantity } from '../utils'
 import type { Product } from '../types'
 import { ProductCard } from './ProductCard'
 
@@ -99,7 +102,7 @@ describe('ProductCard', () => {
   it('marks a sold-out product', () => {
     const { stamps } = renderCard('branza-in-coaja-de-brad')
 
-    expect(screen.getByText('Stoc epuizat')).toBeInTheDocument()
+    // The stamp on the label; the disabled button says the same (tested below).
     expect(stamps).toContain('Stoc epuizat')
   })
 
@@ -115,5 +118,53 @@ describe('ProductCard', () => {
 
     expect(screen.queryByText(/Stoc epuizat/)).not.toBeInTheDocument()
     expect(screen.queryByText(/în stoc/)).not.toBeInTheDocument()
+  })
+
+  it('has an "Adaugă în coș" button inside the card', () => {
+    const { view } = renderCard('miere-de-tei')
+
+    const button = screen.getByRole('button', { name: 'Adaugă în coș' })
+    expect(view.container.querySelector('[data-label]')).toContainElement(button)
+  })
+
+  it('lifts the button above the stretched link with relative z-10', () => {
+    renderCard('miere-de-tei')
+
+    const button = screen.getByRole('button', { name: 'Adaugă în coș' })
+    expect(button).toHaveClass('relative', 'z-10')
+  })
+
+  it('adds the product to the cart and stays on the same route when the button is clicked', async () => {
+    const user = userEvent.setup()
+    const product = seed('miere-de-tei')
+    const { router } = renderWithRouter(
+      [
+        {
+          path: '/categorie/miere',
+          element: (
+            <ul>
+              <li>
+                <ProductCard product={product} isPriority={false} />
+              </li>
+            </ul>
+          ),
+        },
+        { path: '/produs/:slug', element: <p>Pagina produsului</p> },
+      ],
+      '/categorie/miere',
+    )
+    const card = screen.getByRole('listitem')
+
+    await user.click(within(card).getByRole('button', { name: 'Adaugă în coș' }))
+
+    expect(router.state.location.pathname).toBe('/categorie/miere')
+    expect(lineQuantity(cartStore.getSnapshot(), product.slug)).toBe(1)
+    expect(within(card).getByRole('status')).toHaveTextContent('În coș: 1 buc.')
+  })
+
+  it('shows a disabled "Indisponibil" button on a sold-out card', () => {
+    renderCard('branza-in-coaja-de-brad')
+
+    expect(screen.getByRole('button', { name: 'Indisponibil' })).toBeDisabled()
   })
 })

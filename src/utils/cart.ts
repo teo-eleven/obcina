@@ -22,7 +22,18 @@ function assertQuantity(quantity: number, { allowZero }: { allowZero: boolean })
   }
 }
 
-const clamp = (quantity: number): number => Math.min(quantity, MAX_LINE_QUANTITY)
+function assertLimit(limit: number): void {
+  if (!Number.isSafeInteger(limit) || limit < 0) {
+    throw new RangeError(`A limit must be a whole, non-negative number of units, got ${limit}`)
+  }
+}
+
+/** The highest quantity a line may hold: the stock (when given), never above MAX_LINE_QUANTITY. */
+function capFor(limit: number | undefined): number {
+  if (limit === undefined) return MAX_LINE_QUANTITY
+  assertLimit(limit)
+  return Math.min(limit, MAX_LINE_QUANTITY)
+}
 
 /** Replaces one line's quantity, keeping its place; the same cart when the quantity is the same. */
 function withQuantity(cart: Cart, index: number, quantity: number): Cart {
@@ -31,13 +42,20 @@ function withQuantity(cart: Cart, index: number, quantity: number): Cart {
   return cart.map((current, i) => (i === index ? { ...current, quantity } : current))
 }
 
-export function addItem(cart: Cart, productId: string, quantity = 1): Cart {
+/**
+ * Adds `quantity` of a product, never past `limit` (its stock) or MAX_LINE_QUANTITY. A line that is
+ * already above a lowered limit comes down to it; at the limit the same cart comes back.
+ */
+export function addItem(cart: Cart, productId: string, quantity = 1, limit?: number): Cart {
   assertProductId(productId)
   assertQuantity(quantity, { allowZero: false })
+  const cap = capFor(limit)
   const index = cart.findIndex((line) => line.productId === productId)
   const existing = cart[index]
-  if (!existing) return [...cart, { productId, quantity: clamp(quantity) }]
-  return withQuantity(cart, index, clamp(existing.quantity + quantity))
+  if (!existing)
+    return cap === 0 ? cart : [...cart, { productId, quantity: Math.min(quantity, cap) }]
+  const next = Math.min(existing.quantity + quantity, cap)
+  return next === 0 ? removeItem(cart, productId) : withQuantity(cart, index, next)
 }
 
 export function removeItem(cart: Cart, productId: string): Cart {
@@ -46,11 +64,17 @@ export function removeItem(cart: Cart, productId: string): Cart {
 }
 
 /** Sets a line's quantity exactly (0 removes it); a product not in the cart is not added. */
-export function setQuantity(cart: Cart, productId: string, quantity: number): Cart {
+export function setQuantity(cart: Cart, productId: string, quantity: number, limit?: number): Cart {
   assertQuantity(quantity, { allowZero: true })
-  if (quantity === 0) return removeItem(cart, productId)
+  const next = Math.min(quantity, capFor(limit))
+  if (next === 0) return removeItem(cart, productId)
   const index = cart.findIndex((line) => line.productId === productId)
-  return withQuantity(cart, index, clamp(quantity))
+  return withQuantity(cart, index, next)
+}
+
+/** How many of a product the cart holds (0 when it isn't there). */
+export function lineQuantity(cart: Cart, productId: string): number {
+  return cart.find((line) => line.productId === productId)?.quantity ?? 0
 }
 
 export function itemCount(cart: Cart): number {

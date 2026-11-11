@@ -1,4 +1,5 @@
 export * from './cart'
+export * from './cartMessage'
 export * from './catalog'
 export * from './contrast'
 export * from './money'

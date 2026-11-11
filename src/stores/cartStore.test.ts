@@ -569,3 +569,63 @@ describe('createCartStore: cross-tab sync', () => {
     unsubscribeSecond()
   })
 })
+
+describe('createCartStore: stock limit', () => {
+  it('addItem respects the limit', () => {
+    const { storage, values } = fakeStorage()
+    const store = createCartStore(storage)
+
+    store.addItem(MIERE, 5, 3)
+
+    expect(store.getSnapshot()).toEqual([{ productId: MIERE, quantity: 3 }])
+    expect(stored(values)).toEqual([{ productId: MIERE, quantity: 3 }])
+  })
+
+  it('addItem at the limit does not notify or write', () => {
+    const { storage } = fakeStorage()
+    const store = createCartStore(storage)
+    store.addItem(MIERE, 3, 3)
+    const before = store.getSnapshot()
+    const listener = vi.fn()
+    store.subscribe(listener)
+    storage.setItem.mockClear()
+
+    store.addItem(MIERE, 1, 3)
+
+    expect(store.getSnapshot()).toBe(before)
+    expect(listener).not.toHaveBeenCalled()
+    expect(storage.setItem).not.toHaveBeenCalled()
+  })
+
+  it('setQuantity respects the limit', () => {
+    const { storage, values } = fakeStorage()
+    const store = createCartStore(storage)
+    store.addItem(MIERE)
+
+    store.setQuantity(MIERE, 9, 4)
+
+    expect(store.getSnapshot()).toEqual([{ productId: MIERE, quantity: 4 }])
+    expect(stored(values)).toEqual([{ productId: MIERE, quantity: 4 }])
+  })
+
+  it('setQuantity to the already-clamped quantity does not notify or write', () => {
+    const { storage } = fakeStorage()
+    const store = createCartStore(storage)
+    store.addItem(MIERE, 4)
+    const listener = vi.fn()
+    store.subscribe(listener)
+    storage.setItem.mockClear()
+
+    store.setQuantity(MIERE, 9, 4)
+
+    expect(listener).not.toHaveBeenCalled()
+    expect(storage.setItem).not.toHaveBeenCalled()
+  })
+
+  it('throws RangeError for an invalid limit and leaves the cart alone', () => {
+    const store = createCartStore(fakeStorage().storage)
+
+    expect(() => store.addItem(MIERE, 1, -1)).toThrow(RangeError)
+    expect(store.getSnapshot()).toEqual(EMPTY_CART)
+  })
+})
