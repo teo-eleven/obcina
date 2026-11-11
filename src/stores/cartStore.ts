@@ -11,9 +11,10 @@ type CartStorage = Pick<Storage, 'getItem' | 'setItem'>
 export interface CartStore {
   getSnapshot(): Cart
   subscribe(listener: () => void): () => void
-  addItem(productId: string, quantity?: number): void
+  /** `limit` is the product's stock (see utils cartLimit); the line never goes past it. */
+  addItem(productId: string, quantity?: number, limit?: number): void
   removeItem(productId: string): void
-  setQuantity(productId: string, quantity: number): void
+  setQuantity(productId: string, quantity: number, limit?: number): void
   clear(): void
 }
 
@@ -98,10 +99,11 @@ export function createCartStore(storage: CartStorage | undefined): CartStore {
         }
       }
     },
-    addItem: (productId, quantity) => emit(addItem(cart, productId, quantity), { persist: true }),
+    addItem: (productId, quantity, limit) =>
+      emit(addItem(cart, productId, quantity, limit), { persist: true }),
     removeItem: (productId) => emit(removeItem(cart, productId), { persist: true }),
-    setQuantity: (productId, quantity) =>
-      emit(setQuantity(cart, productId, quantity), { persist: true }),
+    setQuantity: (productId, quantity, limit) =>
+      emit(setQuantity(cart, productId, quantity, limit), { persist: true }),
     clear: () => emit(cart.length === 0 ? cart : EMPTY_CART, { persist: true }),
   }
 }

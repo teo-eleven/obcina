@@ -67,6 +67,7 @@ const TEXT_ON_BACKGROUND = [
   ['brad-900', 'brad-100'], // hero heading
   ['crema-50', 'brad-700'], // primary buttons
   ['crema-50', 'afina-700'], // primary buttons on hover
+  ['crema-50', 'lemn-600'], // buttons that can't be used now (sold out, stock in the cart)
   ['brad-100', 'brad-900'], // footer text
   ['afina-700', 'crema-50'], // link hover, italic heading accents
   ['afina-700', 'brad-100'], // italic accent in the hero heading

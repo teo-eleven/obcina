@@ -101,6 +101,20 @@ describe('ProductPage', () => {
     expect(document.title).toBe('Miere de tei — Obcina')
   })
 
+  it('shows an enabled "Adaugă în coș" button for a product in stock', async () => {
+    renderWithRouter(ROUTES, '/produs/miere-de-tei')
+
+    expect(await screen.findByRole('button', { name: 'Adaugă în coș' })).toBeEnabled()
+  })
+
+  it('shows a disabled "Indisponibil" button for the sold-out product', async () => {
+    vi.mocked(fetchProduct).mockResolvedValue(soldOut)
+
+    renderWithRouter(ROUTES, '/produs/branza-in-coaja-de-brad')
+
+    expect(await screen.findByRole('button', { name: 'Indisponibil' })).toBeDisabled()
+  })
+
   it('links back to the shelf of its category', async () => {
     renderWithRouter(ROUTES, '/produs/miere-de-tei')
 
