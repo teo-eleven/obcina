@@ -1,4 +1,4 @@
-import { CATEGORY_PAGE_LIMIT } from '../constants'
+import { CATEGORY_PAGE_LIMIT, FIRESTORE_IN_LIMIT } from '../constants'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { SEED_PRODUCTS } from '../constants/seedProducts'
 
@@ -254,6 +254,83 @@ describe('fetchProductsBySlugs', () => {
 
     expect(products).toEqual([wantedProducts[1]])
     expect(warn).toHaveBeenCalledTimes(2)
+  })
+
+  describe('with more slugs than one "in" query takes', () => {
+    // Real slugs are looked up by id, so the fake documents only need an id and a valid product body.
+    const template = SEED_PRODUCTS[0]!
+    const manySlugs = (n: number) => Array.from({ length: n }, (_, i) => `produs-${i + 1}`)
+    const productFor = (slug: string) => ({ ...template, slug })
+
+    /** Answers each query with the products whose slugs are in that query's `in` batch. */
+    function answerPerBatch() {
+      getDocsFromServer.mockImplementation((q: { query: unknown[] }) => {
+        const clause = q.query.find(
+          (part): part is { where: [string, string, string[]] } =>
+            typeof part === 'object' && part !== null && 'where' in part,
+        )
+        const batch = clause?.where[2] ?? []
+        return Promise.resolve({ docs: batch.toReversed().map((s) => toDoc(productFor(s), s)) })
+      })
+    }
+
+    it('limits one "in" query to 30 values, the Firestore maximum', () => {
+      expect(FIRESTORE_IN_LIMIT).toBe(30)
+    })
+
+    it('uses a single query for exactly 30 slugs', async () => {
+      const slugs = manySlugs(30)
+      answerPerBatch()
+
+      const products = await fetchProductsBySlugs(slugs)
+
+      expect(getDocsFromServer).toHaveBeenCalledTimes(1)
+      expect(where).toHaveBeenCalledWith('__name__', 'in', slugs)
+      expect(products.map((p) => p.slug)).toEqual(slugs)
+    })
+
+    it('splits 31 slugs into a batch of 30 and a batch of 1', async () => {
+      const slugs = manySlugs(31)
+      answerPerBatch()
+
+      await fetchProductsBySlugs(slugs)
+
+      expect(getDocsFromServer).toHaveBeenCalledTimes(2)
+      expect(where).toHaveBeenNthCalledWith(1, '__name__', 'in', slugs.slice(0, 30))
+      expect(where).toHaveBeenNthCalledWith(2, '__name__', 'in', slugs.slice(30))
+      expect(limit).toHaveBeenCalledWith(30)
+      expect(limit).toHaveBeenCalledWith(1)
+    })
+
+    it('splits 65 slugs into batches of 30, 30 and 5', async () => {
+      const slugs = manySlugs(65)
+      answerPerBatch()
+
+      await fetchProductsBySlugs(slugs)
+
+      const batches = vi.mocked(where).mock.calls.map((call) => (call[2] as string[]).length)
+      expect(batches).toEqual([30, 30, 5])
+    })
+
+    it('keeps the order of the input slugs across batches', async () => {
+      const slugs = manySlugs(45)
+      answerPerBatch()
+
+      const products = await fetchProductsBySlugs(slugs)
+
+      expect(products.map((p) => p.slug)).toEqual(slugs)
+    })
+
+    it('fails the whole read when one batch fails', async () => {
+      // No once-queue: an unconsumed one would leak into the next test while batching is missing.
+      getDocsFromServer.mockImplementation((q: { query: unknown[] }) =>
+        JSON.stringify(q).includes('produs-31')
+          ? Promise.reject(new Error('unavailable'))
+          : Promise.resolve({ docs: [] }),
+      )
+
+      await expect(fetchProductsBySlugs(manySlugs(31))).rejects.toThrow('unavailable')
+    })
   })
 
   it('propagates a Firestore failure', async () => {

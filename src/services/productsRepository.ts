@@ -9,7 +9,7 @@ import {
   where,
 } from 'firebase/firestore'
 import type { CategorySlug, Product } from '../types'
-import { PRODUCTS_COLLECTION, CATEGORY_PAGE_LIMIT } from '../constants'
+import { CATEGORY_PAGE_LIMIT, FIRESTORE_IN_LIMIT, PRODUCTS_COLLECTION } from '../constants'
 import { getDb } from './firebase'
 import { productSchema, slugSchema } from '../schemas'
 
@@ -59,10 +59,15 @@ export async function fetchProduct(slug: string): Promise<Product | null> {
   return snapshot.exists() ? parseProductDoc(snapshot.id, snapshot.data()) : null
 }
 
-/** The products a gift basket is made of, in the basket's order. */
-export async function fetchProductsBySlugs(slugs: readonly string[]): Promise<Product[]> {
-  if (slugs.length === 0) return []
-  // 'in' takes up to 30 values; a basket has at most 8 components (productSchema).
+/** Splits a list into consecutive batches of at most `size` items. */
+function batches<T>(items: readonly T[], size: number): T[][] {
+  return Array.from({ length: Math.ceil(items.length / size) }, (_, i) =>
+    items.slice(i * size, (i + 1) * size),
+  )
+}
+
+/** One 'in' query for at most FIRESTORE_IN_LIMIT slugs. */
+async function fetchBatch(slugs: readonly string[]): Promise<Product[]> {
   const snapshot = await getDocsFromServer(
     query(
       collection(getDb(), PRODUCTS_COLLECTION),
@@ -70,6 +75,16 @@ export async function fetchProductsBySlugs(slugs: readonly string[]): Promise<Pr
       limit(slugs.length),
     ),
   )
-  const bySlug = new Map(parseDocs(snapshot.docs).map((product) => [product.slug, product]))
+  return parseDocs(snapshot.docs)
+}
+
+/**
+ * The products with these slugs, in the order asked (a basket's components, a cart's lines).
+ * Firestore takes at most FIRESTORE_IN_LIMIT values per 'in' query, so longer lists go in batches.
+ */
+export async function fetchProductsBySlugs(slugs: readonly string[]): Promise<Product[]> {
+  if (slugs.length === 0) return []
+  const found = await Promise.all(batches(slugs, FIRESTORE_IN_LIMIT).map(fetchBatch))
+  const bySlug = new Map(found.flat().map((product) => [product.slug, product]))
   return slugs.flatMap((slug) => bySlug.get(slug) ?? [])
 }

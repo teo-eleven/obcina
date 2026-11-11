@@ -46,7 +46,7 @@ test('shows the loading state on a slow connection, then the shelf', async ({ pa
 
   await page.goto('/categorie/ceaiuri')
 
-  await expect(page.getByRole('status')).toHaveText('Se încarcă produsele…')
+  await expect(page.getByRole('main').getByRole('status')).toHaveText('Se încarcă produsele…')
   answer()
   await expect(page.getByRole('list', { name: 'Produse' }).getByRole('listitem')).toHaveCount(3)
 })
