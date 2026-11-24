@@ -45,7 +45,7 @@ export function assertEmulatorOnly(
   }
 }
 
-// Set by .env.emulators (`npm run dev:emulators`). Exact match only, so a typo stays on the safe side.
+// Set by the `dev:emulators` and `e2e:serve` npm scripts. Exact match only, so a typo stays on the safe side.
 export function usesEmulators(env: Readonly<Record<string, string | undefined>>): boolean {
   return env.VITE_USE_EMULATORS === 'true'
 }

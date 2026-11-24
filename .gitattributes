@@ -1,0 +1,4 @@
+# Every text file is stored with LF line endings, whatever the editor or OS.
+* text=auto eol=lf
+# Generated: collapsed in GitHub diffs and left out of the language stats.
+package-lock.json linguist-generated=true

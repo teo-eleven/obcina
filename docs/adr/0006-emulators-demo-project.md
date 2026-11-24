@@ -16,7 +16,7 @@ conectare uitată) trimite scrierile de test în producție.
 
 - Emulatoarele pornesc cu `--project demo-obcina`. Firebase tratează orice proiect `demo-` ca
   offline: nu are credențiale, iar orice serviciu neemulat refuză cererea.
-- Modul emulator se alege cu `VITE_USE_EMULATORS=true`, din `.env.emulators` (`npm run dev:emulators`).
+- Modul emulator se alege cu `VITE_USE_EMULATORS=true`, din `.env.emulators` (acum direct în scripturile npm, din 2026-11-24) (`npm run dev:emulators`).
   Fișierul e în git: conține doar steagul, fără chei. În acest mod aplicația
   folosește `EMULATOR_CONFIG` (proiectul demo) și ignoră complet valorile din `.env.local`.
 - Un build cu `MODE === 'production'` (cel de pe Vercel) refuză steagul cu o eroare clară: altfel
