@@ -15,6 +15,8 @@ export interface CartStore {
   addItem(productId: string, quantity?: number, limit?: number): void
   removeItem(productId: string): void
   setQuantity(productId: string, quantity: number, limit?: number): void
+  /** Swaps the whole cart in one change (one notification, one write), validated by parseCart. */
+  replace(next: Cart): void
   clear(): void
 }
 
@@ -104,6 +106,10 @@ export function createCartStore(storage: CartStorage | undefined): CartStore {
     removeItem: (productId) => emit(removeItem(cart, productId), { persist: true }),
     setQuantity: (productId, quantity, limit) =>
       emit(setQuantity(cart, productId, quantity, limit), { persist: true }),
+    replace: (next) => {
+      const parsed = parseCart(next)
+      emit(sameCart(parsed, cart) ? cart : parsed, { persist: true })
+    },
     clear: () => emit(cart.length === 0 ? cart : EMPTY_CART, { persist: true }),
   }
 }
