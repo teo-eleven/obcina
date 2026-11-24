@@ -7,13 +7,16 @@ import { expect, test } from './fixtures'
  */
 
 const FIRESTORE = `http://${EMULATOR_HOST}:${FIRESTORE_EMULATOR_PORT}/**`
+const EMULATOR_ADDRESS = `${EMULATOR_HOST}:${FIRESTORE_EMULATOR_PORT}`.replaceAll('.', '\\.')
 
 test.describe('network trouble', () => {
   // One pattern each: Playwright reads a two-element array in test.use as [value, fixtureOptions].
   test.use({
-    allowedRequestFailures: [/127\.0\.0\.1:8080/],
+    allowedRequestFailures: [new RegExp(EMULATOR_ADDRESS)],
     // Our own log line, and the Firestore SDK's own warning about the backend it can't reach.
-    allowedConsoleErrors: [/Could not load the miere shelf|@firebase\/firestore|127\.0\.0\.1:8080/],
+    allowedConsoleErrors: [
+      new RegExp(`Could not load the miere shelf|@firebase/firestore|${EMULATOR_ADDRESS}`),
+    ],
   })
 
   test('shows the error state when Firestore is unreachable, and recovers on retry', async ({
