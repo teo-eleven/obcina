@@ -1,4 +1,4 @@
-import type { z } from 'zod'
+import type { z } from 'zod/mini'
 import type { productSchema } from '../schemas'
 
 // Product types come from the schema, so the type and the runtime check can never drift apart.

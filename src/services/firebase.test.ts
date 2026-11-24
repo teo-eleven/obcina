@@ -6,7 +6,7 @@ const fakeApp = { name: 'fake-app' }
 const fakeDb = { type: 'fake-firestore' }
 
 vi.mock('firebase/app', () => ({ initializeApp: vi.fn(() => fakeApp) }))
-vi.mock('firebase/firestore', () => ({
+vi.mock('firebase/firestore/lite', () => ({
   getFirestore: vi.fn(() => fakeDb),
   connectFirestoreEmulator: vi.fn(),
 }))
@@ -25,7 +25,7 @@ function stubValidEnv() {
 async function loadModules() {
   vi.resetModules()
   const app = await import('firebase/app')
-  const firestore = await import('firebase/firestore')
+  const firestore = await import('firebase/firestore/lite')
   const firebase = await import('./firebase')
   return { app, firestore, firebase }
 }
