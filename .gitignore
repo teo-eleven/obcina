@@ -27,8 +27,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
-# Emulator mode only: a flag, no keys (see src/services/firebaseConfig.ts)
-!.env.emulators
 
 # Test output
 coverage
@@ -36,8 +34,8 @@ coverage
 # Vercel
 .vercel
 
-# Claude Code local settings
-.claude/settings.local.json
+# Personal tool config (Claude Code, editors): never in the repo
+.claude/
 
 # Playwright
 /test-results/
@@ -56,3 +54,10 @@ coverage
 
 # Graphify: the local code graph (exposes the architecture; never committed)
 graphify-out/
+
+# Local working notes (PR drafts, plans, summaries) and demo recordings: never in the repo
+/PR-*.md
+/plan-*.md
+/rezumat-*.md
+/notite-*.md
+/demo-*/

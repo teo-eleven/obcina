@@ -4,7 +4,8 @@ Magazin online demonstrativ (proiect universitar, predare ~sfârșit de decembri
 Produse fictive, plăți doar în mod test.
 
 **Citește întâi `docs/PRD.md`** (ce construim) **și `docs/PLAN.md`** (pasul curent, ce urmează).
-Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`.
+Brand, ton și stil vizual: `docs/BRAND.md`. Decizii tehnice: `docs/adr/`. Regulile de lucru pe scurt (și
+pentru oameni): `CONTRIBUTING.md`.
 
 ## Comenzi
 

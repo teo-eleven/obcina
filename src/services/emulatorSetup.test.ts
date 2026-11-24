@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
@@ -7,6 +7,10 @@ import {
   EMULATOR_PROJECT_ID,
   FIRESTORE_EMULATOR_PORT,
 } from '../constants'
+
+interface PackageJson {
+  readonly scripts: Readonly<Record<string, string | undefined>>
+}
 
 // Drift guard: the constants the app connects with must match what `npm run emulators` starts.
 function readRepoFile(name: string): string {
@@ -57,20 +61,17 @@ describe('emulator setup', () => {
     expect(script).toMatch(new RegExp(`--project ${EMULATOR_PROJECT_ID}(\\s|$)`))
   })
 
-  describe('.env.emulators', () => {
-    const readLines = () =>
-      readRepoFile('.env.emulators')
-        .split(/\r?\n/)
-        .map((line) => line.trim())
+  // The flag is set in the npm scripts, so no .env file but .env.example is committed.
+  describe.each(['dev:emulators', 'e2e:serve'])('the %s script', (name) => {
+    const script = () =>
+      (JSON.parse(readRepoFile('package.json')) as PackageJson).scripts[name] ?? ''
 
-    it('turns the emulator flag on', () => {
-      expect(readLines()).toContain('VITE_USE_EMULATORS=true')
+    it('turns the emulator flag on for a vite run in emulators mode', () => {
+      expect(script()).toMatch(/VITE_USE_EMULATORS=true vite (build )?--mode emulators/)
     })
+  })
 
-    it('holds no real Firebase config, since the file is committed', () => {
-      const leaked = readLines().filter((line) => line.startsWith('VITE_FIREBASE_'))
-
-      expect(leaked).toEqual([])
-    })
+  it('commits no .env file other than .env.example', () => {
+    expect(existsSync(resolve(process.cwd(), '.env.emulators'))).toBe(false)
   })
 })

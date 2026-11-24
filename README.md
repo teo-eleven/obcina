@@ -50,6 +50,8 @@ fișierele `.env`.
 
 ## Documentație
 
+- [Reguli de lucru](CONTRIBUTING.md)
+
 - [Specificația produsului (PRD)](docs/PRD.md)
 - [Ghid de brand](docs/BRAND.md)
 - [Decizii de arhitectură](docs/adr/)
