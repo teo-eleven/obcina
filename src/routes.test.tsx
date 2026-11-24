@@ -37,6 +37,12 @@ describe('app routes', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument()
   })
 
+  it('renders the cart page for /cos', async () => {
+    renderWithRouter(routes, '/cos')
+
+    expect(await screen.findByRole('heading', { level: 1, name: 'Coșul tău' })).toBeInTheDocument()
+  })
+
   it('renders the product page for /produs/:slug', async () => {
     const tea = SEED_PRODUCTS.find((product) => product.slug === 'miere-de-tei') ?? null
     vi.mocked(fetchProduct).mockResolvedValue(tea)

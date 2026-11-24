@@ -19,6 +19,10 @@ export const routes: RouteObject[] = [
         path: 'produs/:slug',
         lazy: async () => ({ Component: (await import('./pages/ProductPage')).ProductPage }),
       },
+      {
+        path: 'cos',
+        lazy: async () => ({ Component: (await import('./pages/CartPage')).CartPage }),
+      },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

@@ -9,6 +9,7 @@ export interface UseCart {
   readonly addItem: CartStore['addItem']
   readonly removeItem: CartStore['removeItem']
   readonly setQuantity: CartStore['setQuantity']
+  readonly replace: CartStore['replace']
   readonly clear: CartStore['clear']
 }
 
@@ -23,6 +24,7 @@ export function useCartStore(store: CartStore): UseCart {
       addItem: store.addItem,
       removeItem: store.removeItem,
       setQuantity: store.setQuantity,
+      replace: store.replace,
       clear: store.clear,
     }),
     [cart, store],

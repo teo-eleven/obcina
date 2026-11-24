@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { useCart, useRemoteData } from '../hooks'
-import { fetchProductsBySlugs } from '../services'
+import { useEffect, useRef } from 'react'
+import { Link } from 'react-router'
+import { useCart, useCartProducts } from '../hooks'
 import type { Cart, Product } from '../types'
-import { formatPrice, orderTotal, shippingCost } from '../utils'
+import { cartSubtotal } from '../utils'
 import { CartDrawerLine } from './CartDrawerLine'
+import { CartTotals } from './CartTotals'
 import { LoadError } from './LoadError'
 
 interface CartDrawerContentsProps {
@@ -21,13 +22,7 @@ const UNAVAILABLE = 'produsul indisponibil'
  */
 export function CartDrawerContents({ cart, onRemoved, onNavigate }: CartDrawerContentsProps) {
   const { removeItem } = useCart()
-  const slugs = cart.map((line) => line.productId)
-  // Adjusted during render (no effect): a new product in the cart widens what we ask for.
-  const [requested, setRequested] = useState(slugs)
-  if (!slugs.every((slug) => requested.includes(slug))) setRequested(slugs)
-  const state = useRemoteData(`the cart products ${requested.join(',')}`, () =>
-    fetchProductsBySlugs(requested),
-  )
+  const state = useCartProducts(cart)
   const region = useRef<HTMLDivElement>(null)
   const list = useRef<HTMLUListElement>(null)
   // The line whose "Scoate" gets focus once a removal re-renders the list (its button is gone).
@@ -64,12 +59,8 @@ export function CartDrawerContents({ cart, onRemoved, onNavigate }: CartDrawerCo
   }
 
   const bySlug = new Map<string, Product>(state.data.map((product) => [product.slug, product]))
-  // Lines whose product left the catalogue are shown, and kept out of the money (pruned at 3.6).
-  const subtotal = cart.reduce(
-    (sum, line) => sum + (bySlug.get(line.productId)?.priceBani ?? 0) * line.quantity,
-    0,
-  )
-  const shipping = shippingCost(subtotal)
+  // Lines whose product left the catalogue are shown, and count 0 here (the /cos page removes them).
+  const subtotal = cartSubtotal(cart, (productId) => bySlug.get(productId)?.priceBani ?? 0)
 
   return (
     <div className="mt-6 flex flex-1 flex-col">
@@ -89,20 +80,14 @@ export function CartDrawerContents({ cart, onRemoved, onNavigate }: CartDrawerCo
           )
         })}
       </ul>
-      <dl className="border-in-100 mt-6 space-y-2 border-t pt-4">
-        <div className="flex justify-between gap-4">
-          <dt>Subtotal</dt>
-          <dd>{formatPrice(subtotal)}</dd>
-        </div>
-        <div className="flex justify-between gap-4">
-          <dt>Transport</dt>
-          <dd>{shipping === 0 ? 'gratuit' : formatPrice(shipping)}</dd>
-        </div>
-        <div className="flex justify-between gap-4 text-lg font-semibold">
-          <dt>Total</dt>
-          <dd>{formatPrice(orderTotal(subtotal))}</dd>
-        </div>
-      </dl>
+      <CartTotals subtotal={subtotal} className="border-in-100 mt-6 border-t pt-4" />
+      <Link
+        to="/cos"
+        onClick={onNavigate}
+        className="bg-brad-700 text-crema-50 hover:bg-afina-700 mt-6 rounded-full px-6 py-3 text-center font-semibold transition"
+      >
+        Vezi coșul
+      </Link>
     </div>
   )
 }

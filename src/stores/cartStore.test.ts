@@ -222,6 +222,51 @@ describe('createCartStore: what it accepts survives a reload', () => {
   })
 })
 
+describe('createCartStore: replace', () => {
+  it('swaps the whole cart in one change: one notification, one write', () => {
+    const { storage } = fakeStorage()
+    const store = createCartStore(storage)
+    store.addItem(MIERE, 5)
+    store.addItem(ZACUSCA, 1)
+    const listener = vi.fn()
+    store.subscribe(listener)
+    storage.setItem.mockClear()
+
+    store.replace([{ productId: MIERE, quantity: 2 }])
+
+    expect(store.getSnapshot()).toEqual([{ productId: MIERE, quantity: 2 }])
+    expect(listener).toHaveBeenCalledTimes(1)
+    expect(storage.setItem).toHaveBeenCalledTimes(1)
+  })
+
+  it('validates the new cart through parseCart', () => {
+    const store = createCartStore(fakeStorage().storage)
+
+    store.replace([
+      { productId: MIERE, quantity: 500 },
+      { productId: '../x', quantity: 1 },
+    ])
+
+    expect(store.getSnapshot()).toEqual([{ productId: MIERE, quantity: MAX_LINE_QUANTITY }])
+  })
+
+  it('changes nothing when the new cart equals the current one', () => {
+    const { storage } = fakeStorage()
+    const store = createCartStore(storage)
+    store.addItem(MIERE, 2)
+    const before = store.getSnapshot()
+    const listener = vi.fn()
+    store.subscribe(listener)
+    storage.setItem.mockClear()
+
+    store.replace([{ productId: MIERE, quantity: 2 }])
+
+    expect(store.getSnapshot()).toBe(before)
+    expect(listener).not.toHaveBeenCalled()
+    expect(storage.setItem).not.toHaveBeenCalled()
+  })
+})
+
 describe('createCartStore: no-op actions', () => {
   it('keep the snapshot reference, do not notify and do not write', () => {
     const { storage } = fakeStorage()

@@ -298,6 +298,17 @@ describe('CartDrawer', () => {
       expect(fetchProductsBySlugs).toHaveBeenCalledTimes(2)
     })
 
+    it('links to the cart page with "Vezi coșul" and closes the drawer on it', async () => {
+      const user = userEvent.setup()
+      const { onOpenChange } = renderDrawer()
+      await screen.findByRole('list', { name: 'Produse în coș' })
+      const link = screen.getByRole('link', { name: 'Vezi coșul' })
+
+      expect(link).toHaveAttribute('href', '/cos')
+      await user.click(link)
+      expect(onOpenChange).toHaveBeenCalledWith(false)
+    })
+
     it('closes the drawer when a product link is followed', async () => {
       const user = userEvent.setup()
       const { onOpenChange } = renderDrawer()
