@@ -2,19 +2,19 @@ import {
   collection,
   doc,
   documentId,
-  getDocFromServer,
-  getDocsFromServer,
+  getDoc,
+  getDocs,
   limit,
   query,
   where,
-} from 'firebase/firestore'
+} from 'firebase/firestore/lite'
 import type { CategorySlug, Product } from '../types'
 import { CATEGORY_PAGE_LIMIT, FIRESTORE_IN_LIMIT, PRODUCTS_COLLECTION } from '../constants'
 import { getDb } from './firebase'
 import { productSchema, slugSchema } from '../schemas'
 
-// Every read here goes to the server: offline, the getDoc(s) variants answer from the (empty)
-// local cache, and a page would look empty instead of showing its error state.
+// Every read here goes to the server: Firestore Lite has no local cache, so offline a page shows its
+// error state rather than an empty shelf.
 
 /**
  * Validates one document. A bad one is reported (field paths and codes only, never stored values)
@@ -40,7 +40,7 @@ function parseDocs(docs: readonly { id: string; data: () => unknown }[]): Produc
 
 /** The products on one shelf, sorted by name. */
 export async function fetchCategoryProducts(category: CategorySlug): Promise<Product[]> {
-  const snapshot = await getDocsFromServer(
+  const snapshot = await getDocs(
     query(
       collection(getDb(), PRODUCTS_COLLECTION),
       where('category', '==', category),
@@ -55,7 +55,7 @@ export async function fetchCategoryProducts(category: CategorySlug): Promise<Pro
 export async function fetchProduct(slug: string): Promise<Product | null> {
   // The slug comes from the URL; anything that can't be a slug never reaches Firestore.
   if (!slugSchema.safeParse(slug).success) return null
-  const snapshot = await getDocFromServer(doc(getDb(), PRODUCTS_COLLECTION, slug))
+  const snapshot = await getDoc(doc(getDb(), PRODUCTS_COLLECTION, slug))
   return snapshot.exists() ? parseProductDoc(snapshot.id, snapshot.data()) : null
 }
 
@@ -68,7 +68,7 @@ function batches<T>(items: readonly T[], size: number): T[][] {
 
 /** One 'in' query for at most FIRESTORE_IN_LIMIT slugs. */
 async function fetchBatch(slugs: readonly string[]): Promise<Product[]> {
-  const snapshot = await getDocsFromServer(
+  const snapshot = await getDocs(
     query(
       collection(getDb(), PRODUCTS_COLLECTION),
       where(documentId(), 'in', [...slugs]),

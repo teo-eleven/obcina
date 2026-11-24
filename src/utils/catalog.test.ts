@@ -77,6 +77,13 @@ describe('validateCatalog problems', () => {
     expect(message).toContain('priceBani')
   })
 
+  // zod/mini ships no locale, so its own messages are a bare "Invalid input": the code says what.
+  it('says what is wrong with a field, not only "Invalid input"', () => {
+    const message = errorMessage([jam, { ...honey, priceBani: 19.99 }])
+
+    expect(message).toMatch(/priceBani: invalid_type/)
+  })
+
   it.each([null, 'miere', { kind: 'product' }])('prefixes %j with its index', (bad) => {
     expect(errorMessage([jam, bad])).toContain('#1')
   })

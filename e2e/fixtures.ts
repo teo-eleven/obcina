@@ -16,19 +16,13 @@ interface HealthOptions {
   allowedRequestFailures: RegExp[]
   /** Console errors the app logs on purpose in such tests (e.g. "Could not load …"). */
   allowedConsoleErrors: RegExp[]
-  /** Uncaught page errors a test expects from the browser itself, never from our code. */
-  allowedPageErrors: RegExp[]
 }
 
 export const test = base.extend<HealthOptions & { healthyPage: void }>({
   allowedRequestFailures: [[], { option: true }],
   allowedConsoleErrors: [[], { option: true }],
-  allowedPageErrors: [[], { option: true }],
   healthyPage: [
-    async (
-      { page, baseURL, allowedRequestFailures, allowedConsoleErrors, allowedPageErrors },
-      use,
-    ) => {
+    async ({ page, baseURL, allowedRequestFailures, allowedConsoleErrors }, use) => {
       const problems: string[] = []
       const origin = baseURL ? new URL(baseURL).origin : null
 
@@ -42,10 +36,7 @@ export const test = base.extend<HealthOptions & { healthyPage: void }>({
         if (allowedConsoleErrors.some((pattern) => pattern.test(message.text()))) return
         problems.push(`console.error: ${message.text()}`)
       })
-      page.on('pageerror', (error) => {
-        if (allowedPageErrors.some((pattern) => pattern.test(error.message))) return
-        problems.push(`pageerror: ${error.message}`)
-      })
+      page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`))
       // The app never opens alert/confirm/prompt, so any dialog means injected script ran. Recorded
       // here (a throw inside the handler would not fail the test) and dismissed so the page goes on.
       page.on('dialog', (dialog) => {

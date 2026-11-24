@@ -9,8 +9,7 @@ import { expect, test } from './fixtures'
  * needs a real browser lives here: real link navigation and real network traffic. The page states
  * themselves are unit-tested.
  *
- * One page load per test: a second page.goto would tear down Firestore's open listen channel, and
- * WebKit reports that teardown as an access-control error.
+ * (Firestore Lite since PLAN 3.8: plain requests, no listen channel to tear down between page loads.)
  */
 
 const NOT_FOUND_TITLE = 'Pagină negăsită — Obcina'

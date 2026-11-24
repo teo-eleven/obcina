@@ -30,7 +30,8 @@ function parseEntries(entries: readonly unknown[]): Parsed {
         ? []
         : result.error.issues.map(
             (issue) =>
-              `${label}: ${issue.path.map(String).join('.') || '(entry)'}: ${issue.message}`,
+              // The code first: zod/mini has no locale, so messages alone can be a bare "Invalid input".
+              `${label}: ${issue.path.map(String).join('.') || '(entry)'}: ${issue.code}: ${issue.message}`,
           ),
     ),
     invalidSlugs: new Set(results.flatMap(({ label, result }) => (result.success ? [] : [label]))),

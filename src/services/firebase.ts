@@ -1,5 +1,7 @@
 import { initializeApp } from 'firebase/app'
-import { connectFirestoreEmulator, getFirestore, type Firestore } from 'firebase/firestore'
+// Firestore Lite (PLAN 3.8): plain REST reads, no realtime listeners and no offline cache, which the
+// shop never uses; a far smaller download than the full SDK.
+import { connectFirestoreEmulator, getFirestore, type Firestore } from 'firebase/firestore/lite'
 import { EMULATOR_CONFIG, readFirebaseConfig, usesEmulators } from './firebaseConfig'
 import { EMULATOR_HOST, FIRESTORE_EMULATOR_PORT } from '../constants'
 
