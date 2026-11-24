@@ -96,8 +96,12 @@ Organizarea codului (cerută de Teodor pe 2026-11-10; aplicată la pasul 3.R, p�
   squash merge → branch șters automat → `git pull`. Un singur branch de lucru deschis odată; poarta
   fazei e și ea un PR. Merge: Claude pe pașii obișnuiți; Teodor aprobă poarta, infrastructura și pașii
   sensibili; Teodor poate da oricând merge pe GitHub (verifică `main` înainte de pasul următor).
+- **Mod economic (din 2026-11-23, regula globală a lui Teodor):** Claude scrie singur testele și codul;
+  **un singur agent de review pe PR** (`code-reviewer` pe `sonnet`, sau `security-reviewer` când pasul o
+  cere), raport scurt; verificarea se face cu scripturi proprii, nu cu agenți. Pașii de mai jos rămân
+  ordinea de lucru, cu agenții înlocuiți de această regulă.
 - **Fiecare pas folosește agenții din kitul `~/Desktop/claude-code-starter-kit`** (nivel „maxim”, ales de
-  Teodor):
+  Teodor până la 2026-11-23):
   1. `tdd-guide` scrie testele care pică (RED), pornind de la „Gata când” al pasului.
   2. Implementare până trec (GREEN), apoi refactor; verificare vizuală în browser pe 375px și desktop.
   3. `typescript-reviewer` **și** `code-reviewer`, rulați în paralel pe diff-ul pasului.

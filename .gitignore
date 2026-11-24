@@ -53,3 +53,6 @@ coverage
 
 # Image originals (AI products, photos): large; only the optimised WebP in public/images is committed
 /assets/
+
+# Graphify: the local code graph (exposes the architecture; never committed)
+graphify-out/
