@@ -1,3 +1,4 @@
+import { CATALOG_TEXT, pageTitle } from '../../constants'
 import { useRef } from 'react'
 import { useParams } from 'react-router'
 import { LoadError } from '../../components'
@@ -21,13 +22,13 @@ export function ProductPage() {
   return (
     <div ref={region} tabIndex={-1} className="mx-auto max-w-5xl px-4 py-12 outline-none">
       {/* Until the product is known, the tab must not keep the previous page's name. */}
-      {state.status !== 'ready' && <title>Produs — Obcina</title>}
+      {state.status !== 'ready' && <title>{pageTitle(CATALOG_TEXT.productTitle)}</title>}
       {state.status === 'loading' && (
-        <output className="text-lemn-600 block">Se încarcă produsul…</output>
+        <output className="text-lemn-600 block">{CATALOG_TEXT.loadingProduct}</output>
       )}
       {state.status === 'error' && (
         <LoadError
-          message="Nu am putut încărca produsul."
+          message={CATALOG_TEXT.productLoadError}
           onRetry={() => {
             state.retry()
             region.current?.focus()

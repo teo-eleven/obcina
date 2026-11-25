@@ -1,14 +1,15 @@
 import { useEffect, useId, useRef, useState, type FocusEvent } from 'react'
 import { Link, useLocation } from 'react-router'
+import { COMMON_TEXT } from '../constants'
 
 const NAV_LINKS = [
-  { hash: '#categorii', label: 'Categorii' },
-  { hash: '#povestea', label: 'Povestea' },
+  { hash: '#categorii', label: COMMON_TEXT.navCategories },
+  { hash: '#povestea', label: COMMON_TEXT.navStory },
 ] as const
 
 /*
  * Main navigation. From `sm` up the links sit inline; below it they collapse behind a
- * "Meniu" button (WAI-ARIA disclosure pattern — not a modal, so focus is not trapped).
+ * menu button (WAI-ARIA disclosure pattern — not a modal, so focus is not trapped).
  * Open: focus moves to the first link. Closes on Escape (focus back on the button), on a
  * click or focus outside, after choosing a link, and when the page changes.
  */
@@ -62,7 +63,7 @@ export function MainNav() {
   }
 
   return (
-    <nav ref={navRef} aria-label="Principal" className="relative">
+    <nav ref={navRef} aria-label={COMMON_TEXT.mainNavigation} className="relative">
       <button
         ref={toggleRef}
         type="button"
@@ -72,7 +73,7 @@ export function MainNav() {
         onBlur={closeWhenFocusLeaves}
         className="border-lemn-600/40 text-brad-900 hover:bg-in-100 inline-flex size-11 items-center justify-center rounded-md border sm:hidden"
       >
-        <span className="sr-only">Meniu</span>
+        <span className="sr-only">{COMMON_TEXT.menu}</span>
         <svg
           aria-hidden="true"
           viewBox="0 0 24 24"

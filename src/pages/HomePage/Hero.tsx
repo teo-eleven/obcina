@@ -1,3 +1,4 @@
+import { HOME_TEXT } from '../../constants'
 import { PantryShelf, Stamp } from '../../components'
 
 export function Hero() {
@@ -5,20 +6,17 @@ export function Hero() {
     <section className="bg-brad-100 paper relative overflow-hidden">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-14 pb-40 sm:pt-20 sm:pb-52 md:grid-cols-[1.15fr_1fr]">
         <div>
-          <Stamp tone="brad">Din Bucovina, în cămara ta</Stamp>
+          <Stamp tone="brad">{HOME_TEXT.heroStamp}</Stamp>
           <h1 className="mt-6 max-w-2xl text-4xl leading-tight font-semibold sm:text-6xl">
-            Gusturi de munte, puse la borcan{' '}
-            <i className="text-afina-700 font-medium">ca pe vremuri</i>.
+            {HOME_TEXT.heroHeading}{' '}
+            <i className="text-afina-700 font-medium">{HOME_TEXT.heroHeadingAccent}</i>.
           </h1>
-          <p className="text-lemn-600 mt-5 max-w-xl text-lg">
-            Dulcețuri, miere, zacuscă, brânzeturi și ceaiuri din loturi mici, de pe obcinele dintre
-            Suceava și Rarău.
-          </p>
+          <p className="text-lemn-600 mt-5 max-w-xl text-lg">{HOME_TEXT.heroBody}</p>
           <a
             href="#categorii"
             className="bg-brad-700 text-crema-50 hover:bg-afina-700 mt-8 inline-block rounded-full px-6 py-3 font-semibold transition"
           >
-            Vezi ce avem în cămară
+            {HOME_TEXT.heroCta}
           </a>
         </div>
         <PantryShelf className="mx-auto w-full max-w-xs md:max-w-md" />

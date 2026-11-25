@@ -1,3 +1,4 @@
+import { CART_TEXT } from '../../constants'
 import { useEffect, useRef } from 'react'
 import { CartTotals, LoadError } from '../../components'
 import { useCart, useCartProducts } from '../../hooks'
@@ -43,13 +44,13 @@ export function CartPageContents({ cart, onCorrected }: CartPageContentsProps) {
   }, [products, cart, onCorrected, replace])
 
   if (state.status === 'loading') {
-    return <output className="text-lemn-600 mt-8 block">Se încarcă produsele…</output>
+    return <output className="text-lemn-600 mt-8 block">{CART_TEXT.loading}</output>
   }
   if (state.status === 'error') {
     return (
       <div ref={region} tabIndex={-1} className="mt-8 outline-none">
         <LoadError
-          message="Nu am putut încărca produsele din coș."
+          message={CART_TEXT.loadError}
           onRetry={() => {
             state.retry()
             region.current?.focus()
@@ -65,7 +66,7 @@ export function CartPageContents({ cart, onCorrected }: CartPageContentsProps) {
 
   return (
     <div className="mt-8 grid gap-10 md:grid-cols-[1fr_18rem]">
-      <ul ref={list} aria-label="Produse în coș" className="divide-in-100 divide-y">
+      <ul ref={list} aria-label={CART_TEXT.linesList} className="divide-in-100 divide-y">
         {cart.flatMap((line) => {
           const product = bySlug.get(line.productId)
           if (!product) return []

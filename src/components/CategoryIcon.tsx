@@ -28,7 +28,7 @@ const ICONS: Record<CategorySlug, ReactNode> = {
       />
     </>
   ),
-  // Upright pepper (stem, green calyx, pointed tip), roasted for zacuscă.
+  // Upright pepper (stem, green calyx, pointed tip), roasted for zacusca (vegetable spread).
   conserve: (
     <>
       <path

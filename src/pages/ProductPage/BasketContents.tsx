@@ -1,3 +1,4 @@
+import { CATALOG_TEXT } from '../../constants'
 import { useRef } from 'react'
 import { LoadError, OnceLink } from '../../components'
 import { useRemoteData } from '../../hooks'
@@ -14,15 +15,15 @@ export function BasketContents({ basket }: { basket: GiftBasket }) {
   return (
     <section ref={section} tabIndex={-1} className="mt-8 outline-none">
       <h2 id="ce-contine" className="text-xl font-semibold">
-        Ce conține
+        {CATALOG_TEXT.basketContents}
       </h2>
       {state.status === 'loading' && (
-        <output className="text-lemn-600 mt-3 block">Se încarcă produsele din coș…</output>
+        <output className="text-lemn-600 mt-3 block">{CATALOG_TEXT.loadingBasketContents}</output>
       )}
       {state.status === 'error' && (
         <div className="mt-3">
           <LoadError
-            message="Nu am putut încărca produsele din coș."
+            message={CATALOG_TEXT.basketContentsLoadError}
             onRetry={() => {
               state.retry()
               section.current?.focus()
@@ -30,9 +31,7 @@ export function BasketContents({ basket }: { basket: GiftBasket }) {
           />
         </div>
       )}
-      {isIncomplete && (
-        <p className="text-lemn-600 mt-3">Unele produse din coș nu sunt disponibile acum.</p>
-      )}
+      {isIncomplete && <p className="text-lemn-600 mt-3">{CATALOG_TEXT.basketIncomplete}</p>}
       {state.status === 'ready' && state.data.length > 0 && (
         <ul aria-labelledby="ce-contine" className="mt-3 list-disc pl-5">
           {state.data.map((component) => (

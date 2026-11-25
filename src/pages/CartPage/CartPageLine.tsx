@@ -1,3 +1,4 @@
+import { CART_TEXT } from '../../constants'
 import { Link } from 'react-router'
 import type { Product } from '../../types'
 import { cartLimit, formatPrice } from '../../utils'
@@ -21,7 +22,7 @@ export function CartPageLine({ product, quantity, onQuantity, onRemove }: CartPa
         >
           {product.name}
         </Link>
-        <p className="text-lemn-600 mt-1 text-sm">{`${formatPrice(product.priceBani)} / buc.`}</p>
+        <p className="text-lemn-600 mt-1 text-sm">{`${formatPrice(product.priceBani)} ${CART_TEXT.perUnit}`}</p>
         <QuantityField
           name={product.name}
           quantity={quantity}
@@ -36,10 +37,10 @@ export function CartPageLine({ product, quantity, onQuantity, onRemove }: CartPa
           type="button"
           data-remove-for={product.slug}
           onClick={onRemove}
-          aria-label={`Scoate ${product.name} din coș`}
+          aria-label={CART_TEXT.removeLabel(product.name)}
           className="text-brad-700 hover:text-afina-700 text-sm font-semibold underline"
         >
-          Scoate
+          {CART_TEXT.remove}
         </button>
       </div>
     </div>

@@ -85,7 +85,9 @@ Organizarea codului (cerută de Teodor pe 2026-11-10; aplicată la pasul 3.R, p�
 - **O comandă e `paid` doar din webhook-ul Stripe** cu semnătura verificată.
 - **Secretele** (`STRIPE_*`, service account Firebase) doar în `.env.local` și în Vercel. Niciodată cu prefix `VITE_`.
 - **Culori doar din tokenurile de brand** (`src/styles/index.css` → `@theme`), fără hex în componente.
-- **Texte de interfață în română, cu diacritice.** Cod, nume de variabile și commit-uri în engleză.
+- **Texte de interfață în română, cu diacritice, toate în `src/constants/`** (`commonText`, `homeText`,
+  `catalogText`, `cartText`; regula echipei, păzită de `codeOrganisation.test.ts`). Cod, nume de
+  variabile și commit-uri în engleză.
 - **Accesibilitate:** un singur `h1` per pagină, etichete pe butoane și formulare, focus vizibil.
 - **Mobil întâi:** verifică la 375px lățime, fără scroll orizontal.
 

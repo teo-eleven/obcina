@@ -1,3 +1,4 @@
+import { BRAND_NAME, COMMON_TEXT } from '../constants'
 interface LogoProps {
   readonly withTagline?: boolean
   readonly className?: string
@@ -13,11 +14,9 @@ export function Logo({ withTagline = false, className = '' }: LogoProps) {
         <path d="M0 56 C16 48 30 48 42 54 C50 50 58 50 64 54 V64 H0 Z" className="fill-brad-900" />
       </svg>
       <span className="flex flex-col leading-none">
-        <span className="font-display text-brad-900 text-2xl font-semibold">Obcina</span>
+        <span className="font-display text-brad-900 text-2xl font-semibold">{BRAND_NAME}</span>
         {withTagline && (
-          <span className="text-lemn-600 mt-1 text-xs tracking-wide">
-            cămară de munte din Bucovina
-          </span>
+          <span className="text-lemn-600 mt-1 text-xs tracking-wide">{COMMON_TEXT.tagline}</span>
         )}
       </span>
     </span>

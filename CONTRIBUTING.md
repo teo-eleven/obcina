@@ -22,7 +22,9 @@ Regulile proiectului, scurte. Detaliile tehnice (comenzi, structură, ce verific
 ## 3. Stil și design
 
 - Tailwind doar cu tokenurile de brand (`src/styles/index.css`), fără culori hex în componente.
-- Cod în engleză; textele pentru cumpărător în română, cu diacritice.
+- Cod în engleză; textele pentru cumpărător în română, cu diacritice, **toate în `src/constants/`**
+  (`commonText`, `homeText`, `catalogText`, `cartText`), niciodată scrise direct în componente sau în
+  logică (păzit de `codeOrganisation.test.ts`).
 - Componentele shadcn se copiază **manual**, pe Base UI ([ADR 0009](docs/adr/0009-base-ui-shadcn-copied-by-hand.md)).
 - Formularele: React Hook Form + Zod. Parolele nu apar niciodată în loguri.
 - Designul urmează direcția din [docs/BRAND.md](docs/BRAND.md) („etichetă de borcan”).

@@ -1,11 +1,11 @@
-import { formatPrice, stockLabel, stockLevel } from '../utils'
+import { formatPrice, productCount, stockLabel, stockLevel } from '../utils'
 import type { Product } from '../types'
 import { AddToCartButton } from './AddToCartButton'
 import { Label } from './Label'
 import { OnceLink } from './OnceLink'
 import { ProductImage } from './ProductImage'
 import { Stamp } from './Stamp'
-import { STRETCHED_CARD, STRETCHED_LINK } from '../constants'
+import { CATALOG_TEXT, STRETCHED_CARD, STRETCHED_LINK } from '../constants'
 
 interface ProductCardProps {
   readonly product: Product
@@ -16,7 +16,9 @@ interface ProductCardProps {
 /** A jar label for one product: picture, name, weight or contents, price stamp, stock warning. */
 export function ProductCard({ product, isPriority }: ProductCardProps) {
   const detail =
-    product.kind === 'product' ? `${product.weightGrams} g` : `${product.components.length} produse`
+    product.kind === 'product'
+      ? CATALOG_TEXT.weight(product.weightGrams)
+      : productCount(product.components.length)
   const stock = product.kind === 'product' ? stockLevel(product.stock) : null
   const warning = stock && stockLabel(stock)
 
