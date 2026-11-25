@@ -1,4 +1,10 @@
-import { SEARCH_MIN_LENGTH, SEARCH_PARAM, SEARCH_TEXT, pageTitle } from '../../constants'
+import {
+  SEARCH_MAX_LENGTH,
+  SEARCH_MIN_LENGTH,
+  SEARCH_PARAM,
+  SEARCH_TEXT,
+  pageTitle,
+} from '../../constants'
 import { useSearchParams } from 'react-router'
 import { normalizeForSearch } from '../../utils'
 import { SearchResults } from './SearchResults'
@@ -6,7 +12,7 @@ import { SearchResults } from './SearchResults'
 /** /cautare?q=…: every product whose name holds the query (the header box opens it on Enter). */
 export function SearchPage() {
   const [params] = useSearchParams()
-  const query = (params.get(SEARCH_PARAM) ?? '').trim()
+  const query = (params.get(SEARCH_PARAM) ?? '').slice(0, SEARCH_MAX_LENGTH).trim()
   const length = normalizeForSearch(query).length
 
   return (

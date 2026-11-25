@@ -1,6 +1,9 @@
 /** Below this many letters the search shows nothing: one letter matches almost every name. */
 export const SEARCH_MIN_LENGTH = 2
 
+/** Longer queries are cut: no product name is near this long, and the page renders the query. */
+export const SEARCH_MAX_LENGTH = 100
+
 /** How many products the header suggests while typing; the search page shows them all. */
 export const SEARCH_SUGGESTION_LIMIT = 6
 

@@ -1,4 +1,10 @@
-import { SEARCH_INPUT, SEARCH_MIN_LENGTH, SEARCH_SUGGESTION_LIMIT, SEARCH_TEXT } from '../constants'
+import {
+  SEARCH_INPUT,
+  SEARCH_MAX_LENGTH,
+  SEARCH_MIN_LENGTH,
+  SEARCH_SUGGESTION_LIMIT,
+  SEARCH_TEXT,
+} from '../constants'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import type { SearchCatalogue } from '../hooks'
@@ -19,6 +25,8 @@ interface SearchAutocompleteProps {
   readonly onQueryChange: (query: string) => void
   readonly catalogue: SearchCatalogue
   readonly onChoose: (product: Product) => void
+  /** Starts (or, after a failure, retries) reading the catalogue. */
+  readonly onFocus: () => void
   /** True when it replaces the plain field while that one has focus: focus moves over, caret at the end. */
   readonly takesFocus: boolean
 }
@@ -33,6 +41,7 @@ export function SearchAutocomplete({
   onQueryChange,
   catalogue,
   onChoose,
+  onFocus,
   takesFocus,
 }: SearchAutocompleteProps) {
   const [isOpen, setIsOpen] = useState(takesFocus)
@@ -66,10 +75,9 @@ export function SearchAutocomplete({
       itemToStringValue={(product: Product) => product.name}
       value={query}
       onValueChange={(value, details) => {
-        // Choosing a suggestion (click or Enter) opens its page instead of filling in the field.
-        if (details.reason !== 'item-press') return onQueryChange(value)
-        const chosen = matches.find((product) => product.name === value)
-        if (chosen) onChoose(chosen)
+        // Choosing a suggestion opens its page (the item's onClick; Enter clicks the highlighted
+        // one), so it must not also fill in the field with the product's name.
+        if (details.reason !== 'item-press') onQueryChange(value)
       }}
       open={isOpen && hasQuery}
       onOpenChange={setIsOpen}
@@ -78,6 +86,8 @@ export function SearchAutocomplete({
         ref={input}
         id={inputId}
         type="search"
+        maxLength={SEARCH_MAX_LENGTH}
+        onFocus={onFocus}
         placeholder={SEARCH_TEXT.placeholder}
         className={SEARCH_INPUT}
       />
@@ -91,7 +101,7 @@ export function SearchAutocomplete({
         )}
         <AutocompleteList aria-label={SEARCH_TEXT.suggestions}>
           {(product: Product) => (
-            <AutocompleteItem key={product.slug} value={product}>
+            <AutocompleteItem key={product.slug} value={product} onClick={() => onChoose(product)}>
               <span className="font-semibold">{product.name}</span>{' '}
               <span className="text-lemn-600 text-sm">{formatPrice(product.priceBani)}</span>
             </AutocompleteItem>

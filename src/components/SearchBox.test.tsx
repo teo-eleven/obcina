@@ -114,4 +114,23 @@ describe('SearchBox', () => {
       expect(screen.getByRole('status')).toHaveTextContent(/Căutarea nu merge acum/),
     )
   })
+
+  it('tries the catalogue again on the next focus after a failed read', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    vi.mocked(fetchCatalogue).mockRejectedValue(new Error('offline'))
+    const { user, box } = await typeInSearch('miere')
+    await vi.waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent(/Căutarea nu merge acum/),
+    )
+
+    const failedReads = vi.mocked(fetchCatalogue).mock.calls.length
+    vi.mocked(fetchCatalogue).mockResolvedValue([...SEED_PRODUCTS])
+
+    await user.tab()
+    // Focus retries the read; one more key opens the list again (a trailing space is ignored).
+    await user.type(box, ' ')
+
+    expect(await screen.findByRole('option', { name: /Miere de tei/ })).toBeInTheDocument()
+    expect(fetchCatalogue).toHaveBeenCalledTimes(failedReads + 1)
+  })
 })

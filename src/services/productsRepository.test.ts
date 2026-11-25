@@ -51,6 +51,16 @@ describe('fetchCatalogue', () => {
     expect(products.map((p) => p.slug)).toEqual(honey.map((p) => p.slug))
     vi.restoreAllMocks()
   })
+
+  it('warns when the read hits the limit, since products past it would be missing', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    getDocs.mockResolvedValue({ docs: Array.from({ length: 100 }, () => toDoc({}, 'x')) })
+
+    await fetchCatalogue()
+
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('at most 100 products'))
+    vi.restoreAllMocks()
+  })
 })
 
 describe('fetchCategoryProducts', () => {

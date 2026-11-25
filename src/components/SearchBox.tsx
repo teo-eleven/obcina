@@ -1,4 +1,4 @@
-import { SEARCH_INPUT, SEARCH_MIN_LENGTH, SEARCH_TEXT } from '../constants'
+import { SEARCH_INPUT, SEARCH_MAX_LENGTH, SEARCH_MIN_LENGTH, SEARCH_TEXT } from '../constants'
 import { useId, useRef, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router'
 import { useSearchCatalogue } from '../hooks'
@@ -25,17 +25,22 @@ export function SearchBox() {
     takesFocus: boolean
   } | null>(null)
   const plainInput = useRef<HTMLInputElement>(null)
+  // Hover then focus would otherwise start two downloads before the first one lands.
+  const isLoadingAutocomplete = useRef(false)
   const inputId = useId()
 
   function prepare() {
     load()
-    if (loaded) return
+    if (loaded || isLoadingAutocomplete.current) return
+    isLoadingAutocomplete.current = true
     // A failed download keeps the plain field, which still searches on Enter; the next focus retries.
     loadAutocomplete().then(
       (Autocomplete) =>
         // Checked at the swap itself: focus moves over only if the plain field holds it right now.
         setLoaded({ Autocomplete, takesFocus: document.activeElement === plainInput.current }),
-      () => undefined,
+      () => {
+        isLoadingAutocomplete.current = false
+      },
     )
   }
 
@@ -63,6 +68,7 @@ export function SearchBox() {
             onQueryChange={setQuery}
             catalogue={catalogue}
             onChoose={openProduct}
+            onFocus={load}
             takesFocus={loaded.takesFocus}
           />
         ) : (
@@ -71,6 +77,7 @@ export function SearchBox() {
             id={inputId}
             type="search"
             autoComplete="off"
+            maxLength={SEARCH_MAX_LENGTH}
             value={query}
             placeholder={SEARCH_TEXT.placeholder}
             onChange={(event) => setQuery(event.target.value)}

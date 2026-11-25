@@ -63,4 +63,11 @@ describe('SearchPage', () => {
 
     expect(await screen.findByRole('list', { name: 'Produse' })).toBeInTheDocument()
   })
+
+  it('cuts a very long query from the URL to the length the field accepts', async () => {
+    renderWithRouter(ROUTES, `/cautare?q=miere${'x'.repeat(500)}`)
+
+    const echoed = await screen.findByText(/^Rezultate pentru/)
+    expect(echoed.textContent?.length).toBeLessThan(130)
+  })
 })

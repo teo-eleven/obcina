@@ -61,6 +61,11 @@ export async function fetchCatalogue(): Promise<Product[]> {
   const snapshot = await getDocs(
     query(collection(getDb(), PRODUCTS_COLLECTION), limit(SEARCH_CATALOGUE_LIMIT)),
   )
+  if (snapshot.docs.length === SEARCH_CATALOGUE_LIMIT) {
+    console.warn(
+      `The search reads at most ${SEARCH_CATALOGUE_LIMIT} products; some may be missing.`,
+    )
+  }
   return parseDocs(snapshot.docs)
 }
 
