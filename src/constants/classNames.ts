@@ -13,3 +13,7 @@ export const PRIMARY_BUTTON =
 // already in the cart, kept focusable). Solid colours, so the label keeps its contrast.
 export const DISABLED_BUTTON =
   'disabled:bg-lemn-600 disabled:cursor-not-allowed disabled:hover:bg-lemn-600 aria-disabled:bg-lemn-600 aria-disabled:cursor-not-allowed aria-disabled:hover:bg-lemn-600'
+
+// The header search field: the plain one shown first and the Base UI one that replaces it look alike.
+export const SEARCH_INPUT =
+  'border-in-100 bg-crema-50 placeholder:text-lemn-600 focus:border-brad-700 w-full rounded-full border py-1.5 pr-11 pl-4'

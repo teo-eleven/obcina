@@ -20,11 +20,38 @@ vi.mock('firebase/firestore/lite', () => ({
 }))
 
 const { collection, doc, documentId, limit, query, where } = await import('firebase/firestore/lite')
-const { fetchCategoryProducts, fetchProduct, fetchProductsBySlugs } =
+const { fetchCatalogue, fetchCategoryProducts, fetchProduct, fetchProductsBySlugs } =
   await import('./productsRepository')
 
 const honey = SEED_PRODUCTS.filter((product) => product.category === 'miere')
 const toDoc = (data: unknown, id: string) => ({ id, data: () => data })
+
+describe('fetchCatalogue', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('lists the whole collection with a limit the rules accept (at most 100)', async () => {
+    getDocs.mockResolvedValue({ docs: [] })
+
+    await fetchCatalogue()
+
+    expect(where).not.toHaveBeenCalled()
+    expect(query).toHaveBeenCalledWith({ collection: 'products' }, { limit: 100 })
+  })
+
+  it('keeps the valid products and drops a malformed one', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    getDocs.mockResolvedValue({
+      docs: [...honey.map((p) => toDoc(p, p.slug)), toDoc({ name: 'broken' }, 'broken')],
+    })
+
+    const products = await fetchCatalogue()
+
+    expect(products.map((p) => p.slug)).toEqual(honey.map((p) => p.slug))
+    vi.restoreAllMocks()
+  })
+})
 
 describe('fetchCategoryProducts', () => {
   beforeEach(() => {

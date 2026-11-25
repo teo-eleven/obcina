@@ -1,13 +1,10 @@
 import { CATALOG_TEXT } from '../../constants'
 import { useRef } from 'react'
 import { Link } from 'react-router'
-import { LoadError, ProductCard } from '../../components'
+import { LoadError, ProductGrid } from '../../components'
 import type { CategorySlug } from '../../types'
 import { useRemoteData } from '../../hooks'
 import { fetchCategoryProducts } from '../../services'
-
-// The first row (three columns on desktop) is above the fold: load it at once, it is the LCP.
-const EAGER_IMAGES = 3
 
 export function ShelfContents({ slug }: { slug: CategorySlug }) {
   const state = useRemoteData(`the ${slug} shelf`, () => fetchCategoryProducts(slug))
@@ -39,18 +36,7 @@ export function ShelfContents({ slug }: { slug: CategorySlug }) {
           </Link>
         </div>
       )}
-      {state.status === 'ready' && state.data.length > 0 && (
-        <ul
-          aria-label={CATALOG_TEXT.productsList}
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {state.data.map((product, index) => (
-            <li key={product.slug}>
-              <ProductCard product={product} isPriority={index < EAGER_IMAGES} />
-            </li>
-          ))}
-        </ul>
-      )}
+      {state.status === 'ready' && state.data.length > 0 && <ProductGrid products={state.data} />}
     </div>
   )
 }
