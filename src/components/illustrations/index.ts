@@ -1,4 +1,5 @@
 export * from './EmptyJar'
 export * from './Jar'
 export * from './LindenLeaf'
+export * from './MagnifierIcon'
 export * from './PantryShelf'

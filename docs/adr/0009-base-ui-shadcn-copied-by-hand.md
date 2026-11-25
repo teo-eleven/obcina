@@ -36,3 +36,8 @@ ca Firebase și zod să nu ajungă în codul încărcat prima dată.
 - Prima deschidere a sertarului așteaptă descărcarea fragmentului lui (câteva sute de ms pe o rețea
   lentă); butonul arată că se încarcă, iar deschiderile următoare sunt instant.
 - O dependență nouă de producție: intră în auditul din CI și în actualizările lunare Dependabot.
+- **Căutarea din header (4.1, 2026-11-25) urmează același model:** Autocomplete din Base UI are ~60 KB
+  gzip, deci header-ul arată întâi o căsuță simplă (Enter caută deja), iar autocomplete-ul se descarcă
+  la primul hover sau focus și o înlocuiește, cu textul și focusul păstrate (testat E2E în
+  `e2e/search.spec.ts`). Prima încărcare crește doar cu ~3 KB gzip. Ales de Teodor în locul unui
+  combobox scris de mână (care cerea o excepție de lint) sau al lui Base UI în fragmentul principal.

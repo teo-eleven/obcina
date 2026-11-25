@@ -10,6 +10,7 @@ const INDEXED_FOLDERS = [
   'components',
   'components/illustrations',
   'components/ui',
+  'components/ui/autocomplete',
   'components/ui/sheet',
   ...BARREL_FOLDERS,
 ]
@@ -135,18 +136,21 @@ describe('code organisation (CLAUDE.md)', () => {
     expect(offenders, 'stores must not import React or hooks').toEqual([])
   })
 
-  it.each(['components', 'components/ui', 'components/ui/sheet', ...BARREL_FOLDERS])(
-    're-exports every module of src/%s from its index.ts',
-    (folder) => {
-      const indexFile = join(abs(folder), 'index.ts')
-      const barrel = existsSync(indexFile) ? read(indexFile) : ''
-      const missing = directModules(folder)
-        .map((f) => basename(f, extname(f)))
-        .filter((name) => name !== SEED_FILE)
-        .filter((name) => !barrel.includes(`from './${name}'`))
-      expect(missing, `not exported by src/${folder}/index.ts`).toEqual([])
-    },
-  )
+  it.each([
+    'components',
+    'components/ui',
+    'components/ui/autocomplete',
+    'components/ui/sheet',
+    ...BARREL_FOLDERS,
+  ])('re-exports every module of src/%s from its index.ts', (folder) => {
+    const indexFile = join(abs(folder), 'index.ts')
+    const barrel = existsSync(indexFile) ? read(indexFile) : ''
+    const missing = directModules(folder)
+      .map((f) => basename(f, extname(f)))
+      .filter((name) => name !== SEED_FILE)
+      .filter((name) => !barrel.includes(`from './${name}'`))
+    expect(missing, `not exported by src/${folder}/index.ts`).toEqual([])
+  })
 
   it('re-exports every subfolder of components/ui from components/ui/index.ts', () => {
     const indexFile = abs('components/ui/index.ts')

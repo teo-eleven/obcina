@@ -9,7 +9,12 @@ import {
   where,
 } from 'firebase/firestore/lite'
 import type { CategorySlug, Product } from '../types'
-import { CATEGORY_PAGE_LIMIT, FIRESTORE_IN_LIMIT, PRODUCTS_COLLECTION } from '../constants'
+import {
+  CATEGORY_PAGE_LIMIT,
+  FIRESTORE_IN_LIMIT,
+  PRODUCTS_COLLECTION,
+  SEARCH_CATALOGUE_LIMIT,
+} from '../constants'
 import { getDb } from './firebase'
 import { productSchema, slugSchema } from '../schemas'
 
@@ -49,6 +54,19 @@ export async function fetchCategoryProducts(category: CategorySlug): Promise<Pro
   )
   // Sorted here rather than with orderBy, which would need a composite index next to the where.
   return parseDocs(snapshot.docs).toSorted((a, b) => a.name.localeCompare(b.name, 'ro'))
+}
+
+/** The whole catalogue, for searching by name in the browser (it is a few dozen products). */
+export async function fetchCatalogue(): Promise<Product[]> {
+  const snapshot = await getDocs(
+    query(collection(getDb(), PRODUCTS_COLLECTION), limit(SEARCH_CATALOGUE_LIMIT)),
+  )
+  if (snapshot.docs.length === SEARCH_CATALOGUE_LIMIT) {
+    console.warn(
+      `The search reads at most ${SEARCH_CATALOGUE_LIMIT} products; some may be missing.`,
+    )
+  }
+  return parseDocs(snapshot.docs)
 }
 
 /** One product by its slug, or null when there is none (or the URL can't be a slug at all). */
