@@ -1,3 +1,4 @@
+import { CART_TEXT } from '../constants'
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router'
 import { useCart, useCartProducts } from '../hooks'
@@ -13,7 +14,7 @@ interface CartDrawerContentsProps {
   readonly onNavigate: () => void
 }
 
-const UNAVAILABLE = 'produsul indisponibil'
+const UNAVAILABLE = CART_TEXT.unavailableProduct
 
 /**
  * The lines of a non-empty cart with their prices. The catalogue is read for the products in the
@@ -42,13 +43,13 @@ export function CartDrawerContents({ cart, onRemoved, onNavigate }: CartDrawerCo
   }
 
   if (state.status === 'loading') {
-    return <output className="text-lemn-600 mt-8 block">Se încarcă produsele…</output>
+    return <output className="text-lemn-600 mt-8 block">{CART_TEXT.loading}</output>
   }
   if (state.status === 'error') {
     return (
       <div ref={region} tabIndex={-1} className="mt-8 outline-none">
         <LoadError
-          message="Nu am putut încărca produsele din coș."
+          message={CART_TEXT.loadError}
           onRetry={() => {
             state.retry()
             region.current?.focus()
@@ -64,7 +65,7 @@ export function CartDrawerContents({ cart, onRemoved, onNavigate }: CartDrawerCo
 
   return (
     <div className="mt-6 flex flex-1 flex-col">
-      <ul ref={list} aria-label="Produse în coș" className="divide-in-100 divide-y">
+      <ul ref={list} aria-label={CART_TEXT.linesList} className="divide-in-100 divide-y">
         {cart.map((line) => {
           const product = bySlug.get(line.productId)
           return (
@@ -86,7 +87,7 @@ export function CartDrawerContents({ cart, onRemoved, onNavigate }: CartDrawerCo
         onClick={onNavigate}
         className="bg-brad-700 text-crema-50 hover:bg-afina-700 mt-6 rounded-full px-6 py-3 text-center font-semibold transition"
       >
-        Vezi coșul
+        {CART_TEXT.seeCart}
       </Link>
     </div>
   )

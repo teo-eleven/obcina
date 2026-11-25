@@ -1,3 +1,4 @@
+import { COMMON_TEXT } from '../constants'
 import { Logo } from './Logo'
 
 export function SiteFooter() {
@@ -7,10 +8,7 @@ export function SiteFooter() {
         <div className="bg-crema-50 paper chamfer self-start px-4 py-3 [--chamfer:10px]">
           <Logo withTagline />
         </div>
-        <p className="max-w-md text-sm">
-          Proiect universitar. Magazin demonstrativ: produsele și prețurile sunt fictive și nu se
-          procesează plăți reale.
-        </p>
+        <p className="max-w-md text-sm">{COMMON_TEXT.footerNote}</p>
       </div>
     </footer>
   )

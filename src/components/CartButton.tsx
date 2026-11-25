@@ -1,3 +1,4 @@
+import { CART_TEXT } from '../constants'
 import { useRef, useState } from 'react'
 import { useCart } from '../hooks'
 import { productNoun } from '../utils'
@@ -38,7 +39,7 @@ export function CartButton() {
 
   return (
     <div className="relative">
-      {/* Named by what it shows ("Coș 3") plus a hidden noun, so voice control finds it (WCAG 2.5.3). */}
+      {/* Named by what it shows (the word and the count) plus a hidden noun, so voice control finds it (WCAG 2.5.3). */}
       <button
         ref={buttonRef}
         type="button"
@@ -50,7 +51,7 @@ export function CartButton() {
         aria-busy={loadState === 'loading' || undefined}
         className="border-in-100 text-brad-700 hover:border-brad-700 flex items-center gap-2 rounded-full border px-3 py-1.5 font-semibold transition"
       >
-        Coș{' '}
+        {CART_TEXT.button}{' '}
         <span className="bg-brad-700 text-crema-50 min-w-6 rounded-full px-1.5 text-center text-sm">
           {itemCount}
         </span>
@@ -65,8 +66,7 @@ export function CartButton() {
             : 'sr-only'
         }
       >
-        {loadState === 'failed' &&
-          'Nu am putut deschide coșul. Verifică conexiunea și încearcă din nou.'}
+        {loadState === 'failed' && CART_TEXT.drawerLoadError}
       </output>
       {Drawer && <Drawer open={isOpen} onOpenChange={setIsOpen} returnFocus={buttonRef} />}
     </div>

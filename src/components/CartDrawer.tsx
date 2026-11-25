@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type RefObject } from 'react'
-import { PRIMARY_BUTTON } from '../constants'
+import { CART_TEXT, PRIMARY_BUTTON } from '../constants'
 import { useCart } from '../hooks'
 import { CartDrawerContents } from './CartDrawerContents'
 import { Sheet, SheetClose, SheetContent, SheetTitle } from './ui'
@@ -17,7 +17,7 @@ const ZERO_WIDTH_SPACE = '\u200b'
 /** The mini-cart: what is in the cart, a way to take things out, and what it all costs. */
 export function CartDrawer({ open, onOpenChange, returnFocus }: CartDrawerProps) {
   const { cart } = useCart()
-  // What the drawer last did, read out by screen readers ("Am scos … din coș.").
+  // What the drawer last did, read out by screen readers (CART_TEXT.removed).
   const [announcement, setAnnouncement] = useState('')
   // A closed drawer has nothing to say; reopening starts quiet (adjusted during render, no effect).
   if (!open && announcement) setAnnouncement('')
@@ -38,9 +38,9 @@ export function CartDrawer({ open, onOpenChange, returnFocus }: CartDrawerProps)
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent finalFocus={returnFocus} className="w-full max-w-sm p-6">
         <div className="flex items-center justify-between gap-4">
-          <SheetTitle className="text-2xl font-semibold">Coșul tău</SheetTitle>
+          <SheetTitle className="text-2xl font-semibold">{CART_TEXT.title}</SheetTitle>
           <SheetClose className="text-brad-700 hover:text-afina-700 rounded-full px-3 py-1 font-semibold underline">
-            Închide
+            {CART_TEXT.close}
           </SheetClose>
         </div>
         <output aria-live="polite" aria-atomic="true" className="sr-only">
@@ -48,20 +48,20 @@ export function CartDrawer({ open, onOpenChange, returnFocus }: CartDrawerProps)
         </output>
         {cart.length === 0 ? (
           <div className="mt-8 flex flex-col items-start gap-4">
-            <p>Coșul e gol deocamdată.</p>
+            <p>{CART_TEXT.empty}</p>
             <button
               ref={emptyAction}
               type="button"
               onClick={() => onOpenChange(false)}
               className={PRIMARY_BUTTON}
             >
-              Continuă cumpărăturile
+              {CART_TEXT.continueShopping}
             </button>
           </div>
         ) : (
           <CartDrawerContents
             cart={cart}
-            onRemoved={(name) => announce(`Am scos ${name} din coș.`)}
+            onRemoved={(name) => announce(CART_TEXT.removed(name))}
             onNavigate={() => onOpenChange(false)}
           />
         )}

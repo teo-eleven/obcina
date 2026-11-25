@@ -1,3 +1,4 @@
+import { CART_TEXT, pageTitle } from '../../constants'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useCart } from '../../hooks'
 import type { CartChange } from '../../types'
@@ -25,9 +26,9 @@ export function CartPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <title>Coșul tău — Obcina</title>
+      <title>{pageTitle(CART_TEXT.title)}</title>
       <h1 ref={heading} tabIndex={-1} className="text-3xl font-semibold outline-none sm:text-4xl">
-        Coșul tău
+        {CART_TEXT.title}
       </h1>
       <CartChangesNotice changes={changes} />
       {cart.length === 0 ? (

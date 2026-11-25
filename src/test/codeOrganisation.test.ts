@@ -242,6 +242,16 @@ describe('code organisation (CLAUDE.md)', () => {
     expect(offenders, 'Firebase belongs in src/services').toEqual([])
   })
 
+  // Team rule (CONTRIBUTING.md): the shopper's Romanian text lives in constants/, not in components or
+  // logic. Romanian letters and quotes are the tell; texts without them are kept out by review.
+  it('keeps every Romanian UI text in src/constants', () => {
+    const offenders = walk(SRC)
+      .filter((f) => /\.tsx?$/.test(f) && !isTest(f) && !rel(f).startsWith('constants/'))
+      .filter((f) => /[ăâîșțĂÂÎȘȚ„”]/.test(read(f)))
+      .map(rel)
+    expect(offenders, 'move these texts into src/constants').toEqual([])
+  })
+
   it('only has the allowed top-level entries in src/', () => {
     const unexpected = readdirSync(SRC).filter((entry) => !ALLOWED_TOP_LEVEL.includes(entry))
     expect(unexpected, 'index.css belongs in src/styles/').toEqual([])

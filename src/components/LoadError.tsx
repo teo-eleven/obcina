@@ -1,4 +1,4 @@
-import { PRIMARY_BUTTON } from '../constants'
+import { COMMON_TEXT, PRIMARY_BUTTON } from '../constants'
 
 interface LoadErrorProps {
   readonly message: string
@@ -12,7 +12,7 @@ export function LoadError({ message, onRetry }: LoadErrorProps) {
     <div role="alert" className="flex flex-col items-start gap-4">
       <p>{message}</p>
       <button type="button" onClick={onRetry} className={PRIMARY_BUTTON}>
-        Încearcă din nou
+        {COMMON_TEXT.retry}
       </button>
     </div>
   )

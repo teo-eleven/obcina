@@ -1,3 +1,4 @@
+import { CART_TEXT } from '../../constants'
 import { useState } from 'react'
 import { cartLineMessage, parseQuantityInput } from '../../utils'
 
@@ -43,12 +44,12 @@ export function QuantityField({
     const parsed = parseQuantityInput(draft, limit)
     if (parsed === null) {
       setDraft(String(quantity))
-      setMessage(`Scrie un număr între 1 și ${limit}.`)
+      setMessage(CART_TEXT.quantityInvalid(limit))
       return
     }
     const typed = Number(draft.trim())
     setDraft(String(parsed))
-    setMessage(parsed < typed ? `Mai sunt doar ${limit} buc.` : '')
+    setMessage(parsed < typed ? CART_TEXT.quantityCapped(limit) : '')
     onChange(parsed)
   }
 
@@ -62,7 +63,7 @@ export function QuantityField({
       <div className="flex items-center gap-2">
         <button
           type="button"
-          aria-label={`Scade cantitatea pentru ${name}`}
+          aria-label={CART_TEXT.decreaseLabel(name)}
           aria-disabled={isAtMinimum || undefined}
           onClick={() => !isAtMinimum && step(-1)}
           className={STEP_BUTTON}
@@ -75,7 +76,7 @@ export function QuantityField({
           enterKeyHint="done"
           autoComplete="off"
           onFocus={(event) => event.target.select()}
-          aria-label={`Cantitate pentru ${name}`}
+          aria-label={CART_TEXT.quantityLabel(name)}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
           onBlur={commit}
@@ -86,7 +87,7 @@ export function QuantityField({
         />
         <button
           type="button"
-          aria-label={`Crește cantitatea pentru ${name}`}
+          aria-label={CART_TEXT.increaseLabel(name)}
           aria-disabled={isAtLimit || undefined}
           onClick={() => !isAtLimit && step(1)}
           className={STEP_BUTTON}

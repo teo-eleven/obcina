@@ -1,3 +1,4 @@
+import { CART_TEXT } from '../constants'
 import { Link } from 'react-router'
 import type { Product } from '../types'
 import { formatPrice } from '../utils'
@@ -25,17 +26,17 @@ export function CartDrawerLine({
     return (
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-lemn-600">Un produs care nu mai e în catalog</p>
-          <p className="text-lemn-600 mt-1 text-sm">Nu intră în total.</p>
+          <p className="text-lemn-600">{CART_TEXT.unavailableLine}</p>
+          <p className="text-lemn-600 mt-1 text-sm">{CART_TEXT.notInTotal}</p>
         </div>
         <button
           type="button"
           data-remove-for={productId}
           onClick={onRemove}
-          aria-label="Scoate produsul indisponibil din coș"
+          aria-label={CART_TEXT.removeUnavailableLabel}
           className={REMOVE_BUTTON}
         >
-          Scoate
+          {CART_TEXT.remove}
         </button>
       </div>
     )
@@ -60,10 +61,10 @@ export function CartDrawerLine({
           type="button"
           data-remove-for={productId}
           onClick={onRemove}
-          aria-label={`Scoate ${product.name} din coș`}
+          aria-label={CART_TEXT.removeLabel(product.name)}
           className={REMOVE_BUTTON}
         >
-          Scoate
+          {CART_TEXT.remove}
         </button>
       </div>
     </div>

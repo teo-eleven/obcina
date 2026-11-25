@@ -1,3 +1,4 @@
+import { COMMON_TEXT } from '../constants'
 import { Outlet, useNavigation } from 'react-router'
 import { useScrollOnNavigation } from '../hooks'
 import { SiteFooter } from './SiteFooter'
@@ -14,7 +15,7 @@ export function Layout() {
         href="#continut"
         className="bg-brad-700 text-crema-50 sr-only z-20 rounded-md focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:px-4 focus:py-2"
       >
-        Sari la conținut
+        {COMMON_TEXT.skipToContent}
       </a>
       {isNavigating && (
         <div

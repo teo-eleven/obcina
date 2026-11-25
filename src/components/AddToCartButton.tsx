@@ -1,4 +1,4 @@
-import { DISABLED_BUTTON, PRIMARY_BUTTON } from '../constants'
+import { CART_TEXT, DISABLED_BUTTON, PRIMARY_BUTTON } from '../constants'
 import { useCart } from '../hooks'
 import type { Product } from '../types'
 import { cartLimit, cartLineMessage, lineQuantity } from '../utils'
@@ -32,7 +32,7 @@ export function AddToCartButton({ product, className = '' }: AddToCartButtonProp
         className={`${PRIMARY_BUTTON} ${DISABLED_BUTTON} relative z-10`}
       >
         {/* The label's stamp already says "Stoc epuizat"; the button says only that it can't be used. */}
-        {isSoldOut ? 'Indisponibil' : 'Adaugă în coș'}
+        {isSoldOut ? CART_TEXT.unavailable : CART_TEXT.add}
       </button>
       <output
         aria-live="polite"

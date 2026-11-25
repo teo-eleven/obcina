@@ -2,7 +2,7 @@ import { Jar } from './Jar'
 
 const SHELF_TOP = 200
 
-/* Hero illustration: three jars (jam, honey, zacuscă) on a wooden pantry shelf. */
+/* Hero illustration: three jars (jam, honey, vegetable spread) on a wooden pantry shelf. */
 export function PantryShelf({ className = '' }: { readonly className?: string }) {
   return (
     <svg aria-hidden="true" viewBox="0 0 320 250" className={className}>

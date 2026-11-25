@@ -1,4 +1,4 @@
-import { LOW_STOCK_THRESHOLD, MAX_LINE_QUANTITY } from '../constants'
+import { CATALOG_TEXT, LOW_STOCK_THRESHOLD, MAX_LINE_QUANTITY } from '../constants'
 import type { Product, StockLevel } from '../types'
 
 export function stockLevel(stock: number): StockLevel {
@@ -9,8 +9,8 @@ export function stockLevel(stock: number): StockLevel {
 
 /** The warning shown next to a product, or null when there is plenty. */
 export function stockLabel(level: StockLevel): string | null {
-  if (level.kind === 'out') return 'Stoc epuizat'
-  if (level.kind === 'low') return `Doar ${level.left} în stoc`
+  if (level.kind === 'out') return CATALOG_TEXT.soldOut
+  if (level.kind === 'low') return CATALOG_TEXT.lowStock(level.left)
   return null
 }
 

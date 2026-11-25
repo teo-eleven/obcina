@@ -1,3 +1,4 @@
+import { CART_TEXT } from '../constants'
 import type { Cart, CartChange, CartLine, Product } from '../types'
 import { cartLimit } from './stock'
 
@@ -35,8 +36,7 @@ export function reconcileCart(cart: Cart, products: readonly Product[]): Reconci
 
 /** What the buyer is told about one change. */
 export function cartChangeMessage(change: CartChange): string {
-  if (change.kind === 'missing') return 'Un produs nu mai e în catalog; l-am scos din coș.'
-  // Name last, so the sentence fits any product (Ceai, Brânză, Ghebe...) without agreement.
-  if (change.kind === 'sold-out') return `Am scos din coș ${change.name}: nu mai e în stoc.`
-  return `${change.name}: mai sunt doar ${change.quantity} buc.`
+  if (change.kind === 'missing') return CART_TEXT.changeMissing
+  if (change.kind === 'sold-out') return CART_TEXT.changeSoldOut(change.name)
+  return CART_TEXT.changeReduced(change.name, change.quantity)
 }
