@@ -37,7 +37,6 @@ export function reconcileCart(cart: Cart, products: readonly Product[]): Reconci
 /** What the buyer is told about one change. */
 export function cartChangeMessage(change: CartChange): string {
   if (change.kind === 'missing') return CART_TEXT.changeMissing
-
   if (change.kind === 'sold-out') return CART_TEXT.changeSoldOut(change.name)
   return CART_TEXT.changeReduced(change.name, change.quantity)
 }

@@ -33,6 +33,29 @@ function renderCard(slug: string, isPriority = false) {
 }
 
 describe('ProductCard', () => {
+  it('counts a basket in Romanian, with "de" from twenty components on', () => {
+    const basket = SEED_PRODUCTS.find((candidate) => candidate.kind === 'gift-basket')
+    if (!basket || basket.kind !== 'gift-basket') throw new Error('Missing seed basket')
+    const withComponents = (count: number): Product => ({
+      ...basket,
+      components: Array.from({ length: count }, (_, index) => ({ slug: `p${index}`, quantity: 1 })),
+    })
+    const detailFor = (count: number) => {
+      const { container, unmount } = render(
+        <MemoryRouter>
+          <ProductCard product={withComponents(count)} isPriority={false} />
+        </MemoryRouter>,
+      )
+      const text = container.textContent ?? ''
+      unmount()
+      return text
+    }
+
+    expect(detailFor(1)).toContain('1 produs')
+    expect(detailFor(3)).toContain('3 produse')
+    expect(detailFor(20)).toContain('20 de produse')
+  })
+
   it('is a label card', () => {
     const { view } = renderCard('miere-de-tei')
 
